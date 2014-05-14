@@ -1,5 +1,6 @@
 package fh.tagmon;
 
+import fh.tagmon.gameengine.gameengine.GameEngineModule;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -16,6 +17,9 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		 GameEngineModule gEM = new GameEngineModule();
+		
 		setContentView(R.layout.activity_main);
 
 		if (savedInstanceState == null) {
