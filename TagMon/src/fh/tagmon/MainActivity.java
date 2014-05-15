@@ -1,68 +1,101 @@
 package fh.tagmon;
 
-import fh.tagmon.gameengine.gameengine.GameEngineModule;
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
+
+import fh.tagmon.guiParts.Fight;
+import fh.tagmon.guiParts.Stats;
+import fh.tagmon.guiParts.Train;
+
+/*GameEngineModule gEM = new GameEngineModule();
+
+        setContentView(R.layout.activity_main);*/
 
 public class MainActivity extends Activity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		
-		 GameEngineModule gEM = new GameEngineModule();
-		
-		setContentView(R.layout.activity_main);
+    private final String TAG = "main";
 
-		if (savedInstanceState == null) {
-			getFragmentManager().beginTransaction()
-					.add(R.id.container, new PlaceholderFragment()).commit();
-		}
-	}
+   // private SharedPreferences sharedPref;
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
 
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
+    /////testvariables
+    //private String tagMonName = "Spongebob";
+    ////
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+       // app = ((GlobalVariables) getApplicationContext());
+        //TODO: check if first run!
+     /*   onFirstRun();
+        initTagMon();
+        */
 
-	/**
-	 * A placeholder fragment containing a simple view.
-	 */
-	public static class PlaceholderFragment extends Fragment {
+    }
 
-		public PlaceholderFragment() {
-		}
+    //TODO: call this function on the first time the app is started,
+    //TODO: create TagMon etc, save tagmon in sql lite db
+  /*  public void onFirstRun() {
+        if (app.getTagMon() == null) {
+            app.setTagMon(new TagMon(this.tagMonName));
+        }
+    }
 
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-			return rootView;
-		}
-	}
 
+    private void initTagMon() {
+        TagMon tagMon = app.getTagMon();
+        if (tagMon != null) {
+            TextView tagMonLevelTextView = (TextView) findViewById(R.id.tagMonLevel);
+            tagMonLevelTextView.setText(String.valueOf(tagMon.getLevel()));
+            tagMonLevelTextView.setTextAppearance(getApplicationContext(), R.style.standardDarkeningBackGroundAndTextColor);
+
+            TextView tagMonNameTextView = (TextView) findViewById(R.id.tagMonName);
+            tagMonNameTextView.setText(String.valueOf(tagMon.getName()));
+            tagMonNameTextView.setTextAppearance(getApplicationContext(), R.style.standardDarkeningBackGroundAndTextColor);
+
+            ImageView image = (ImageView) findViewById(R.id.tagMonImage);
+            String enemyDrawable = tagMon.getDrawable();
+            int resID = getResources().getIdentifier(enemyDrawable, "drawable", getPackageName());
+            image.setImageResource(resID);
+        }
+    }
+*/
+    public void switchToStatsActivity(View view) {
+        Intent myIntent = new Intent(this, Stats.class);
+        startActivity(myIntent);
+    }
+
+    public void switchToTrainActivity(View view) {
+        Intent myIntent = new Intent(this, Train.class);
+        startActivity(myIntent);
+    }
+
+    public void switchToBattleActivity(View view) {
+        Intent myIntent = new Intent(this, Fight.class);
+        String battleMode = "normalPvE";
+        myIntent.putExtra("battleMode", battleMode);
+        startActivity(myIntent);
+    }
+/*
+    public void switchToGenLabActivity(View view) {
+        Intent myIntent = new Intent(this, GenLab.class);
+        startActivity(myIntent);
+    }
+*/
+    //handling button clicks
+    public void onBtnClicked(View v) {
+        if (v.getId() == R.id.switch_to_train_activity) {
+            switchToTrainActivity(v);
+        } else if (v.getId() == R.id.switch_to_battle_activity) {
+            switchToBattleActivity(v);
+        } else if (v.getId() == R.id.switch_to_stats_activity) {
+            switchToStatsActivity(v);
+        } else if (v.getId() == R.id.switch_to_gen_lab_activity) {
+          //  switchToGenLabActivity(v);
+        }
+    }
 }
+

@@ -2,7 +2,47 @@
 <resources>
 
     <string name="app_name">TagMon</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_stats">Status</string>
+    <string name="name">Name</string>
+    <string name="level">Level</string>
+    <string name="energy">Energie</string>
+    <string name="experience">Erfahrung</string>
+    <string name="weight">Gewicht</string>
+    <string name="title_activity_train">Training</string>
+    <string name="training">Training</string>
+    <string name="status">Status</string>
+    <string name="title_activity_battle">Battle</string>
+    <string name="damage">Schaden</string>
+    <string name="inventory">Inventar</string>
+    <string name="escape">Flucht</string>
+    <string name="attack">Angriff</string>
+    <string name="title_activity_possible_attacks">PossibleAttacks</string>
+    <string name="battle">Kampf</string>
+    <string name="opponent">Gegner:</string>
+    <string name="life">Leben</string>
+    <string name="strength">Stärke</string>
+    <string name="maxLife">Max. Leben</string>
+    <string name="title_activity_gen_lab">GenLab</string>
+    <string name="genlab">Gen-Labor</string>
+    <string name="enemyDefeated">Gratulation! Du hast %s besiegt!</string>
+    <string name="chooseAttack">Wähle eine Attacke aus</string>
+    <string name="close">Schließen</string>
+    <string name="battleEnded">Kampf beendet</string>
+    <string name="dmgDealt">Verursachter Schaden</string>
+    <string name="dmgGot">Schaden erlitten</string>
+    <string name="youLost">Du wurdest von %s besiegt!</string>
+    <string name="lifeRegPerMinute">Lebensregeneration/Min</string>
+    <string name="lifeRegenerationService">Lebensregeneration Service</string>
+    <string name="physical">Normal</string>
+    <string name="fire">Feuer</string>
+    <string name="water">Wasser</string>
+    <string name="earth">Erde</string>
+    <string name="air">Luft</string>
+    <string name="head">Kopf</string>
+    <string name="leftHand">Linke Hand</string>
+    <string name="rightHand">Rechte Hand</string>
+    <string name="title_activity_fight">Fight</string>
 
 </resources>

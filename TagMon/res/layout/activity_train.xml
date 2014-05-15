@@ -1,0 +1,89 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wallpaper2"
+    tools:context="de.hsauxinf.tagmon.Train">
+
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    style="@style/wrapContentCentered"
+                    android:text="@string/training"
+                    android:textSize="@dimen/text_size_title"
+                    android:textColor="#ffffff"/>
+
+                <TableLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:stretchColumns="0,1">
+
+                    <TableRow>
+
+                        <Button
+                            android:id="@+id/train_strength"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_height="100dp"
+                            android:layout_gravity="bottom"
+                            android:layout_margin="2dp"
+                            android:background="#ffffff" />
+
+                        <Button
+                            android:id="@+id/train_defense"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_height="100dp"
+
+                            android:layout_gravity="bottom"
+                            android:layout_margin="2dp"
+                            android:background="#ffffff" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <Button
+                            android:id="@+id/train_wisdom"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_height="100dp"
+
+                            android:layout_gravity="bottom"
+                            android:layout_margin="2dp"
+                            android:background="#ffffff" />
+
+                        <Button
+                            android:id="@+id/train_something"
+                            style="?android:attr/borderlessButtonStyle"
+                            android:layout_height="100dp"
+
+                            android:layout_gravity="bottom"
+                            android:layout_margin="2dp"
+                            android:background="#ffffff" />
+
+                    </TableRow>
+
+                </TableLayout>
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</FrameLayout>

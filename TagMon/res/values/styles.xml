@@ -17,4 +17,25 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="wrapContentCentered">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="statusTextViews">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textColor">#ffffff</item>
+
+    </style>
+
+    <style name="standardDarkeningBackGroundAndTextColor" >
+        <item name="android:background">#22ffffff</item>
+        <item name="android:textColor">#ffffff</item>
+    </style>
+
+
 </resources>

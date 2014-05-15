@@ -1,8 +1,101 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="fh.tagmon.MainActivity"
-    tools:ignore="MergeRootFrame" />
+    android:background="@drawable/wallpaper1"
+    tools:context=".Main">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/tagMonImage"
+        android:layout_below="@+id/tableRow1"
+        android:layout_above="@+id/tableRow2"
+        android:layout_margin="15dp"/>
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp">
+
+        <TextView
+            android:id="@+id/tagMonLevel"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.9"
+            android:gravity="center"
+            android:textSize="@dimen/text_size" />
+
+        <TextView
+            android:id="@+id/tagMonName"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.1"
+            android:gravity="center"
+            android:textSize="@dimen/text_size" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow2"
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:id="@+id/button1"
+            style="standardDarkeningBackGroundAndTextColor"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:background="#22ffffff" />
+
+        <Button
+            android:id="@+id/switch_to_stats_activity"
+            style="standardDarkeningBackGroundAndTextColor"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:background="#22ffffff"
+            android:onClick="onBtnClicked"
+            android:text="@string/status" />
+
+        <Button
+            android:id="@+id/switch_to_train_activity"
+            style="standardDarkeningBackGroundAndTextColor"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:background="#22ffffff"
+            android:onClick="onBtnClicked"
+            android:text="@string/training" />
+
+        <Button
+            android:id="@+id/switch_to_gen_lab_activity"
+            style="standardDarkeningBackGroundAndTextColor"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:background="#22ffffff"
+            android:onClick="onBtnClicked"
+            android:text="@string/genlab" />
+
+        <Button
+            android:id="@+id/switch_to_battle_activity"
+            style="standardDarkeningBackGroundAndTextColor"
+
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:background="#22ffffff"
+            android:onClick="onBtnClicked"
+            android:text="@string/battle" />
+    </TableRow>
+
+</RelativeLayout>
