@@ -17,11 +17,13 @@ public class KI implements IPlayer{
 	private String kiName;
 	private Monster myMonster;
 	private MonsterPlayModule playModule;
+    private int id;
 	private EventManager eventManager = new EventManager();
 	
-	public KI(String name, Monster myMonster){
+	public KI(String name, Monster myMonster, int id){
 		this.kiName = name;
 		this.myMonster = myMonster;
+        this.id = id;
 		this.playModule = new MonsterPlayModule(myMonster,eventManager);	
 	}
 	
@@ -72,5 +74,11 @@ public class KI implements IPlayer{
 	public Monster getMonster() {
 		return this.myMonster;
 	}
+
+    @Override
+    public int getId() {
+        return this.id;
+    }
+
 
 }

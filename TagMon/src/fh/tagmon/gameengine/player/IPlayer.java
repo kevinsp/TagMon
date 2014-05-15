@@ -1,7 +1,6 @@
 package fh.tagmon.gameengine.player;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
@@ -14,4 +13,5 @@ public interface IPlayer {
 	public String getPlayerName();
 	public AnswerObject workWithAbilityComponent(IAbilityComponent abilityComponent);
 	public Monster getMonster();
+    public int getId();
 }

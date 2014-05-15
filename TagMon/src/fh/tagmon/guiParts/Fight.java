@@ -3,15 +3,18 @@ package fh.tagmon.guiParts;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 
 import fh.tagmon.R;
 import fh.tagmon.gameengine.MonsterDummys.Monster;
+import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.GameEngineModule;
 import fh.tagmon.gameengine.gameengine.PlayerListNode;
 import fh.tagmon.gameengine.player.IPlayer;
@@ -19,10 +22,8 @@ import fh.tagmon.gameengine.player.IPlayer;
 
 public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
 
-    public void finishActivity() {
-        finish();
-    }
-
+    private final String TAG = "fight";
+    private int userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
 
         //init game engine
 
-        GameEngineModule gEM = new GameEngineModule();
+        GameEngineModule gEM = new GameEngineModule(this);
 
 /*
         IPlayer redKi = MyPlayerCreator.getPlayer("Red", "RedMonster");
@@ -82,32 +83,61 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
         boolean: true if the GUI could initialize successful, otherwise false
         */
     public boolean initBattleGUI(LinkedList<PlayerListNode> players, int userId) {
+        this.userId = userId;
         for (PlayerListNode playerNode : players) {
             IPlayer player = playerNode.getPlayer();
             String playerName = player.getPlayerName();
             Monster playerMonster = player.getMonster();
-            int playerNodeId = playerNode.getOwnTargetId();
-
 
             int level = 5; //TODO: remove hardcoded
-/*
-            if (playerNodeId == userId) {
-                refreshUserGui(playerMonster.getMaxLifePoints(), playerMonster.getCurrentLifePoints(), level, playerName);
+
+            if (player.getId() == userId) {
+                initUserGui(playerMonster.getMaxLifePoints(), playerMonster.getCurrentLifePoints(), level, playerName);
             } else {
-                refreshEnemyGui(playerMonster.getMaxLifePoints(), playerMonster.getCurrentLifePoints(), level, playerName);
+                initEnemyGui(playerMonster.getMaxLifePoints(), playerMonster.getCurrentLifePoints(), level, playerName);
             }
-´*/
-        }
+       }
 
         return true;
     }
 
     @Override
-    public void refreshGUI(PlayerListNode node, String attr, int value) {
+    public void refreshGUI(IPlayer player, String attr) {
+        Monster monster = player.getMonster();
+        if (attr.equals("life")) {
+            int currentLife = monster.getCurrentLifePoints();
+            int maxLife = monster.getMaxLifePoints();
+            Log.d(TAG, "id: "+ player.getId() + " -  current: " + currentLife);
+            if (player.getId() ==  this.userId) {
+                refreshUserLife(maxLife, currentLife);
+            } else {
+                refreshEnemyLife(maxLife, currentLife);
+            }
+        }
 
     }
 
-    public void refreshUserGui(int maxLife, int currentLife, int level, String name) {
+    @Override
+    public Ability chooseAbility(HashMap<Integer, IPlayer> targetList, int yourTargetId) {
+        return null;
+    }
+
+
+    public void initUserGui(int maxLife, int currentLife, int level, String name) {
+
+        refreshUserLife(maxLife, currentLife);
+        //level
+
+        TextView ownLevelView = (TextView) findViewById(R.id.ownLevel);
+        ownLevelView.setText(String.valueOf(level));
+
+        //name
+        TextView ownNameView = (TextView) findViewById(R.id.ownName);
+        ownNameView.setText(name);
+
+    }
+
+    public void refreshUserLife(int maxLife, int currentLife) {
 
         //health bar
         ProgressBar ownHealthBar = (ProgressBar) findViewById(R.id.ownHealthBar);
@@ -116,18 +146,20 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
         TextView ownHealthBarNumberTextView = (TextView) findViewById(R.id.ownHealthBarNumber);
         String ownLifeProgress = String.format("%d/%d", currentLife, maxLife);
         ownHealthBarNumberTextView.setText(ownLifeProgress);
-
-        //level
-        TextView ownLevelView = (TextView) findViewById(R.id.ownLevel);
-        ownLevelView.setText(String.valueOf(level));
-
-        //name
-        TextView ownNameView = (TextView) findViewById(R.id.ownName);
-        ownNameView.setText(name);
     }
 
 
-    public void refreshEnemyGui(int maxLife, int currentLife, int level, String name) {
+    public void refreshEnemyLife(int maxLife, int currentLife) {
+        //health bar
+        ProgressBar enemyHealthBar = (ProgressBar) findViewById(R.id.enemyHealthBar);
+        enemyHealthBar.setMax(maxLife);
+        enemyHealthBar.setProgress(currentLife);
+        TextView enemyHealthBarNumberTextView = (TextView) findViewById(R.id.enemyHealthBarNumber);
+        String enemyLifeProgress = String.format("%d/%d", currentLife, maxLife);
+        enemyHealthBarNumberTextView.setText(enemyLifeProgress);
+    }
+
+    public void initEnemyGui(int maxLife, int currentLife, int level, String name) {
 
         //set the image for the enemy
         ImageView image = (ImageView) findViewById(R.id.enemyImage);
@@ -136,14 +168,7 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
         image.setImageResource(resID);
         */
 
-        //health bar
-        ProgressBar enemyHealthBar = (ProgressBar) findViewById(R.id.enemyHealthBar);
-        enemyHealthBar.setMax(maxLife);
-        enemyHealthBar.setProgress(currentLife);
-        TextView enemyHealthBarNumberTextView = (TextView) findViewById(R.id.enemyHealthBarNumber);
-        String enemyLifeProgress = String.format("%d/%d", currentLife, maxLife);
-        enemyHealthBarNumberTextView.setText(enemyLifeProgress);
-
+        refreshEnemyLife(maxLife, currentLife);
         //level
         TextView enemyLevelView = (TextView) findViewById(R.id.enemyLevel);
         enemyLevelView.setText(String.valueOf(level));
@@ -243,12 +268,16 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
     public void onBtnClicked(View v) {
         if (v.getId() == R.id.chooseAttack) {
             // showAttackPossibilites(v);
-           // disableButtons();
+            // disableButtons();
         } else if (v.getId() == R.id.openInventory) {
             // openInventory();
         } else if (v.getId() == R.id.tryToEscape) {
             tryToEscape();
         }
+    }
+
+    public void finishActivity() {
+        finish();
     }
 
 

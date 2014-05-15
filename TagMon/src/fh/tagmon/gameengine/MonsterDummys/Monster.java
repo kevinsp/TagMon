@@ -148,5 +148,12 @@ public class Monster {
 	public BuffListHandler getBuffListHandler(){
 		return this.buffListHandler;
 	}
-	
+
+    public int getMaxLifePoints() {
+        return maxLifePoints;
+    }
+
+    public void setMaxLifePoints(int maxLifePoints) {
+        this.maxLifePoints = maxLifePoints;
+    }
 }
