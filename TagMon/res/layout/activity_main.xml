@@ -6,12 +6,12 @@
     tools:context=".Main">
 
     <ImageView
+        android:id="@+id/tagMonImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/tagMonImage"
-        android:layout_below="@+id/tableRow1"
         android:layout_above="@+id/tableRow2"
-        android:layout_margin="15dp"/>
+        android:layout_below="@+id/tableRow1"
+        android:layout_margin="15dp" />
 
     <TableRow
         android:id="@+id/tableRow1"
@@ -42,11 +42,10 @@
         style="?android:attr/buttonBarStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:gravity="center"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_gravity="bottom"
+        android:gravity="center">
 
         <Button
             android:id="@+id/button1"

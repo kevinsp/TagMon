@@ -6,7 +6,6 @@
     tools:context="de.hsauxinf.tagmon.Fight">
 
 
-
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -25,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:stretchColumns="0,1,2,3">
 
 
@@ -63,7 +61,6 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:gravity="center"
             android:textColor="#ff0000"
@@ -123,10 +120,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/tableLayout"
-            android:layout_alignParentEnd="true"
+
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentStart="true"
+
             android:layout_gravity="center"
             android:columnCount="2"
             android:gravity="center">
@@ -141,11 +138,10 @@
                     android:id="@+id/ownName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/text_size"
-                    android:layout_marginRight="20dp"
-                    android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true" />
+                    android:layout_alignParentTop="true"
+                    android:layout_marginRight="20dp"
+                    android:textSize="@dimen/text_size" />
 
                 <TextView
                     android:id="@+id/ownLevel"
@@ -171,7 +167,6 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
