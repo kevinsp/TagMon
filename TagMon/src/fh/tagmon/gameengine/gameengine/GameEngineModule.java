@@ -9,18 +9,33 @@ import fh.tagmon.gameengine.player.MyPlayerCreator;
 
 public class GameEngineModule {
 
+    private boolean fuerRolleZumTesten = true;
+
+
     public GameEngineModule(Activity context) {
 
         if (BuildConfig.DEBUG) {
-            IPlayer redKi = MyPlayerCreator.getPlayer("Red", "RedMonster",0);
+            // der erste part ist zum testen für rolle ;)
+            // das else ist für pascal zum testen mit der gui
+            if (fuerRolleZumTesten) {
+                IPlayer redKi = MyPlayerCreator.getPlayer("Red", "RedMonster", 0, true);
+                IPlayer blueKi = MyPlayerCreator.getPlayer("Blue", "BlueMonster", 1, true);
+                PlayerList playerList = new PlayerList();
+                playerList.addPlayer(redKi);
+                playerList.addPlayer(blueKi);
+                GamePlayEngine playEngine = new GamePlayEngine(playerList, context);
+                playEngine.run();
+            } else {
+                IPlayer redKi = MyPlayerCreator.getPlayer("Red", "RedMonster", 0, false);
+                IPlayer blueKi = MyPlayerCreator.getPlayer("Blue", "BlueMonster", 1, true);
+                PlayerList playerList = new PlayerList();
+                playerList.addPlayer(redKi);
+                playerList.addPlayer(blueKi);
+                GamePlayEngine playEngine = new GamePlayEngine(playerList, context);
+                playEngine.execute();
+            }
 
-            IPlayer blueKi = MyPlayerCreator.getPlayer("Blue", "BlueMonster", 1);
-            PlayerList playerList = new PlayerList();
-            playerList.addPlayer(redKi);
-            playerList.addPlayer(blueKi);
-            GamePlayEngine playEngine = new GamePlayEngine(playerList, context);
-
-            playEngine.run();
+//            playEngine.run();
 
 //        	RunBuffHandlerTest buffHandler = new RunBuffHandlerTest();
 //        	buffHandler.run();

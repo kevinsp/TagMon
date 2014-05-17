@@ -1,6 +1,5 @@
 package fh.tagmon.gameengine.player;
 
-
 import java.util.HashMap;
 
 import fh.tagmon.gameengine.MonsterDummys.Monster;
@@ -10,20 +9,23 @@ import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 
+/**
+ * Created by pasca_000 on 17.05.2014.
+ */
+public class Player implements IPlayer {
 
-public class KI implements IPlayer {
 
-    private String kiName;
+    private String playerName;
     private Monster myMonster;
     private MonsterPlayModule playModule;
     private int id;
     private EventManager eventManager = new EventManager();
 
-    public KI(String name, Monster myMonster, int id) {
-        this.kiName = name;
+    public Player(String name, Monster myMonster, int id){
+        this.playerName = name;
         this.myMonster = myMonster;
         this.id = id;
-        this.playModule = new MonsterPlayModule(myMonster, eventManager);
+        this.playModule = new MonsterPlayModule(myMonster,eventManager);
     }
 
     private int myRandomWithHigh(int low, int high) {
@@ -32,19 +34,25 @@ public class KI implements IPlayer {
         return (int) (Math.random() * (high - low) + low);
     }
 
-    private Ability choseRandomAbility() {
+    private Ability choseRandomAbility(){
         int random = this.myRandomWithHigh(0, 1);
         return this.playModule.getPrep().getAbility(random);
     }
 
-    private AbilityTargetRestriction choseRandomTarget(Ability chosenAbility) {
+    private AbilityTargetRestriction choseRandomTarget(Ability chosenAbility){
         return chosenAbility.getTargetRestriction().getFirst();
+    }
+
+    public void sendNewRoundEvent (HashMap<Integer, IPlayer> targetList,
+                                   int yourTargetId) {
+        this.eventManager.sendNewRoundEvent(targetList, yourTargetId);
     }
 
     @Override
     public ActionObject yourTurn(HashMap<Integer, IPlayer> targetList,
                                  int yourTargetId) {
         sendNewRoundEvent(targetList, yourTargetId);
+
         Ability chosenAbility = this.choseRandomAbility();
         ActionObject action = new ActionObject(chosenAbility, this.choseRandomTarget(chosenAbility));
         return action;
@@ -52,7 +60,7 @@ public class KI implements IPlayer {
 
     @Override
     public String getPlayerName() {
-        return this.kiName;
+        return this.playerName;
     }
 
     @Override
@@ -61,7 +69,7 @@ public class KI implements IPlayer {
         this.playModule.handleAbilityComponents(abilityComponent);
 
         boolean isMonsterDead = false;
-        if (this.myMonster.getCurrentLifePoints() <= 0) {
+        if (this.myMonster.getCurrentLifePoints() <= 0){
             isMonsterDead = true;
         }
 
@@ -77,12 +85,5 @@ public class KI implements IPlayer {
     public int getId() {
         return this.id;
     }
-
-    @Override
-    public void sendNewRoundEvent(HashMap<Integer, IPlayer> targetList, int yourTargetId) {
-        this.eventManager.sendNewRoundEvent(targetList, yourTargetId);
-
-    }
-
 
 }

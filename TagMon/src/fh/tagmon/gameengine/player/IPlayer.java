@@ -14,4 +14,5 @@ public interface IPlayer {
 	public AnswerObject workWithAbilityComponent(IAbilityComponent abilityComponent);
 	public Monster getMonster();
     public int getId();
+    void sendNewRoundEvent(HashMap<Integer, IPlayer> playerTargetList, int currentPlayerTargetId);
 }
