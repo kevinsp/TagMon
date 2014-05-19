@@ -172,7 +172,10 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
                 builder.setTitle(getString(R.string.chooseAbility));
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
-                        Ability choosenAbility = abilities.getLast();
+
+
+
+                        Ability choosenAbility = abilities.get(item);
 
                         gamePlayEngine.setActionFromUser(new ActionObject(choosenAbility, chooseTarget(choosenAbility)));
                     }
