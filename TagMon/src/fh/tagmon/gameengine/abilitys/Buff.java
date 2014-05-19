@@ -21,6 +21,10 @@ public class Buff extends AbilityComponent implements IAbilityComponent {
 		this.setDamageAbsorbationAmount(damageAbsorbationAmount);
 	}
 
+	public Buff clone(){
+		return new Buff(this.duration, this.strengthBuff, this.armorValueBuff, this.constitutionBuff, this.damageAbsorbationAmount);
+	}
+	
 	public int getStrengthBuff() {
 		return strengthBuff;
 	}
@@ -50,6 +54,8 @@ public class Buff extends AbilityComponent implements IAbilityComponent {
 	public int getDuration(){
 		return this.duration;
 	}
+	
+	
 
 	@Override
 	public AbilityComponentTypes getComponentType() {

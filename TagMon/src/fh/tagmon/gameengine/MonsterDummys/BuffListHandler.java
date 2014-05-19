@@ -40,7 +40,7 @@ public class BuffListHandler {
 	}
 	
 	public void addBuff(Buff buff){
-		this.buffList.add(new BuffListElement(buff.getDuration(),this.idCounter,buff));
+		this.buffList.add(new BuffListElement(buff.getDuration(),this.idCounter,buff.clone()));
 		this.idCounter++;
 	}
 	

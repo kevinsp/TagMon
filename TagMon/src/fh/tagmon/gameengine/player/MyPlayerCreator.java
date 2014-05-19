@@ -28,7 +28,7 @@ public class MyPlayerCreator {
 	}
 	
 	public static Ability getDefenseAbility(){
-		IAbilityComponent comp = new Buff(1,0,0,0,3);
+		IAbilityComponent comp = new Buff(1,0,0,0,5);
 		AbilityTargetRestriction restriction = AbilityTargetRestriction.SELF;
 		Ability abl = new Ability("Block",0,restriction);
 		abl.addAbilityComponent(comp);

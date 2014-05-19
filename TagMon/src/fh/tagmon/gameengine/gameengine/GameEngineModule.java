@@ -2,10 +2,10 @@ package fh.tagmon.gameengine.gameengine;
 
 
 import android.app.Activity;
-
 import fh.tagmon.BuildConfig;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.MyPlayerCreator;
+import fh.tagmon.gameengine.testDmgAbsorbationHandler.RunTestDmgAbsorbationHandler;
 
 public class GameEngineModule {
 
@@ -25,6 +25,10 @@ public class GameEngineModule {
                 playerList.addPlayer(blueKi);
                 GamePlayEngine playEngine = new GamePlayEngine(playerList, context);
                 playEngine.run();
+            	
+//            	RunTestDmgAbsorbationHandler testDmgAb = new RunTestDmgAbsorbationHandler();
+//            	testDmgAb.run();
+            	
             } else {
                 IPlayer redKi = MyPlayerCreator.getPlayer("Red", "RedMonster", 0, false);
                 IPlayer blueKi = MyPlayerCreator.getPlayer("Blue", "BlueMonster", 1, true);
