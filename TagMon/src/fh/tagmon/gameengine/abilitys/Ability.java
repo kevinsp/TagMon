@@ -34,7 +34,7 @@ public class Ability {
 	}
 	
 	public LinkedList<IAbilityComponent> getAbilityComponents(){
-		return this.abilityComponents;
+		return (LinkedList<IAbilityComponent>) this.abilityComponents.clone();
 	}
 	
 	public String getAbilityName(){

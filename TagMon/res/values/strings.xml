@@ -44,5 +44,6 @@
     <string name="leftHand">Linke Hand</string>
     <string name="rightHand">Rechte Hand</string>
     <string name="title_activity_fight">Fight</string>
+    <string name="chooseAbility">Fähigkeit auswählen</string>
 
 </resources>

@@ -32,33 +32,31 @@ public class BuffHandler{
 
 	public void refreshBuffEffects() {
 		LinkedList<BuffListElement> activBuffList = this.scanForActiveBuffs();
-		if(activBuffList.size() > 0){
+//		if(activBuffList.size() > 0){
 			this.putActivBuffsIntoEffect(activBuffList);
-		}
+//		}
 	}
 	
 	private void putActivBuffsIntoEffect(LinkedList<BuffListElement> activBuffList){
 		int strengthBuff = 0;
 		int armorValueBuff = 0;
 		int constitutionBuff = 0;
-		int dmgAbsorbValue = 0;
 		
 		for(BuffListElement buffListElement: activBuffList){
 			Buff theBuff = buffListElement.getBuff(); 
 			strengthBuff += theBuff.getStrengthBuff();
 			armorValueBuff += theBuff.getArmorValueBuff();
 			constitutionBuff += theBuff.getConstitutionBuff();
-			dmgAbsorbValue += theBuff.getDamageAbsorbationAmount();
 		}
 		
 		this.monster.setAdditionalStrength(strengthBuff);
 		this.monster.setAdditionalArmorValue(armorValueBuff);
 		this.monster.setAdditionalConstitution(constitutionBuff);
 		
-		this.logActiveBuffEffect(strengthBuff, armorValueBuff, constitutionBuff, dmgAbsorbValue);
+		this.logActiveBuffEffect(strengthBuff, armorValueBuff, constitutionBuff);
 	}
 	
-	private void logActiveBuffEffect(int strengthBuff,int  armorValueBuff,int constitutionBuff , int dmgAbsorbValue){
+	private void logActiveBuffEffect(int strengthBuff,int  armorValueBuff,int constitutionBuff ){
 		String stringToLog= "[BuffHandler] Monster is Buffed with following stats: ";
 		
 		if( strengthBuff != 0){
@@ -70,8 +68,11 @@ public class BuffHandler{
 		if( constitutionBuff != 0){
 			stringToLog += this.prepForLog("CON", constitutionBuff);
 		}
-		if( dmgAbsorbValue != 0 ){
-			stringToLog += this.prepForLog("DMG_ABSORB", dmgAbsorbValue);
+		
+		int dmgAbsorg = this.monster.getDmgAbsHandler().getDamageAbsorbationAmount();
+		
+		if( dmgAbsorg != 0 ){
+			stringToLog += this.prepForLog("DMG_ABSORB", dmgAbsorg);
 		}
 		
 		this.componentLogger.addLogMsg(stringToLog);
@@ -91,9 +92,10 @@ public class BuffHandler{
 			int strengthBuff = theBuff.getStrengthBuff();
 			int armorValueBuff = theBuff.getArmorValueBuff();
 			int constitutionBuff = theBuff.getConstitutionBuff();
-			int dmgAbsorb = theBuff.getDamageAbsorbationAmount();
 			
-			if( strengthBuff > 0 || armorValueBuff > 0 || constitutionBuff > 0 || dmgAbsorb > 0){
+
+			
+			if( strengthBuff > 0 || armorValueBuff > 0 || constitutionBuff > 0 ){
 				activBuffList.add(buffListElement);
 			}
 		}
