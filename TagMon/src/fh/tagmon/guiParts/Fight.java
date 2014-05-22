@@ -19,7 +19,6 @@ import java.util.List;
 import fh.tagmon.R;
 import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.Ability;
-import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
 import fh.tagmon.gameengine.gameengine.GameEngineModule;
 import fh.tagmon.gameengine.gameengine.GamePlayEngine;
@@ -152,40 +151,85 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
         final int yourTargetIdF = yourTargetId;
         final Context context = this;
 
-        runOnUiThread(new Runnable() {
-            public void run() {
-                IPlayer player = targetListF.get(yourTargetIdF);
-                final LinkedList<Ability> abilities = player.getMonster().getAbilitys();
+        final IPlayer player = targetListF.get(yourTargetIdF);
+        final LinkedList<Ability> abilities = player.getMonster().getAbilitys();
 
-                List<String> abilityNames = new ArrayList<String>();
-                for (Ability ability : abilities) {
-                    String abilityName = ability.getAbilityName();
-                    abilityNames.add(abilityName);
+        List<String> abilityNames = new ArrayList<String>();
+        for (Ability ability : abilities) {
+            String abilityName = ability.getAbilityName();
+            abilityNames.add(abilityName);
 
-                    LinkedList<IAbilityComponent> abilityComponents = ability.getAbilityComponents();
-                    String abilityType = abilityComponents.get(0).getComponentType().name();
+            // LinkedList<IAbilityComponent> abilityComponents = ability.getAbilityComponents();
+            // String abilityType = abilityComponents.get(0).getComponentType().name();
 
+        }
+
+        final CharSequence[] items = abilityNames.toArray(new CharSequence[abilityNames.size()]);
+/*
+        DialogBuilder db = new DialogBuilder(context, getString(R.string.chooseAbility), items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                Ability choosenAbility = abilities.get(item);
+                gamePlayEngine.setActionFromUser(new ActionObject(choosenAbility, chooseTarget(choosenAbility)));
+            }
+        });
+*/
+
+        //choose ability
+        createAlertDialogWithItems(context, getString(R.string.chooseAbility), items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+               final Ability choosenAbility = abilities.get(item);
+               final LinkedList <AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
+
+
+                List<String> targetNames = new ArrayList<String>();
+                for (Enum target : atr) {
+                    String targetName = target.name();
+                    targetNames.add(targetName);
                 }
 
-                final CharSequence[] items = abilityNames.toArray(new CharSequence[abilityNames.size()]);
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(getString(R.string.chooseAbility));
-                builder.setItems(items, new DialogInterface.OnClickListener() {
+                final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
+
+                //choose enemy or self
+                createAlertDialogWithItems(context, getString(R.string.chooseTarget), targetItems, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
 
+                        LinkedList <Integer> targetList = atr.get(item).getTargetList();
+
+                        List<String> targetNames = new ArrayList<String>();
+                        for (Integer target : targetList) {
+                            targetNames.add(target.toString());
+                        }
+
+                        final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
+
+                        createAlertDialogWithItems(context, getString(R.string.chooseTarget), targetItems, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int item) {
+                                gamePlayEngine.setActionFromUser(new ActionObject(choosenAbility, chooseTarget(choosenAbility)));
+
+                            }});
 
 
-                        Ability choosenAbility = abilities.get(item);
 
-                        gamePlayEngine.setActionFromUser(new ActionObject(choosenAbility, chooseTarget(choosenAbility)));
-                    }
-                });
+                    }});
+
+
+            }
+        });
+
+    }
+
+
+    private void createAlertDialogWithItems(final Context context, final String title, final CharSequence[] items, final DialogInterface.OnClickListener callback) {
+        runOnUiThread(new Runnable() {
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setTitle(title);
+                builder.setItems(items, callback);
                 AlertDialog alert = builder.create();
                 alert.show();
             }
         });
     }
-
 
     private AbilityTargetRestriction chooseTarget(Ability ability) {
         //TODO: open dialog and let the user choose which target he wants to attack
