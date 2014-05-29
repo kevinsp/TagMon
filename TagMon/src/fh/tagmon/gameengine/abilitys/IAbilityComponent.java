@@ -1,8 +1,9 @@
 package fh.tagmon.gameengine.abilitys;
 
 import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
+import fh.tagmon.model.Monster;
 
-import fh.tagmon.gameengine.MonsterDummys.Monster;
+
 
 
 public interface IAbilityComponent {

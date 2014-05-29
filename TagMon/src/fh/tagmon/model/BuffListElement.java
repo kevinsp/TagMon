@@ -1,4 +1,4 @@
-package fh.tagmon.gameengine.MonsterDummys;
+package fh.tagmon.model;
 
 import fh.tagmon.gameengine.abilitys.Buff;
 

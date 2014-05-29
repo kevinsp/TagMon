@@ -144,7 +144,7 @@ public class GameHostEngine extends AsyncTask implements Runnable {
             final IPlayer player = this.playerList.getPlayerByTargetId(targetId);
             AnswerObject answer = player.workWithAbilityComponent(aComponent);
 
-            ((Fight) context).refreshGUI(player, "life");
+//            ((Fight) context).refreshGUI(player, "life");
 
 
             myLogger("==== Answer from Player: " + player.getPlayerName() + " ====");

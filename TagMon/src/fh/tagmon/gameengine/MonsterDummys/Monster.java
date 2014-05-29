@@ -8,7 +8,10 @@ import java.util.LinkedList;
 
 
 
+
 import fh.tagmon.gameengine.abilitys.Ability;
+import fh.tagmon.model.BuffListHandler;
+import fh.tagmon.model.DamageAbsorbationHandler;
 
 
 public class Monster {

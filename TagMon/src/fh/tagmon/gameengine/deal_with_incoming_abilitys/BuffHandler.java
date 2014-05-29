@@ -3,10 +3,10 @@ package fh.tagmon.gameengine.deal_with_incoming_abilitys;
 
 import java.util.LinkedList;
 
-import fh.tagmon.gameengine.MonsterDummys.BuffListElement;
-import fh.tagmon.gameengine.MonsterDummys.BuffListHandler;
-import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.Buff;
+import fh.tagmon.model.BuffListElement;
+import fh.tagmon.model.BuffListHandler;
+import fh.tagmon.model.Monster;
 
 
 public class BuffHandler{

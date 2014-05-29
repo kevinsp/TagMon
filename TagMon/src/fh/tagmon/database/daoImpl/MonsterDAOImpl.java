@@ -10,6 +10,7 @@ import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Attribut;
+import fh.tagmon.model.AttributModifikator;
 import fh.tagmon.model.Koerperteil;
 import fh.tagmon.model.KoerperteilArt;
 import fh.tagmon.model.Monster;
@@ -28,21 +29,22 @@ public class MonsterDAOImpl implements MonsterDAO {
 		Attribut attribut = new Attribut(0, 10, 11, 12, 13);
 		Ability ability = new Ability("Beiﬂattacke", 20, AbilityTargetRestriction.ENEMY);
 		
-		IAbilityComponent component = new Damage(2);
+		IAbilityComponent component = new Damage(7);
 		ability.addAbilityComponent(component);
 		
 		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
 		
 		Ability blockAbility = new Ability("BLOCKABILITY", 11, AbilityTargetRestriction.SELF);
-		blockAbility.addAbilityComponent(new Buff(2,10,22,11,20));
+		blockAbility.addAbilityComponent(new Buff(2,0,5,0,0));
 		abilityList.add(blockAbility);
 		
 		
 		abilityList.add(ability);
-		Koerperteil koerperteil = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM);
+		
+		Koerperteil koerperteil = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0, 0));
 		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
 		koerperteilList.add(koerperteil);
-		Stats stats = new Stats(0,100,100,2222,111,100,10,123);
+		Stats stats = new Stats(0,100,100,30,111,100,10,123);
 		Monster dummyMonster = new Monster(0, "MonsterName", attribut, koerperteilList, stats);
 		
 		return dummyMonster;

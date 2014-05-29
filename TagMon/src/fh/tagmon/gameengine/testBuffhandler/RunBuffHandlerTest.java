@@ -3,9 +3,7 @@ package fh.tagmon.gameengine.testBuffhandler;
 import java.util.LinkedList;
 
 import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
-
 import android.util.Log;
-import fh.tagmon.gameengine.MonsterDummys.BuffListElement;
 import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
@@ -13,6 +11,7 @@ import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.deal_with_incoming_abilitys.AbilityComponentDirector;
 import fh.tagmon.gameengine.deal_with_incoming_abilitys.BuffHandler;
+import fh.tagmon.model.BuffListElement;
 
 
 public class RunBuffHandlerTest {

@@ -3,8 +3,6 @@ package fh.tagmon.gameengine.deal_with_incoming_abilitys;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import fh.tagmon.gameengine.MonsterDummys.BuffListElement;
-import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
@@ -12,6 +10,8 @@ import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.player.EventManager;
 import fh.tagmon.gameengine.player.IListener;
 import fh.tagmon.gameengine.player.IPlayer;
+import fh.tagmon.model.BuffListElement;
+import fh.tagmon.model.Monster;
 
 public class AbilityComponentDirector implements IListener{
 

@@ -25,11 +25,12 @@ public class Koerperteil {
 		return attributModifikator;
 	}
 	
-	public Koerperteil(int id, String name, ArrayList<Ability> abilityList, KoerperteilArt koerperteilArt){
+	public Koerperteil(int id, String name, ArrayList<Ability> abilityList, KoerperteilArt koerperteilArt, AttributModifikator attributModifikator){
 		this.id = id;
 		this.name = name;
 		this.abilityList = abilityList;
 		this.koerperteilArt = koerperteilArt;
+		this.attributModifikator = attributModifikator;
 		
 	}
 

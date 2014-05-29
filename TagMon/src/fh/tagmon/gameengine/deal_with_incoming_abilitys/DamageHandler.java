@@ -1,8 +1,8 @@
 package fh.tagmon.gameengine.deal_with_incoming_abilitys;
 
-import fh.tagmon.gameengine.MonsterDummys.DamageAbsorbationHandler;
-import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.Damage;
+import fh.tagmon.model.DamageAbsorbationHandler;
+import fh.tagmon.model.Monster;
 
 public class DamageHandler {
 

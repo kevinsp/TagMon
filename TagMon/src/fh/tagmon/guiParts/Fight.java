@@ -20,7 +20,7 @@ import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
 import fh.tagmon.gameengine.gameengine.GameEngineModule;
-import fh.tagmon.gameengine.gameengine.GamePlayEngine;
+import fh.tagmon.gameengine.gameengine.GameHostEngine;
 import fh.tagmon.gameengine.gameengine.PlayerListNode;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.player.IPlayer;
@@ -33,7 +33,7 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
     private static boolean battleGuiInit = false;
     private Context context = this;
     private DialogBuilder chooseDialog;
-    private GamePlayEngine gpe;
+    private GameHostEngine gpe;
 
     private IPlayer player;
 
@@ -74,26 +74,27 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
         boolean: true if the GUI could initialize successful, otherwise false
         */
     public boolean initBattleGUI(LinkedList<PlayerListNode> players, int userId) {
-        if (!battleGuiInit) {
-            battleGuiInit = true;
-            this.userId = userId;
-            for (PlayerListNode playerNode : players) {
-                IPlayer player = playerNode.getPlayer();
-                String playerName = player.getPlayerName();
-                Monster playerMonster = player.getMonster();
-
-                int level = 5; //TODO: remove hardcoded
-
-                if (player.getId() == userId) {
-                    initUserGui(playerMonster.getMaxLifePoints(), playerMonster.getCurrentLifePoints(), level, playerName);
-                } else {
-                    initEnemyGui(playerMonster.getMaxLifePoints(), playerMonster.getCurrentLifePoints(), level, playerName);
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
+//        if (!battleGuiInit) {
+//            battleGuiInit = true;
+//            this.userId = userId;
+//            for (PlayerListNode playerNode : players) {
+//                IPlayer player = playerNode.getPlayer();
+//                String playerName = player.getPlayerName();
+//                Monster playerMonster = player.getMonster();
+//
+//                int level = 5; //TODO: remove hardcoded
+//
+//                if (player.getId() == userId) {
+//                    initUserGui(playerMonster.getMaxLifePoints(), playerMonster.getCurrentLifePoints(), level, playerName);
+//                } else {
+//                    initEnemyGui(playerMonster.getMaxLifePoints(), playerMonster.getCurrentLifePoints(), level, playerName);
+//                }
+//            }
+//            return true;
+//        } else {
+//            return false;
+//        }
+    	return true;
     }
 
 
@@ -115,27 +116,27 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
 
     @Override
     public void refreshGUI(final IPlayer player, final Enum<GuiPartsToUpdate> partToUpdate) {
-        if (battleGuiInit) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Monster monster = player.getMonster();
-                    if (partToUpdate == GuiPartsToUpdate.HEALTH) {
-                        int currentLife = monster.getCurrentLifePoints();
-                        int maxLife = monster.getMaxLifePoints();
-                        //Log.d(TAG, "id: " + player.getId() + " -  current: " + currentLife);
-                        if (player.getId() == userId) {
-                            refreshUserLife(maxLife, currentLife);
-                        } else {
-                            refreshEnemyLife(maxLife, currentLife);
-                        }
-                    }
-
-                }
-            });
-        } else {
-            //TODO: do something on error, throw exception for example
-        }
+//        if (battleGuiInit) {
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    Monster monster = player.getMonster();
+//                    if (partToUpdate == GuiPartsToUpdate.HEALTH) {
+//                        int currentLife = monster.getCurrentLifePoints();
+//                        int maxLife = monster.getMaxLifePoints();
+//                        //Log.d(TAG, "id: " + player.getId() + " -  current: " + currentLife);
+//                        if (player.getId() == userId) {
+//                            refreshUserLife(maxLife, currentLife);
+//                        } else {
+//                            refreshEnemyLife(maxLife, currentLife);
+//                        }
+//                    }
+//
+//                }
+//            });
+//        } else {
+//            //TODO: do something on error, throw exception for example
+//        }
 
     }
 
@@ -149,7 +150,7 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
 
     */
     @Override
-    public void chooseAbility(HashMap<Integer, IPlayer> targetList, int yourTargetId, GamePlayEngine gpe) {
+    public void chooseAbility(HashMap<Integer, IPlayer> targetList, int yourTargetId, GameHostEngine gpe) {
 
         this.gpe = gpe;
         HashMap<Integer, IPlayer> targetListF = targetList;

@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 
 import fh.tagmon.guiParts.Fight;
-import fh.tagmon.guiParts.Stats;
-import fh.tagmon.guiParts.Train;
+//import fh.tagmon.guiParts.Stats;
+//import fh.tagmon.guiParts.Train;
 
 /*GameEngineModule gEM = new GameEngineModule();
 
@@ -64,13 +64,13 @@ public class MainActivity extends Activity {
     }
 */
     public void switchToStatsActivity(View view) {
-        Intent myIntent = new Intent(this, Stats.class);
-        startActivity(myIntent);
+//        Intent myIntent = new Intent(this, Stats.class);
+//        startActivity(myIntent);
     }
 
     public void switchToTrainActivity(View view) {
-        Intent myIntent = new Intent(this, Train.class);
-        startActivity(myIntent);
+//        Intent myIntent = new Intent(this, Train.class);
+//        startActivity(myIntent);
     }
 
     public void switchToBattleActivity(View view) {

@@ -1,4 +1,4 @@
-package fh.tagmon.gameengine.MonsterDummys;
+package fh.tagmon.model;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -40,7 +40,10 @@ public class BuffListHandler {
 	}
 	
 	public void addBuff(Buff buff){
-		this.buffList.add(new BuffListElement(buff.getDuration(),this.idCounter,buff.clone()));
+		// clone deswegen da ich local ohne netzwerk teste und es sonst zu problemen kommt
+		// da das buff object ja nur einmal exestiert. Sobald ich was daran endere ist es immer geändert. Daher lieber mit dem Clone arbbeiten
+		// so funktoniert auch der dmgAbsorbHandler
+		this.buffList.add(new BuffListElement(buff.getDuration(),this.idCounter,buff.clone())); 
 		this.idCounter++;
 	}
 	

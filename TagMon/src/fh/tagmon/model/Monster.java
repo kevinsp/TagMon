@@ -3,8 +3,6 @@ package fh.tagmon.model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import fh.tagmon.gameengine.MonsterDummys.BuffListHandler;
-import fh.tagmon.gameengine.MonsterDummys.DamageAbsorbationHandler;
 import fh.tagmon.gameengine.abilitys.Ability;
 
 public class Monster {
@@ -88,10 +86,10 @@ public class Monster {
 
 	public int decreaseLifePoints(int decreaseValue){
 		if(decreaseValue >= stats.getCurHP()){
-			stats.setCurEP(0);
+			stats.setCurHP(0);
 		}
 		else{
-			stats.setCurEP(stats.getCurHP()-decreaseValue);
+			stats.setCurHP(stats.getCurHP()-decreaseValue);
 		}	
 		return stats.getCurHP();
 	}

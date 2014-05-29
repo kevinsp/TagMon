@@ -3,15 +3,15 @@ package fh.tagmon.gameengine.testDmgAbsorbationHandler;
 import java.util.LinkedList;
 
 import android.util.Log;
-import fh.tagmon.gameengine.MonsterDummys.BuffListElement;
-import fh.tagmon.gameengine.MonsterDummys.BuffListHandler;
-import fh.tagmon.gameengine.MonsterDummys.DamageAbsorbationHandler;
 import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
+import fh.tagmon.model.BuffListElement;
+import fh.tagmon.model.BuffListHandler;
+import fh.tagmon.model.DamageAbsorbationHandler;
 
 public class RunTestDmgAbsorbationHandler {
 

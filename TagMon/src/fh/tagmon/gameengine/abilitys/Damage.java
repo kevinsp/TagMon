@@ -1,15 +1,15 @@
 package fh.tagmon.gameengine.abilitys;
 
 import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
+import fh.tagmon.model.Monster;
 
-import fh.tagmon.gameengine.MonsterDummys.Monster;
+
 
 public class Damage extends AbilityComponent implements IAbilityComponent {
 
 	private int baseDmg;
 	
 	private int monsterStrength = 0;
-	private int monsterAttackPower = 0;
 	
 	public Damage(int baseDmg){
 		super(AbilityComponentTypes.DAMAGE);
@@ -18,7 +18,7 @@ public class Damage extends AbilityComponent implements IAbilityComponent {
 	
 	
 	public int getDamage(){
-		return (this.getMonsterStrength() + this.getMonsterAttackPower() + this.baseDmg);
+		return (this.getMonsterStrength() + this.baseDmg);
 	}
 
 
@@ -32,14 +32,6 @@ public class Damage extends AbilityComponent implements IAbilityComponent {
 	}
 
 
-	public int getMonsterAttackPower() {
-		return monsterAttackPower;
-	}
-
-
-	public void setMonsterAttackPower(int monsterAttackPower) {
-		this.monsterAttackPower = monsterAttackPower;
-	}
 
 
 	@Override
@@ -51,7 +43,7 @@ public class Damage extends AbilityComponent implements IAbilityComponent {
 	@Override
 	public void setReqStats(Monster monster) {
 		this.setMonsterStrength(monster.getStrength());
-		this.setMonsterAttackPower(monster.getAttackPower());
+		
 	}
 
 

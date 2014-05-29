@@ -6,7 +6,16 @@ public class AttributModifikator {
 	private int intelligenz;
 	private int konstitution;
 	private int verteidigung;
+
 	
+	
+	
+	public AttributModifikator(int staerke, int intelligenz, int konstitution,int verteidigung) {
+		this.staerke = staerke;
+		this.intelligenz = intelligenz;
+		this.konstitution = konstitution;
+		this.verteidigung = verteidigung;
+	}
 	
 	public int getStaerke() {
 		return staerke;

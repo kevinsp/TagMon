@@ -4,9 +4,9 @@ import java.util.HashMap;
 
 import fh.tagmon.gameengine.choseability.AbilityPreporator;
 import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
-import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.deal_with_incoming_abilitys.AbilityComponentDirector;
+import fh.tagmon.model.Monster;
 
 public class MonsterPlayModule {
 
