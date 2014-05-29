@@ -42,7 +42,6 @@ public class Monster {
 		this.attackPower = attackPower;
 		this.armorValue = ArmorValue;
 
-		
 	}
 
 	

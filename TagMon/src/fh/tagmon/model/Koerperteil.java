@@ -2,16 +2,35 @@ package fh.tagmon.model;
 
 import java.util.ArrayList;
 
+import fh.tagmon.gameengine.abilitys.Ability;
+
 public class Koerperteil {
 	
 	private int id;
 	private String name;
 	
-	private ArrayList<Faehigkeit> faehigkeiten;
+	private ArrayList<Ability> abilityList;
+	//private ArrayList<Faehigkeit> faehigkeiten;
 	
-	//  art -> 0=Kopf, 1=Torso, 2=Arme etc. -> create enum class later maybe with kopf,torso etc
-	private int art;
-	
+	private KoerperteilArt koerperteilArt;
+
+
 	private AttributModifikator attributModifikator;
+	
+	public ArrayList<Ability> getAbilityList(){
+		return abilityList;
+	}
+	
+	public AttributModifikator getAttributModifikator() {
+		return attributModifikator;
+	}
+	
+	public Koerperteil(int id, String name, ArrayList<Ability> abilityList, KoerperteilArt koerperteilArt){
+		this.id = id;
+		this.name = name;
+		this.abilityList = abilityList;
+		this.koerperteilArt = koerperteilArt;
+		
+	}
 
 }
