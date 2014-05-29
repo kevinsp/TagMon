@@ -23,7 +23,7 @@ public class GameEngineModule {
                 PlayerList playerList = new PlayerList();
                 playerList.addPlayer(redKi);
                 playerList.addPlayer(blueKi);
-                GamePlayEngine playEngine = new GamePlayEngine(playerList, context);
+                GameHostEngine playEngine = new GameHostEngine(playerList, context);
                 playEngine.run();
             	
 //            	RunTestDmgAbsorbationHandler testDmgAb = new RunTestDmgAbsorbationHandler();
@@ -35,7 +35,7 @@ public class GameEngineModule {
                 PlayerList playerList = new PlayerList();
                 playerList.addPlayer(redKi);
                 playerList.addPlayer(blueKi);
-                GamePlayEngine playEngine = new GamePlayEngine(playerList, context);
+                GameHostEngine playEngine = new GameHostEngine(playerList, context);
                 playEngine.execute();
             }
 
