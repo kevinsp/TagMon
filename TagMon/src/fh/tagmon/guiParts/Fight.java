@@ -2,13 +2,12 @@ package fh.tagmon.guiParts;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -32,6 +31,12 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
     private final String TAG = "fight";
     private int userId;
     private static boolean battleGuiInit = false;
+    private Context context = this;
+    private DialogBuilder chooseDialog;
+    private GamePlayEngine gpe;
+
+    private IPlayer player;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +45,7 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
 
         //init game engine
         GameEngineModule gEM = new GameEngineModule(this);
+
     }
 
 
@@ -108,13 +114,13 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
 
 
     @Override
-    public void refreshGUI(final IPlayer player, final String attr) {
+    public void refreshGUI(final IPlayer player, final Enum<GuiPartsToUpdate> partToUpdate) {
         if (battleGuiInit) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     Monster monster = player.getMonster();
-                    if (attr.equals("life")) {
+                    if (partToUpdate == GuiPartsToUpdate.HEALTH) {
                         int currentLife = monster.getCurrentLifePoints();
                         int maxLife = monster.getMaxLifePoints();
                         //Log.d(TAG, "id: " + player.getId() + " -  current: " + currentLife);
@@ -133,7 +139,6 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
 
     }
 
-
     /*
     @desc:
     opens a dialog with all possible attacks the player can use
@@ -143,99 +148,34 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
         //TODO documentation
 
     */
-
     @Override
     public void chooseAbility(HashMap<Integer, IPlayer> targetList, int yourTargetId, GamePlayEngine gpe) {
-        final GamePlayEngine gamePlayEngine = gpe;
-        final HashMap<Integer, IPlayer> targetListF = targetList;
-        final int yourTargetIdF = yourTargetId;
-        final Context context = this;
 
-        final IPlayer player = targetListF.get(yourTargetIdF);
-        final LinkedList<Ability> abilities = player.getMonster().getAbilitys();
+        this.gpe = gpe;
+        HashMap<Integer, IPlayer> targetListF = targetList;
+        int yourTargetIdF = yourTargetId;
+
+        player = targetListF.get(yourTargetIdF);
+        LinkedList<Ability> abilities = player.getMonster().getAbilitys();
 
         List<String> abilityNames = new ArrayList<String>();
         for (Ability ability : abilities) {
             String abilityName = ability.getAbilityName();
             abilityNames.add(abilityName);
-
-            // LinkedList<IAbilityComponent> abilityComponents = ability.getAbilityComponents();
-            // String abilityType = abilityComponents.get(0).getComponentType().name();
-
         }
-
         final CharSequence[] items = abilityNames.toArray(new CharSequence[abilityNames.size()]);
-/*
-        DialogBuilder db = new DialogBuilder(context, getString(R.string.chooseAbility), items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                Ability choosenAbility = abilities.get(item);
-                gamePlayEngine.setActionFromUser(new ActionObject(choosenAbility, chooseTarget(choosenAbility)));
-            }
-        });
-*/
 
-        //choose ability
-        createAlertDialogWithItems(context, getString(R.string.chooseAbility), items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-               final Ability choosenAbility = abilities.get(item);
-               final LinkedList <AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
-
-
-                List<String> targetNames = new ArrayList<String>();
-                for (Enum target : atr) {
-                    String targetName = target.name();
-                    targetNames.add(targetName);
-                }
-
-                final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
-
-                //choose enemy or self
-                createAlertDialogWithItems(context, getString(R.string.chooseTarget), targetItems, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-
-                        LinkedList <Integer> targetList = atr.get(item).getTargetList();
-
-                        List<String> targetNames = new ArrayList<String>();
-                        for (Integer target : targetList) {
-                            targetNames.add(target.toString());
-                        }
-
-                        final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
-
-                        createAlertDialogWithItems(context, getString(R.string.chooseTarget), targetItems, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int item) {
-                                gamePlayEngine.setActionFromUser(new ActionObject(choosenAbility, chooseTarget(choosenAbility)));
-
-                            }});
-
-
-
-                    }});
-
-
-            }
-        });
-
-    }
-
-
-    private void createAlertDialogWithItems(final Context context, final String title, final CharSequence[] items, final DialogInterface.OnClickListener callback) {
         runOnUiThread(new Runnable() {
-            public void run() {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(title);
-                builder.setItems(items, callback);
-                AlertDialog alert = builder.create();
-                alert.show();
-            }
-        });
+                          @Override
+                          public void run() {
+                              if (chooseDialog != null) {
+                                  chooseDialog.dismiss();
+                              }
+                              chooseDialog = new DialogBuilder(context, getString(R.string.chooseAbility), items, null, chooseAbilityListener);
+                          }
+                      }
+        );
     }
-
-    private AbilityTargetRestriction chooseTarget(Ability ability) {
-        //TODO: open dialog and let the user choose which target he wants to attack
-        return ability.getTargetRestriction().getFirst();
-    }
-
 
     public void initUserGui(int maxLife, int currentLife, int level, String name) {
 
@@ -252,7 +192,6 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
     }
 
     public void refreshUserLife(int maxLife, int currentLife) {
-
         //health bar
         ProgressBar ownHealthBar = (ProgressBar) findViewById(R.id.ownHealthBar);
         ownHealthBar.setMax(maxLife);
@@ -293,26 +232,11 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
     }
 
 
-
-
-        /*
-        @desc:
-        should be called after the battle ended
-        destroys the battleGui
-        set battleGuiInit to false
-        */
-
-    public static void destroyBattleGui() {
-        //reset the view
-        battleGuiInit = false;
-    }
-
-
     //disable buttons
-    public void disableButtons() {
-        findViewById(R.id.tryToEscape).setEnabled(false);
-        findViewById(R.id.chooseAttack).setEnabled(false);
-        findViewById(R.id.openInventory).setEnabled(false);
+    public void toggleButtons(boolean enable) {
+        findViewById(R.id.tryToEscape).setEnabled(enable);
+        findViewById(R.id.chooseAttack).setEnabled(enable);
+        findViewById(R.id.openInventory).setEnabled(enable);
     }
 
     //try to escape from the fight
@@ -333,8 +257,112 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
     }
 
     public void finishActivity() {
+        if (gpe != null) {
+            gpe.cancel(true);
+            gpe.onResume();
+        }
+        battleGuiInit = false;
+        gpe = null;
         finish();
     }
 
 
+    //click listeners
+    //listener after an ability was choosen, choose the target category (enemy, self, etc)
+    private final View.OnClickListener chooseAbilityListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //Log.d(TAG, v.getTag().toString());
+            try {
+             /*   TableLayout table = (TableLayout) v.getParent().getParent();
+                if (table != null) {
+                    final IPlayer player = (IPlayer) table.getTag();
+
+*/
+                int item = Integer.parseInt(v.getTag().toString());
+
+
+                final Ability choosenAbility = player.getMonster().getAbilitys().get(item);
+                final LinkedList<AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
+
+                List<String> targetNames = new ArrayList<String>();
+                for (Enum target : atr) {
+                    String targetName = target.name();
+                    targetNames.add(targetName);
+                }
+
+                final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
+
+                runOnUiThread(new Runnable() {
+                                  @Override
+                                  public void run() {
+                                      if (chooseDialog != null) {
+                                          chooseDialog.dismiss();
+                                      }
+                                      chooseDialog = new DialogBuilder(context, getString(R.string.chooseTarget), targetItems, choosenAbility, chooseTargetRestrictionListener);
+                                  }
+                              }
+                );
+                //   }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+
+        }
+    };
+
+    //listener after an ability and an target category was choosen, choose the concret target
+    private final View.OnClickListener chooseTargetRestrictionListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            //Log.d(TAG, v.getTag().toString());
+            try {
+                int item = Integer.parseInt(v.getTag().toString());
+                TableLayout table = (TableLayout) v.getParent().getParent();
+                if (table != null) {
+                    final Ability choosenAbility = (Ability) table.getTag();
+                    LinkedList<AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
+
+                    LinkedList<Integer> targetList = atr.get(item).getTargetList();
+
+                    List<String> targetNames = new ArrayList<String>();
+                    for (Integer target : targetList) {
+                        targetNames.add(target.toString());
+                    }
+
+                    final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
+                    runOnUiThread(new Runnable() {
+                                      @Override
+                                      public void run() {
+                                          if (chooseDialog != null) {
+                                              chooseDialog.dismiss();
+                                          }
+                                          chooseDialog = new DialogBuilder(context, getString(R.string.chooseTarget), targetItems, choosenAbility, sendActionToGamePlayEngineListener);
+                                      }
+                                  }
+                    );
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    };
+    //listener after an ability and an target category was choosen, choose the concret target
+    private final View.OnClickListener sendActionToGamePlayEngineListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            try {
+                int item = Integer.parseInt(v.getTag().toString());
+                TableLayout table = (TableLayout) v.getParent().getParent();
+                if (table != null) {
+                    Ability choosenAbility = (Ability) table.getTag();
+                    gpe.setActionFromUser(new ActionObject(choosenAbility, choosenAbility.getTargetRestriction().get(item)));
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    };
 }
