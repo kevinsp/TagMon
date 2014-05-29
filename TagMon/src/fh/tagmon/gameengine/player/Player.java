@@ -1,6 +1,7 @@
 package fh.tagmon.gameengine.player;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.Ability;
@@ -33,7 +34,9 @@ public class Player implements IPlayer {
         high++;
         return (int) (Math.random() * (high - low) + low);
     }
-
+    public LinkedList getAbilityTargetRestriction(Ability chosenAbility) {
+        return chosenAbility.getTargetRestriction();
+    }
     private Ability choseRandomAbility(){
         int random = this.myRandomWithHigh(0, 1);
         return this.playModule.getPrep().getAbility(random);

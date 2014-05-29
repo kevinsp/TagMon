@@ -11,6 +11,6 @@ import fh.tagmon.gameengine.player.IPlayer;
 public interface IBattleGUI {
 
     public boolean initBattleGUI(LinkedList<PlayerListNode> players, int userId);
-    public void refreshGUI(IPlayer player, String attr);
+    public void refreshGUI(IPlayer player, Enum <GuiPartsToUpdate> partToUpdate);
     public void chooseAbility(HashMap<Integer, IPlayer> targetList, int yourTargetId, GamePlayEngine gpe);
 }

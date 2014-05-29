@@ -2,6 +2,7 @@ package fh.tagmon.gameengine.player;
 
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import fh.tagmon.gameengine.MonsterDummys.Monster;
 import fh.tagmon.gameengine.abilitys.Ability;
@@ -30,6 +31,9 @@ public class KI implements IPlayer {
         // Zufallszahlen inklusive Obergrenze
         high++;
         return (int) (Math.random() * (high - low) + low);
+    }
+    public LinkedList getAbilityTargetRestriction(Ability chosenAbility) {
+        return chosenAbility.getTargetRestriction();
     }
 
     private Ability choseRandomAbility() {
