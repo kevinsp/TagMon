@@ -37,6 +37,10 @@ public class Monster {
 	public int getCurrentLifePoints(){
 		return stats.getCurHP();
 	}
+
+    public int getMaxLifePoints(){
+        return stats.getMaxHP();
+    }
 	
 	public LinkedList<Ability> getAbilitys(){
 		LinkedList<Ability> abilities = new LinkedList<Ability>();

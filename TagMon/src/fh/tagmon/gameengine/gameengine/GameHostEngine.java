@@ -13,6 +13,7 @@ import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.guiParts.Fight;
+import fh.tagmon.guiParts.GuiPartsToUpdate;
 
 
 public class GameHostEngine extends AsyncTask implements Runnable {
@@ -144,7 +145,7 @@ public class GameHostEngine extends AsyncTask implements Runnable {
             final IPlayer player = this.playerList.getPlayerByTargetId(targetId);
             AnswerObject answer = player.workWithAbilityComponent(aComponent);
 
-//            ((Fight) context).refreshGUI(player, "life");
+            ((Fight) context).refreshGUI(player, GuiPartsToUpdate.HEALTH);
 
 
             myLogger("==== Answer from Player: " + player.getPlayerName() + " ====");
