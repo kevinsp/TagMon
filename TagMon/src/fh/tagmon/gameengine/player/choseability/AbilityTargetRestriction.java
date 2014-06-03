@@ -1,4 +1,4 @@
-package fh.tagmon.gameengine.choseability;
+package fh.tagmon.gameengine.player.choseability;
 
 import java.util.LinkedList;
 

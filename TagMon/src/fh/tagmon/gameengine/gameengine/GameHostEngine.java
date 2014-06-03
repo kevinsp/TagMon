@@ -8,10 +8,10 @@ import java.util.LinkedList;
 
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.IPlayer;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.guiParts.Fight;
 import fh.tagmon.guiParts.GuiPartsToUpdate;
 
@@ -22,15 +22,13 @@ public class GameHostEngine extends AsyncTask implements Runnable {
     private IPlayer currentPlayer;
     private int currentRoundStatus = 0;
     private int roundCounter = 0;
-    private Context context = null;
     private boolean runGame = true;
     private final Object waitForPlayer;
     private boolean wait;
     private ActionObject actionFromUser;
 
-    public GameHostEngine(PlayerList newPList, Context context) {
+    public GameHostEngine(PlayerList newPList) {
         this.playerList = newPList;
-        this.context = context;
 
         waitForPlayer = new Object();
         wait = false;
@@ -39,8 +37,7 @@ public class GameHostEngine extends AsyncTask implements Runnable {
     //function for testing for rolle
     @Override
     public void run() {
-        ((Fight) context).initBattleGUI(playerList.getPlayList(), 0); // player id is '0' for testing
-
+        
         while (runGame) {
             this.roundCounter++;
             // 1Phase Neuer Spieler

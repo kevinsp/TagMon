@@ -1,7 +1,7 @@
 package fh.tagmon.gameengine.helperobjects;
 
 import fh.tagmon.gameengine.abilitys.Ability;
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
 public class ActionObject {
 	

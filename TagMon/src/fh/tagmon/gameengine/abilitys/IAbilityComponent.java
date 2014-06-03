@@ -1,6 +1,6 @@
 package fh.tagmon.gameengine.abilitys;
 
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 

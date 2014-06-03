@@ -2,16 +2,16 @@ package fh.tagmon.gameengine.player;
 
 import java.util.HashMap;
 
-import fh.tagmon.gameengine.choseability.AbilityPreporator;
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
-import fh.tagmon.gameengine.deal_with_incoming_abilitys.AbilityComponentDirector;
+import fh.tagmon.gameengine.player.choseability.AbilityPreporator;
+import fh.tagmon.gameengine.player.deal_with_incoming_abilitys.AbilityComponentDirector;
 import fh.tagmon.model.Monster;
 
 public class MonsterPlayModule {
 
 	private Monster myMonster;
 	private AbilityComponentDirector myMonstersAbilityComponentDirector;
+
 	private AbilityPreporator myMonstersAbilityPreporator;
 	private EventManager eventManager;
 	
@@ -31,10 +31,6 @@ public class MonsterPlayModule {
 	}
 	
 	
-	public void handleAbilityComponents(IAbilityComponent abilityComponent){
-		this.myMonstersAbilityComponentDirector.handleAbilityComponent(abilityComponent);
-	}
-	
 	
 	public String getLatestLogEntry(){
 		return this.myMonstersAbilityComponentDirector.getLatestLog();
@@ -42,6 +38,10 @@ public class MonsterPlayModule {
 	
 	public AbilityPreporator getPrep(){
 		return this.myMonstersAbilityPreporator;
+	}
+	
+	public AbilityComponentDirector getMyMonstersAbilityComponentDirector() {
+		return myMonstersAbilityComponentDirector;
 	}
 	
 }

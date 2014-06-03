@@ -1,4 +1,4 @@
-package fh.tagmon.gameengine.deal_with_incoming_abilitys;
+package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -7,6 +7,7 @@ import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.EventManager;
 import fh.tagmon.gameengine.player.IListener;
 import fh.tagmon.gameengine.player.IPlayer;
@@ -30,7 +31,7 @@ public class AbilityComponentDirector implements IListener{
 	}
 	
 	
-	public void handleAbilityComponent(IAbilityComponent abilityComponent){
+	public AnswerObject handleAbilityComponent(IAbilityComponent abilityComponent){
 
 		switch(abilityComponent.getComponentType()){
 		case BUFF:
@@ -46,7 +47,8 @@ public class AbilityComponentDirector implements IListener{
 		
 		}
 			
-		
+		//TODO answer zusammenbauen
+		return null;
 	}
 	
 	public String getLatestLog(){

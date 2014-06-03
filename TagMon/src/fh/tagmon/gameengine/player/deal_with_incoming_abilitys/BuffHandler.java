@@ -1,4 +1,4 @@
-package fh.tagmon.gameengine.deal_with_incoming_abilitys;
+package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
 
 import java.util.LinkedList;

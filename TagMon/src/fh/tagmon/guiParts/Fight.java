@@ -17,12 +17,12 @@ import java.util.List;
 
 import fh.tagmon.R;
 import fh.tagmon.gameengine.abilitys.Ability;
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
 import fh.tagmon.gameengine.gameengine.GameEngineModule;
 import fh.tagmon.gameengine.gameengine.GameHostEngine;
 import fh.tagmon.gameengine.gameengine.PlayerListNode;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.player.IPlayer;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 
@@ -33,7 +33,7 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
     private static boolean battleGuiInit = false;
     private Context context = this;
     private DialogBuilder chooseDialog;
-    private GameHostEngine gpe;
+    private GameEngineModule engineModule;
 
     private IPlayer player;
 
@@ -44,7 +44,8 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
         setContentView(R.layout.activity_fight);
 
         //init game engine
-        GameEngineModule gEM = new GameEngineModule(this);
+        //Todo : Kondition einbauen für nicht-host-spieler
+        engineModule = new GameEngineModule(this);
 
     }
 

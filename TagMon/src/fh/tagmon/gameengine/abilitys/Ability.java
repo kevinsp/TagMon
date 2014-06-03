@@ -8,7 +8,8 @@ import java.util.ListIterator;
 
 
 
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
+
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 public class Ability {
