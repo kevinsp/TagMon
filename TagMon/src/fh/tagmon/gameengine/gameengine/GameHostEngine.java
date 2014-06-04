@@ -142,9 +142,6 @@ public class GameHostEngine extends AsyncTask implements Runnable {
             final IPlayer player = this.playerList.getPlayerByTargetId(targetId);
             AnswerObject answer = player.workWithAbilityComponent(aComponent);
 
-            ((Fight) context).refreshGUI(player, GuiPartsToUpdate.HEALTH);
-
-
             myLogger("==== Answer from Player: " + player.getPlayerName() + " ====");
             myLogger(answer.getMsg());
             myLogger("====");
@@ -154,30 +151,5 @@ public class GameHostEngine extends AsyncTask implements Runnable {
             }
             //////////////////////////////
         }
-    }
-
-    @Override
-    protected Object doInBackground(Object[] params) {
-        //for testing
-        ((Fight) context).initBattleGUI(playerList.getPlayList(), 0); // player id is '0' for testing
-
-        while (runGame) {
-
-            this.roundCounter++;
-            // 1Phase Neuer Spieler
-            currentPlayer = this.playerList.getNextPlayer();
-
-            // 2Phase Spieler soll seinen Zugmachen
-            ActionObject action = waitForAction();
-
-            myLogger("##################### ROUND: " + String.valueOf(this.roundCounter));
-            myLogger("CurrentPlayer: " + currentPlayer.getPlayerName());
-            String targetName = this.playerList.getPlayerByTargetId(action.getTargetRestriction().getTargetList().getFirst()).getPlayerName();
-            myLogger("Chosen Ability: |" + action.getAbility().getAbilityName() + "| on Target: " + targetName);
-
-            // 3phase Ability Zerlegen und Komponenten an den Richtigen Schicken
-            this.sendAbilityComponentToPlayer(action);
-        }
-        return null;
     }
 }

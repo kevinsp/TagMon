@@ -8,6 +8,7 @@ import fh.tagmon.client.GameClientEngine;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.gameengine.player.MyPlayerCreator;
+import fh.tagmon.network.ConnectionType;
 
 public class GameEngineModule {
 
@@ -41,7 +42,8 @@ public class GameEngineModule {
 	private void initializeClient(Context context) {
 		//TODO Zentraler Speicherplatz für MonsterPlayModule
 		MonsterPlayModule module = null;
-		clientEngine = new GameClientEngine(context, module, connection);
+		ConnectionType connectionType = ConnectionType.LCL_SOCKET;
+		clientEngine = new GameClientEngine(context, module, connectionType);
 	}
 
 

@@ -1,18 +1,24 @@
 package fh.tagmon.network;
 
-import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import java.io.Serializable;
 
-public final class HostMessageObject {
+import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.gameengine.PlayerList;
+
+public final class HostMessageObject implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private final HostMessageObjectType type;
 	private final String msg;
 	private final IAbilityComponent abilityComponent;
+	private final PlayerList playerList;
 	
 	
 	
 	public HostMessageObject(HostMessageObjectType type, String msg,
-			IAbilityComponent abilityComponent) {
+			IAbilityComponent abilityComponent, PlayerList playerList) {
 		this.type = type;
 		this.msg = msg;
+		this.playerList = playerList;
 		this.abilityComponent = abilityComponent;
 	}
 
@@ -29,6 +35,12 @@ public final class HostMessageObject {
 	public IAbilityComponent getAbilityComponent(){
 		if(type == HostMessageObjectType.ABILITY_COMPONENT)
 			return abilityComponent;
+		return null;
+	}
+	
+	public PlayerList getPlayerList(){
+		if(type == HostMessageObjectType.YOUR_TURN_ORDER)
+			return playerList;
 		return null;
 	}
 }

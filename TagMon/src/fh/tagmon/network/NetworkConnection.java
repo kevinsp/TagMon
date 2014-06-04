@@ -1,33 +1,22 @@
 package fh.tagmon.network;
 
+import java.util.Observable;
+
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 
-public class NetworkConnection implements INetworkSender, INetworkListener{
-	private static NetworkConnection instance = null;
-	
-	public static NetworkConnection getInstance(){
-		if(instance == null)
-			instance = new NetworkConnection();
-		return instance;
-	}
+public abstract class NetworkConnection extends Observable implements INetworkSender, INetworkListener{
 	
 	@Override
-	public HostMessageObject listenToBroadcast() {
-		// TODO Auto-generated method stub
-		return "Test";
-	}
+	public abstract HostMessageObject listenToBroadcast();
 
 	@Override
-	public void sendActionToHost(ActionObject ao) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public abstract void sendActionToHost(ActionObject ao);
+	
 	@Override
-	public void sendAnswerToHost(AnswerObject ao) {
-		// TODO Auto-generated method stub
-		
-	}
+	public abstract void sendAnswerToHost(AnswerObject ao);
+	
+	@Override
+	public abstract void closeConnection();
 	
 }

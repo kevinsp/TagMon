@@ -1,20 +1,25 @@
 package fh.tagmon.client;
 
+import java.io.IOException;
+import java.util.Observable;
+import java.util.Observer;
+
+import fh.tagmon.gameengine.gameengine.PlayerList;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
-import fh.tagmon.gameengine.player.EventManager;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.guiParts.Fight;
+import fh.tagmon.guiParts.GuiPartsToUpdate;
+import fh.tagmon.network.ConnectionType;
 import fh.tagmon.network.HostMessageObject;
-import fh.tagmon.network.HostMessageObjectType;
-import fh.tagmon.network.INetworkSender;
 import fh.tagmon.network.NetworkConnection;
+import fh.tagmon.network.NetworkSocketConnection;
 import android.content.Context;
+import android.util.Log;
 
-public class GameClientEngine {
-
+public class GameClientEngine implements Observer{
+	
 	private Context context;
-	private boolean running = true;
 	
 	//GAMEPLAY
 	private MonsterPlayModule monster;
@@ -22,49 +27,91 @@ public class GameClientEngine {
 	//NETWORK
 	private NetworkConnection connection;
 	
-	public GameClientEngine(Context context, MonsterPlayModule mPM, NetworkConnection connection){
+	public GameClientEngine(Context context, MonsterPlayModule mPM, ConnectionType type){
 		this.context = context;
-		this.connection = connection;
-		monster = mPM;
+		this.monster = mPM;
+		connectToNetwork(type);
 	}
 	
-	public void run(){
-		//TODO horche ob der host eine Playerlist schickt...
-		//TODO klären mit Pascal
-		((Fight) context).initBattleGUI(playerList.getPlayList(), 0); // player id is '0' for testing
-
-		while(running){
-			HostMessageObject hostMsg = connection.listenToBroadcast();
-			switch(hostMsg.getType()){
-			case ABILITY_COMPONENT:
-				AnswerObject answerObject = monster.getMyMonstersAbilityComponentDirector().
-						handleAbilityComponent(hostMsg.getAbilityComponent());
-				connection.sendAnswerToHost(answerObject);
-				break;
-			case ENEMY_TURN_LOG:
-				//TODO Wenn eine Kampfstatistik kommt, zeige sie zeitlich begrenzt an
-				break;
-			case YOUR_TURN_ORDER:
-				//TODO Wenn eine Aufforderung kommt mach deinen Zug
-				//Aufforderung an GUI weiterleiten und als Antwort ActionObject erhalten
-				ActionObject actionObject = null;
-				connection.sendActionToHost(actionObject);
-				break;
-			case GAME_OVER:
-				stop(); 
-				break;
-			default:
-				//TODO evtl Meldung auf Screen ausgeben
-				break;
-			
+	private void connectToNetwork(ConnectionType type){
+		switch(type){
+		case BLUETOOTH:
+			break;
+		case LCL_SOCKET:
+			try {
+				connection = new NetworkSocketConnection("localhost");
+			} catch (IOException e) {
+				Log.e("Client localhost connection", "Connection failed!");
+				connection = null;
 			}
-			//Wenn Spiel zu Ende dann Client stoppen
+			break;
+		case TCP_SOCKET:
+			break;
+		default:
+			break;
 		}
-		//Statistik ausgeben und zum Hauptbildschirm zurück.
-		//Optional: höchster Damage, gespielte Runden bla bla mitloggen..
+		if(connection != null)
+			connection.addObserver(this);
 	}
 	
 	private void stop(){
-		running = false;
+		connection.deleteObservers();
+		connection.closeConnection();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void update(Observable observable, Object hostMsg) {
+		switch(((HostMessageObject) hostMsg).getType()){
+		case ABILITY_COMPONENT:
+			AnswerObject answerObject = monster.getMyMonstersAbilityComponentDirector().
+				handleAbilityComponent(((HostMessageObject) hostMsg).getAbilityComponent());
+			connection.sendAnswerToHost(answerObject);
+			break;
+		case ENEMY_TURN_LOG:
+			//TODO Wenn eine Kampfstatistik kommt, zeige sie zeitlich begrenzt an
+			break;
+		case GAME_OVER:
+			stop(); 
+			//Statistik ausgeben und zum Hauptbildschirm zurück.
+			//Optional: höchster Damage, gespielte Runden bla bla mitloggen..
+			break;
+		case YOUR_TURN_ORDER:
+			//TODO Wenn eine Aufforderung kommt mach deinen Zug
+			//Aufforderung an GUI weiterleiten und als Antwort ActionObject erhalten
+			PlayerList playerList = ((HostMessageObject) hostMsg).getPlayerList();
+			((Fight) context).initBattleGUI(playerList.getPlayList(), 0); // player id is '0' for testing
+			ActionObject actionObject = null;
+			connection.sendActionToHost(actionObject);
+			break;
+		default:
+			//TODO evtl Meldung auf Screen ausgeben
+			break;
+		}
+	}
+	
+	private ActionObject waitForAction() {
+        ActionObject action = null;
+
+
+        if (currentPlayer.getId() == 0) {
+            onPause();
+
+            ((Fight) context).chooseAbility(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId(), this);
+            currentPlayer.sendNewRoundEvent(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
+
+            synchronized (waitForPlayer) {
+                while (wait) {
+                    try {
+                        waitForPlayer.wait();
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+            action = actionFromUser;
+        } else {
+            action = currentPlayer.yourTurn(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
+        }
+        return action;
+    }
 }
