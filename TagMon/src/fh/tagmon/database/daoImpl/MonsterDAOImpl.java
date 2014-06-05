@@ -2,13 +2,14 @@ package fh.tagmon.database.daoImpl;
 
 import java.util.ArrayList;
 
+import android.content.Context;
 import fh.tagmon.database.dao.MonsterDAO;
 import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Attribut;
 import fh.tagmon.model.AttributModifikator;
 import fh.tagmon.model.Koerperteil;
@@ -18,8 +19,16 @@ import fh.tagmon.model.Stats;
 
 public class MonsterDAOImpl implements MonsterDAO {
 
+	private DataBaseHelper dbHelper;
+	
+	public MonsterDAOImpl(Context context) {
+		dbHelper = new DataBaseHelper(context);
+	}
+	
 	@Override
 	public Monster getMonster(String tagID) throws MonsterDAOException {
+		
+		
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -29,13 +38,13 @@ public class MonsterDAOImpl implements MonsterDAO {
 		Attribut attribut = new Attribut(0, 10, 11, 12, 13);
 		Ability ability = new Ability("Beiﬂattacke", 20, AbilityTargetRestriction.ENEMY);
 		
-		IAbilityComponent component = new Damage(7);
+		IAbilityComponent component = new Damage(7, AbilityTargetRestriction.ENEMY);
 		ability.addAbilityComponent(component);
 		
 		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
 		
 		Ability blockAbility = new Ability("BLOCKABILITY", 11, AbilityTargetRestriction.SELF);
-		blockAbility.addAbilityComponent(new Buff(2,0,5,0,0));
+		blockAbility.addAbilityComponent(new Buff(2,0,5,0,0,null));
 		abilityList.add(blockAbility);
 		
 		

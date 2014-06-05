@@ -1,6 +1,6 @@
 package fh.tagmon.gameengine.abilitys;
 
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 
@@ -13,8 +13,10 @@ public class Buff extends AbilityComponent implements IAbilityComponent {
 	private int constitutionBuff = 0;
 	private int damageAbsorbationAmount = 0;
 	
-	public Buff(int duration, int strengthBuff, int armorValueBuff, int constitutionBuff, int damageAbsorbationAmount){
-		super(AbilityComponentTypes.BUFF);
+	public Buff(int duration, int strengthBuff, int armorValueBuff, int constitutionBuff, int damageAbsorbationAmount, AbilityTargetRestriction abilityTargetRestriction){
+		
+		super(AbilityComponentTypes.BUFF, abilityTargetRestriction);
+		
 		this.duration = duration;
 		this.strengthBuff = strengthBuff;
 		this.constitutionBuff = constitutionBuff;
@@ -23,7 +25,7 @@ public class Buff extends AbilityComponent implements IAbilityComponent {
 	}
 
 	public Buff clone(){
-		return new Buff(this.duration, this.strengthBuff, this.armorValueBuff, this.constitutionBuff, this.damageAbsorbationAmount);
+		return new Buff(this.duration, this.strengthBuff, this.armorValueBuff, this.constitutionBuff, this.damageAbsorbationAmount,this.componentTargetRestr);
 	}
 	
 	public int getStrengthBuff() {

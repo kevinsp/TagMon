@@ -1,7 +1,8 @@
 package fh.tagmon.gameengine.abilitys;
 
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
-import fh.tagmon.gameengine.MonsterDummys.Monster;
+
+
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
 
 
@@ -11,13 +12,13 @@ abstract class AbilityComponent {
 	
 	protected AbilityComponent(AbilityComponentTypes type, AbilityTargetRestriction componentTargetRestr){
 		this.componentType = type;
-		this.componentTargetRestr = componentTargetRestr;
+		if(componentTargetRestr == null){
+			this.componentTargetRestr = AbilityTargetRestriction.DEFAULT;
+		}else{
+			this.componentTargetRestr = componentTargetRestr;
+		}
+		
 	}
-	
-	
-	protected AbilityComponent(AbilityComponentTypes type){
-		this.componentType = type;
-		this.componentTargetRestr = AbilityTargetRestriction.DEFAULT;
-	}
+
 	
 }

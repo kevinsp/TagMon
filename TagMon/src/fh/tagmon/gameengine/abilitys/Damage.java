@@ -1,6 +1,7 @@
 package fh.tagmon.gameengine.abilitys;
 
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
+
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 
@@ -11,8 +12,8 @@ public class Damage extends AbilityComponent implements IAbilityComponent {
 	
 	private int monsterStrength = 0;
 	
-	public Damage(int baseDmg){
-		super(AbilityComponentTypes.DAMAGE);
+	public Damage(int baseDmg, AbilityTargetRestriction abilityTargetRestriction){
+		super(AbilityComponentTypes.DAMAGE, abilityTargetRestriction);
 		this.baseDmg = baseDmg;
 	}
 	

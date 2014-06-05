@@ -8,7 +8,7 @@ import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
-import fh.tagmon.gameengine.choseability.AbilityTargetRestriction;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 public class MyPlayerCreator {
