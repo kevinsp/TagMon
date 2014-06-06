@@ -2,6 +2,7 @@ package fh.tagmon.guiParts;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -18,7 +19,10 @@ public class DialogBuilder extends Dialog {
     private String title = "";
     private CharSequence[] items;
     private View.OnClickListener onClickListener;
+    private int timeTilClose;
     private Object obj;
+    private Handler closeTimeHandler = new Handler();
+    private String text;
 
 
     public DialogBuilder(Context context, String title, CharSequence[] items, Object obj, View.OnClickListener onClickListener) {
@@ -42,6 +46,12 @@ public class DialogBuilder extends Dialog {
         initDialog();
     }
 
+    public DialogBuilder(Context context, String text, int timeTilClose) {
+        super(context);
+        this.timeTilClose = timeTilClose;
+        initDialog();
+    }
+
 
     private void showDialog() {
         this.show();
@@ -54,11 +64,36 @@ public class DialogBuilder extends Dialog {
 
         if (items != null && onClickListener != null) {
             setItemsInScrollList();
+        } else if(timeTilClose != 0 && !text.equals("")) {
+            setText();
+            closeAfterTime();
         }
 
 
         showDialog();
 
+    }
+
+    private void setText() {
+        TableLayout table = (TableLayout) findViewById(R.id.custom_dialog_scroll_table);
+        TableRow tr = new TableRow(context);
+        TextView tv = new TextView(context);
+        tv.setText(text);
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.text_size));
+        tv.setLayoutParams(new TableRow.LayoutParams(1));
+        tv.setGravity(Gravity.CENTER);
+        tr.addView(tv);
+        table.addView(tr);
+    }
+
+    private void closeAfterTime() {
+        final Dialog d = this;
+        closeTimeHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                d.dismiss();
+            }
+        }, timeTilClose);
     }
 
     private void setItemsInScrollList() {
