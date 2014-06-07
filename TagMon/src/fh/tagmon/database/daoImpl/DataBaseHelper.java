@@ -12,6 +12,7 @@ import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.Heal;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.abilitys.Stun;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Attribut;
@@ -20,6 +21,7 @@ import fh.tagmon.model.Buff;
 import fh.tagmon.model.Faehigkeit;
 import fh.tagmon.model.Koerperteil;
 import fh.tagmon.model.KoerperteilArt;
+import fh.tagmon.model.Monster;
 import fh.tagmon.model.Stats;
 import android.content.Context;
 import android.database.Cursor;
@@ -77,7 +79,6 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 				throw new Error("Error copying database");
 			}
 		}
-
 	}
 
 	/**
@@ -164,9 +165,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	
 	
 	
-	public Attribut getAttribute(int monsterID){
+	public Attribut getAttribute(int monsterID) throws MonsterDAOException{
 
-		 
 		String sqlQuery = 	   "SELECT tAttr.staerke, tAttr.intelligenz, tAttr.konstitution, tAttr.verteidigung " +
 					 		   "FROM tagdb_monster tMonster INNER JOIN tagdb_attribute tAttr " +
 					 		   "	ON tMonster.id = tAttr.monster_id " + 
@@ -176,11 +176,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		 
 		 ArrayList<Integer> attribList = new ArrayList<Integer>();
 		 
-		 while(cursor.moveToNext()){
+		 if(cursor.moveToFirst()){
 			 for (int i=0; i<cursor.getColumnCount(); i++) {
 				 attribList.add(cursor.getInt(i));
 			}
 		 }
+		 else
+			 throw new MonsterDAOException("Monster could not be created cause no attributes were found");
+		 
 		 return new Attribut(attribList.get(0), attribList.get(1), attribList.get(2), attribList.get(3), attribList.get(4));
 	}
 	
@@ -223,15 +226,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 				break;
 			case 4: koerperteileArt = KoerperteilArt.BEIN;
 				break;
-			default: throw new MonsterDAOException();
+			default: throw new MonsterDAOException("The Monster's 'koerperteil' has no correct 'koerperteileArt'");
 			}
 			 koerperteilList.add(new Koerperteil(kId, name, abilityList, koerperteileArt, attrMod));
 		 }
+		 
+		 if(koerperteilList.isEmpty())
+			 throw new MonsterDAOException("Monster has not a single 'koerperteil'");
+		 
 		 return koerperteilList;
 	}
 	
 	
-	public AttributModifikator getAttributModifikator(int koerperteileID){
+	public AttributModifikator getAttributModifikator(int koerperteileID) throws MonsterDAOException{
 		
 		 String sqlQuery = 	"SELECT tAttrM.staerke, tAttrM.intelligenz, tAttrM.konstitution, tAttrM.verteidigung " +
 							"FROM tagdb_attributmodifikator tAttrM " +
@@ -247,11 +254,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			}
 		 }
 		 
+		 if(attribList.isEmpty())
+			 throw new MonsterDAOException("Koerperteil has no 'attributModifikator'");
+		 
 		 return new AttributModifikator(attribList.get(0), attribList.get(1), attribList.get(2), attribList.get(3));	
 	}
 	
 	
-	public ArrayList<Ability> getAbilities(int koerperteileID){
+	public ArrayList<Ability> getAbilities(int koerperteileID) throws MonsterDAOException {
 		
 		 String sqlQuery = 	"SELECT tFaehigkeit.id, tFaehigkeit.name, tFaehigkeit.ziel, tFaehigkeit.energiekosten, tFaehigkeit.angriffsziel, tFaehigkeit.angriffswert, " +
 				 					"tFaehigkeit.heilungsziel, tFaehigkeit.heilungswert, tFaehigkeit.stunziel, tFaehigkeit.stundauer, " +
@@ -277,6 +287,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		int stunziel;
 		int stundauer;
 		int absorbationziel;
+		int absorbationsdauer;
 		int schadensabsorbation;
 		
 		while(cursor.moveToNext()){
@@ -285,16 +296,17 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			
 			id = cursor.getInt(0);
 			name = cursor.getString(1);
-			ziel = cursor.getInt(0);
-			energiekosten = cursor.getInt(2);
-			angriffsziel = cursor.getInt(3);
-			angriffswert = cursor.getInt(4);
-			heilungsziel = cursor.getInt(2);
-			heilungswert = cursor.getInt(5);
-			stunziel = cursor.getInt(0);
-			stundauer = cursor.getInt(6);
-			absorbationziel = cursor.getInt(0);
-			schadensabsorbation = cursor.getInt(7);
+			ziel = cursor.getInt(2);
+			energiekosten = cursor.getInt(3);
+			angriffsziel = cursor.getInt(4);
+			angriffswert = cursor.getInt(5);
+			heilungsziel = cursor.getInt(6);
+			heilungswert = cursor.getInt(7);
+			stunziel = cursor.getInt(8);
+			stundauer = cursor.getInt(9);
+			absorbationziel = cursor.getInt(10);
+			absorbationsdauer = cursor.getInt(11);
+			schadensabsorbation = cursor.getInt(12);
 			
 			if(angriffswert!=0){
 				abilityComponents.add(new Damage(angriffswert, getAbilityTargetRestriction(angriffsziel)));
@@ -309,13 +321,21 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			}
 			
 			if(schadensabsorbation!=0){
-				// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-				// NOOOOOOOOOOOOOOOOOOOOOOOCH MAAAAAAAAAAAAAAAAAAACHEN
-				// NEW DAMAGE SHIT NOCH MACHEN DAMAGEABSORBATION IST NOCH KEINE KOMPONENTE WIRD ABER NOCH GEMACHT!!!!!!!!!1
-				//abilityComponents.add(new DamageSHIT, getAbilities(schadensabsorbation));
+				abilityComponents.add(new Schadensabsorbation(absorbationsdauer, schadensabsorbation, getAbilityTargetRestriction(absorbationziel)));
 			}
 			
-			abilityList.add(new Ability(name, energiekosten, getAbilityTargetRestriction(ziel)));
+			
+			// get Buffs for the ability
+			ArrayList<fh.tagmon.gameengine.abilitys.Buff> buffList = getBuff(id);
+			
+			for (fh.tagmon.gameengine.abilitys.Buff buff : buffList) {
+				abilityComponents.add(buff);
+			}
+			
+			abilityList.add(new Ability(name, energiekosten, getAbilityTargetRestriction(ziel), abilityComponents));
+			
+			if(abilityList.isEmpty())
+				throw new MonsterDAOException("Empty ability list");
 			
 		}
 		return abilityList;
@@ -346,7 +366,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	}
 	
 	
-	public ArrayList<Buff> getBuff(int faehigkeitID){
+	public ArrayList<fh.tagmon.gameengine.abilitys.Buff> getBuff(int faehigkeitID){
 		
 		 String sqlQuery = 	"SELECT tBuff.id, tBuff.dauer, tBuff.ziel, tBuff.bStaerke, " +
 							"		tBuff.bIntelligenz, tBuff.bKonstitution, tBuff.bVerteidigung " +
@@ -355,17 +375,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
 		
-		ArrayList<Buff> buffList = new ArrayList<Buff>();
+		ArrayList<fh.tagmon.gameengine.abilitys.Buff> buffList = new ArrayList<fh.tagmon.gameengine.abilitys.Buff>();
 		
 		while(cursor.moveToNext()){
-			buffList.add(new Buff(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6)));
+			buffList.add(new fh.tagmon.gameengine.abilitys.Buff(cursor.getInt(1), cursor.getInt(3), 
+					cursor.getInt(6), cursor.getInt(5), getAbilityTargetRestriction(cursor.getInt(2))));
 		}
 		return buffList;
 		
 	}
 	
 	
-	public Stats getStats(int monsterID){
+	public Stats getStats(int monsterID) throws MonsterDAOException{
 		
 		 String sqlQuery = 	"SELECT tagdb_stats.maxHP,tagdb_stats.curHP,tagdb_stats.curHP,tagdb_stats.maxEP, " +
 				 			"		tagdb_stats.curEP,tagdb_stats.regEP, tagdb_stats.lvl, tagdb_stats.curEXP " +
@@ -374,13 +395,82 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
 		
+		if(!cursor.moveToFirst())
+			throw new MonsterDAOException("Monster has no stats");
+			
+		
 		return new Stats(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6), cursor.getInt(7));			
 
 	}
 	
+	
+	public Monster getMonsterByID(int monsterID) throws MonsterDAOException{
+		
+		Attribut attribut = getAttribute(monsterID);
+		
+		ArrayList<Koerperteil> koerperteile = null;
+		try {
+			koerperteile = getKoerperteile(monsterID);
+		} catch (MonsterDAOException e) {
+			Log.d("tagmonDB", "Koerperteil could not be created");
+		}
+		
+		Stats stats = getStats(monsterID);
+		
+		String sqlQuery = 	"SELECT name " +
+							"FROM tagdb_monster " + 
+							"WHERE id = " + monsterID;
+		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
+		
+		if(!cursor.moveToFirst())
+			throw new MonsterDAOException("Monster has no name");
 
+		String monsterName = cursor.getString(0);
+		
+		Monster monster = new Monster(monsterID, monsterName, attribut, koerperteile, stats);
+		return monster;
+	}
 	
 	
+	// returns list of monstergroup id's
+	public ArrayList<Integer> getMonsterGroupsByTagID(String tagSerial){
+		
+		
+		// getting monstergroup id's for specific tagSerial (1 tag can have several groups)
+		String sqlQuery = 	"SELECT monstergruppe_id " +
+							"FROM tagdb_tag_monsterGruppe tmg " +
+							"INNER JOIN tagdb_tag ta " +
+							"	ON tmg.tag_id = ta.id " +
+							"WHERE ta.tagserial =  '" + tagSerial +"'";
+
+		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
+		
+		ArrayList<Integer> groupIDList = new ArrayList<Integer>();
+		
+		while(cursor.moveToNext()){
+			groupIDList.add(cursor.getInt(0));
+		}
+		return groupIDList;
+	}
+	
+	
+	// returns list of monster id's
+	public ArrayList<Integer> getMonsterByGroupID(int monsterGroupID){
+		String sqlQuery = 	"SELECT monster_id " +
+							"FROM tagdb_monstergruppe_monster " +
+							"WHERE monstergruppe_id =  " + monsterGroupID;
+		
+		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
+		
+		ArrayList<Integer> monsterIDList = new ArrayList<Integer>();
+		
+		while(cursor.moveToNext()){
+			monsterIDList.add(cursor.getInt(0));
+		}
+		return monsterIDList;
+	}
+	
+
 	
 	// Add your public helper methods to access and get content from the
 	// database.

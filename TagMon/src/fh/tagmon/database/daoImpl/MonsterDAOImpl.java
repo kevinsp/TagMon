@@ -1,8 +1,12 @@
 package fh.tagmon.database.daoImpl;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 
 import android.content.Context;
+import android.database.SQLException;
+import android.util.Log;
 import fh.tagmon.database.dao.MonsterDAO;
 import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.gameengine.abilitys.Ability;
@@ -21,16 +25,29 @@ public class MonsterDAOImpl implements MonsterDAO {
 
 	private DataBaseHelper dbHelper;
 	
-	public MonsterDAOImpl(Context context) {
+	public MonsterDAOImpl(Context context) throws IOException, SQLException {
 		dbHelper = new DataBaseHelper(context);
+		
+		dbHelper.createDataBase();
+		dbHelper.openDataBase();
+		
 	}
 	
 	@Override
 	public Monster getMonster(String tagID) throws MonsterDAOException {
 		
+		Random randomGenerator = new Random();
 		
-		// TODO Auto-generated method stub
-		return null;
+		ArrayList<Integer> groupIDList = dbHelper.getMonsterGroupsByTagID(tagID);
+		
+		// choose a random monstergroup for example fire-monster, ice-monster ... and return the id list of the specific group
+		// LATER you can maybe add some LOGIC not random like (Monster is fire - get a ice monsterList as an enemyGroup...)
+		ArrayList<Integer> monsterIDList = dbHelper.getMonsterByGroupID(groupIDList.get(randomGenerator.nextInt(groupIDList.size())));
+		
+		// return random monster from the monsterID list maybe later also with logic like lvl 10 monster gets lvl 8-11 enemy monster ...
+		Monster monster = dbHelper.getMonsterByID(monsterIDList.get(randomGenerator.nextInt(monsterIDList.size())));
+		
+		return monster;
 	}
 	
 	@Override
@@ -44,7 +61,7 @@ public class MonsterDAOImpl implements MonsterDAO {
 		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
 		
 		Ability blockAbility = new Ability("BLOCKABILITY", 11, AbilityTargetRestriction.SELF);
-		blockAbility.addAbilityComponent(new Buff(2,0,5,0,0,null));
+		blockAbility.addAbilityComponent(new Buff(2,0,5,0,null));
 		abilityList.add(blockAbility);
 		
 		
