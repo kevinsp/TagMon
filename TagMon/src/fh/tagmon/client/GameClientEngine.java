@@ -84,7 +84,7 @@ public class GameClientEngine implements Observer, ISetAbility{
 		case YOUR_TURN_ORDER:
 			//TODO Wenn eine Aufforderung kommt mach deinen Zug
 			//Aufforderung an GUI weiterleiten und als Antwort ActionObject erhalten
-			PlayerList playerList = ((HostMessageObject) hostMsg).getPlayerList();
+			PlayerList playerList = ((HostMessageObject) hostMsg).getPlayerList(); // WARUM GREIFT DIE GUI AUF DIE SPIELER LISTE DES HOSTS ZU???
             //TODO nicht jedes mal die gui initialisieren -> UPDATEN
 			((Fight) context).initBattleGUI(playerList.getPlayList(), 0); // player id is '0' for testing
 			ActionObject actionObject = waitForAction(playerList);
