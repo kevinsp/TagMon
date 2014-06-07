@@ -11,9 +11,8 @@ public class Buff extends AbilityComponent implements IAbilityComponent,IDuratio
 	private int strengthBuff = 0;
 	private int armorValueBuff = 0;
 	private int constitutionBuff = 0;
-	private int damageAbsorbationAmount = 0;
 	
-	public Buff(int duration, int strengthBuff, int armorValueBuff, int constitutionBuff, int damageAbsorbationAmount, AbilityTargetRestriction abilityTargetRestriction){
+	public Buff(int duration, int strengthBuff, int armorValueBuff, int constitutionBuff, AbilityTargetRestriction abilityTargetRestriction){
 		
 		super(AbilityComponentTypes.BUFF, abilityTargetRestriction);
 		
@@ -21,14 +20,14 @@ public class Buff extends AbilityComponent implements IAbilityComponent,IDuratio
 		this.strengthBuff = strengthBuff;
 		this.constitutionBuff = constitutionBuff;
 		this.armorValueBuff = armorValueBuff;
-		this.setDamageAbsorbationAmount(damageAbsorbationAmount);
+
 	}
 
 	
 	//brauch man nicht mehr sobalt über netzwerk die objecte transportiert werden
 	@Override
 	public Buff cloneMe(){
-		return new Buff(this.duration, this.strengthBuff, this.armorValueBuff, this.constitutionBuff, this.damageAbsorbationAmount,this.componentTargetRestr);
+		return new Buff(this.duration, this.strengthBuff, this.armorValueBuff, this.constitutionBuff, this.componentTargetRestr);
 	}
 	
 	public int getStrengthBuff() {
@@ -73,13 +72,6 @@ public class Buff extends AbilityComponent implements IAbilityComponent,IDuratio
 		
 	}
 
-	public int getDamageAbsorbationAmount() {
-		return damageAbsorbationAmount;
-	}
-
-	public void setDamageAbsorbationAmount(int damageAbsorbationAmount) {
-		this.damageAbsorbationAmount = damageAbsorbationAmount;
-	}
 
 	@Override
 	public AbilityTargetRestriction getComponentTargetRestriction() {
