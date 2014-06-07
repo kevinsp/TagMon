@@ -3,6 +3,7 @@ package fh.tagmon.gameengine.gameengine;
 import android.util.Log;
 
 import java.util.LinkedList;
+import java.util.Map.Entry;
 
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
@@ -15,25 +16,27 @@ public class GameHostEngine implements Runnable {
 
     private PlayerList playerList;
     private IPlayer currentPlayer;
-    private int currentRoundStatus = 0;
     private int roundCounter = 0;
     private boolean runGame = true;
-    private final Object waitForPlayer;
-    private boolean wait;
-    private ActionObject actionFromUser;
+
 
     public GameHostEngine(PlayerList newPList) {
         this.playerList = newPList;
-
-        waitForPlayer = new Object();
-        wait = false;
     }
-
+    
+    private void initGameStart(){
+    	for(Entry<Integer, IPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
+    		PlayerInfo playerInfo = entry.getValue().getReady(entry.getKey());
+    		this.playerList.addPlayerInfo(entry.getKey(), playerInfo);
+    	}
+    }
+    
     //function for testing for rolle
     @Override
     public void run() {
-        
-        while (runGame) {
+    	initGameStart();
+       
+    	while (runGame) {
             this.roundCounter++;
             // 1Phase Neuer Spieler
             currentPlayer = this.playerList.getNextPlayer();
@@ -42,8 +45,10 @@ public class GameHostEngine implements Runnable {
             ActionObject action = currentPlayer.yourTurn(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
 
             myLogger("##################### ROUND: " + String.valueOf(this.roundCounter));
-            myLogger("CurrentPlayer: " + currentPlayer.getPlayerName());
-            String targetName = this.playerList.getPlayerByTargetId(action.getTargetRestriction().getTargetList().getFirst()).getPlayerName();
+           
+            myLogger("CurrentPlayer: " + this.playerList.getPlayerInfo(this.playerList.getCurrentPlayerTargetId()).getPlayerName());
+           
+            String targetName = this.playerList.getPlayerInfo(action.getTargetRestriction().getTargetList().getFirst()).getPlayerName();
             myLogger("Chosen Ability: |" + action.getAbility().getAbilityName() + "| on Target: " + targetName);
 
             // 3phase Ability Zerlegen und Komponenten an den Richtigen Schicken
@@ -51,53 +56,7 @@ public class GameHostEngine implements Runnable {
         }
 
     }
-/*
 
-    private ActionObject waitForAction() {
-        ActionObject action = null;
-
-
-        if (currentPlayer.getId() == 0) {
-            onPause();
-
-            ((Fight) context).chooseAbility(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId(), this);
-            currentPlayer.sendNewRoundEvent(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
-
-            synchronized (waitForPlayer) {
-                while (wait) {
-                    try {
-                        waitForPlayer.wait();
-                    } catch (InterruptedException e) {
-                    }
-                }
-            }
-            action = actionFromUser;
-        } else {
-            action = currentPlayer.yourTurn(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
-        }
-        return action;
-    }
-
-
-    public void onPause() {
-        synchronized (waitForPlayer) {
-            wait = true;
-        }
-    }
-
-    public void onResume() {
-        synchronized (waitForPlayer) {
-            wait = false;
-            waitForPlayer.notifyAll();
-        }
-    }
-
-
-    public void setActionFromUser(ActionObject action) {
-        actionFromUser = action;
-        onResume();
-    }
-    */
     private void myLogger(String toLog) {
         Log.i("GameEngine", toLog);
     }
@@ -131,7 +90,7 @@ public class GameHostEngine implements Runnable {
             final IPlayer player = this.playerList.getPlayerByTargetId(targetId);
             AnswerObject answer = player.workWithAbilityComponent(aComponent);
 
-            myLogger("==== Answer from Player: " + player.getPlayerName() + " ====");
+            myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(targetId).getPlayerName() + " ====");
             myLogger(answer.getMsg());
             myLogger("====");
             /////////////////////////////////////////// TESTHALBER

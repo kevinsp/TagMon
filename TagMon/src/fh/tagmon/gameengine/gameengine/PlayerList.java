@@ -10,8 +10,13 @@ public class PlayerList {
 
     private LinkedList<PlayerListNode> playList = new LinkedList<PlayerListNode>();
     private HashMap<Integer, IPlayer> playerTargetList = new HashMap<Integer, IPlayer>();
+    private HashMap<Integer, PlayerInfo> playerInfoList = new HashMap<Integer, PlayerInfo>();
 
-    private int playerCounter = 0;
+    public HashMap<Integer, PlayerInfo> getPlayerInfoList() {
+		return playerInfoList;
+	}
+
+	private int playerCounter = 0;
 
     private PlayerListNode currentSelectedPlayerNode;
     private int currentPlayListPos = 0;
@@ -45,7 +50,17 @@ public class PlayerList {
         return this.playerTargetList.get(id);
     }
 
-    public LinkedList getPlayList() {
-        return playList;
-    }
+	public LinkedList<PlayerListNode> getPlayList() {
+		return playList;
+	}
+	
+	public void addPlayerInfo(int id, PlayerInfo playerInfoObj){
+		this.playerInfoList.put(id, playerInfoObj);
+	}
+	
+	public PlayerInfo getPlayerInfo(int id){
+		return this.playerInfoList.get(id);
+	}
+
+    
 }

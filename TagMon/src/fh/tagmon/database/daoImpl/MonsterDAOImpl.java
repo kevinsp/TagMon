@@ -44,7 +44,7 @@ public class MonsterDAOImpl implements MonsterDAO {
 		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
 		
 		Ability blockAbility = new Ability("BLOCKABILITY", 11, AbilityTargetRestriction.SELF);
-		blockAbility.addAbilityComponent(new Buff(2,0,5,0,0,null));
+		blockAbility.addAbilityComponent(new Buff(2,0,5,0,null));
 		abilityList.add(blockAbility);
 		
 		

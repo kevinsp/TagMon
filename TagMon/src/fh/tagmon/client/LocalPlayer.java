@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.IPlayer;
@@ -57,6 +58,12 @@ public class LocalPlayer implements IPlayer{
 
 	@Override
 	public AbilityTargetRestriction getAbilityTargetRestriction(Ability chosenAbility) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PlayerInfo getReady(int id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
