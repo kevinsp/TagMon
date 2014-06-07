@@ -26,7 +26,7 @@ public class Player implements IPlayer {
         this.playerName = name;
         this.myMonster = myMonster;
         this.id = id;
-        this.playModule = new MonsterPlayModule(myMonster,eventManager);
+        this.playModule = new MonsterPlayModule(myMonster);
     }
 
     private int myRandomWithHigh(int low, int high) {
@@ -34,16 +34,16 @@ public class Player implements IPlayer {
         high++;
         return (int) (Math.random() * (high - low) + low);
     }
-    public LinkedList getAbilityTargetRestriction(Ability chosenAbility) {
+    public AbilityTargetRestriction getAbilityTargetRestriction(Ability chosenAbility) {
         return chosenAbility.getTargetRestriction();
     }
     private Ability choseRandomAbility(){
         int random = this.myRandomWithHigh(0, 1);
-        return this.playModule.getPrep().getAbility(random);
+        return this.playModule.getAbilityChooser().getAbility(random);
     }
 
     private AbilityTargetRestriction choseRandomTarget(Ability chosenAbility){
-        return chosenAbility.getTargetRestriction().getFirst();
+        return chosenAbility.getTargetRestriction();
     }
 
     public void sendNewRoundEvent (HashMap<Integer, IPlayer> targetList,
@@ -69,7 +69,7 @@ public class Player implements IPlayer {
     @Override
     public AnswerObject workWithAbilityComponent(
             IAbilityComponent abilityComponent) {
-        this.playModule.handleAbilityComponents(abilityComponent);
+        this.playModule.getMyMonstersAbilityComponentDirector().handleAbilityComponent(abilityComponent);
 
         boolean isMonsterDead = false;
         if (this.myMonster.getCurrentLifePoints() <= 0){

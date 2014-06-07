@@ -1,5 +1,8 @@
 package fh.tagmon.client;
 
+import android.content.Context;
+import android.util.Log;
+
 import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
@@ -9,17 +12,18 @@ import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.guiParts.Fight;
-import fh.tagmon.guiParts.GuiPartsToUpdate;
+import fh.tagmon.guiParts.ISetAbility;
 import fh.tagmon.network.ConnectionType;
 import fh.tagmon.network.HostMessageObject;
 import fh.tagmon.network.NetworkConnection;
 import fh.tagmon.network.NetworkSocketConnection;
-import android.content.Context;
-import android.util.Log;
 
-public class GameClientEngine implements Observer{
+public class GameClientEngine implements Observer, ISetAbility{
 	
 	private Context context;
+    private final Object waitForPlayer;
+    private boolean wait;
+    private ActionObject choosenAbility;
 	
 	//GAMEPLAY
 	private MonsterPlayModule monster;
@@ -30,7 +34,8 @@ public class GameClientEngine implements Observer{
 	public GameClientEngine(Context context, MonsterPlayModule mPM, ConnectionType type){
 		this.context = context;
 		this.monster = mPM;
-		connectToNetwork(type);
+        waitForPlayer = new Object();
+        connectToNetwork(type);
 	}
 	
 	private void connectToNetwork(ConnectionType type){
@@ -70,18 +75,20 @@ public class GameClientEngine implements Observer{
 			break;
 		case ENEMY_TURN_LOG:
 			//TODO Wenn eine Kampfstatistik kommt, zeige sie zeitlich begrenzt an
+            //TODO teste DialogBuilder(Context context, String text, int timeTilClose)
 			break;
 		case GAME_OVER:
 			stop(); 
-			//Statistik ausgeben und zum Hauptbildschirm zurück.
-			//Optional: höchster Damage, gespielte Runden bla bla mitloggen..
+			//Statistik ausgeben und zum Hauptbildschirm zurï¿½ck.
+			//Optional: hï¿½chster Damage, gespielte Runden bla bla mitloggen..
 			break;
 		case YOUR_TURN_ORDER:
 			//TODO Wenn eine Aufforderung kommt mach deinen Zug
 			//Aufforderung an GUI weiterleiten und als Antwort ActionObject erhalten
 			PlayerList playerList = ((HostMessageObject) hostMsg).getPlayerList();
+            //TODO nicht jedes mal die gui initialisieren -> UPDATEN
 			((Fight) context).initBattleGUI(playerList.getPlayList(), 0); // player id is '0' for testing
-			ActionObject actionObject = null;
+			ActionObject actionObject = waitForAction(playerList);
 			connection.sendActionToHost(actionObject);
 			break;
 		default:
@@ -90,15 +97,16 @@ public class GameClientEngine implements Observer{
 		}
 	}
 	
-	private ActionObject waitForAction() {
+	private ActionObject waitForAction(PlayerList playerList) {
         ActionObject action = null;
 
 
-        if (currentPlayer.getId() == 0) {
+      //  if (currentPlayer.getId() == 0) {
             onPause();
 
-            ((Fight) context).chooseAbility(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId(), this);
-            currentPlayer.sendNewRoundEvent(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
+            ((Fight) context).chooseAbility(playerList.getPlayerTargetList(), playerList.getCurrentPlayerTargetId(), this);
+
+            //currentPlayer.sendNewRoundEvent(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
 
             synchronized (waitForPlayer) {
                 while (wait) {
@@ -108,10 +116,38 @@ public class GameClientEngine implements Observer{
                     }
                 }
             }
-            action = actionFromUser;
-        } else {
+            action = choosenAbility;
+
+        /*} else {
             action = currentPlayer.yourTurn(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
-        }
+        }*/
         return action;
+    }
+
+
+    /**
+     * Call this on pause.
+     */
+    public void onPause() {
+        synchronized (waitForPlayer) {
+            wait = true;
+        }
+    }
+
+    /**
+     * Call this on resume.
+     */
+    public void onResume() {
+        synchronized (waitForPlayer) {
+            wait = false;
+            waitForPlayer.notifyAll();
+        }
+    }
+
+
+    @Override
+    public void setAbility(ActionObject actionObject) {
+        choosenAbility = actionObject;
+        onResume();
     }
 }

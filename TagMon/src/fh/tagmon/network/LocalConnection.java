@@ -8,18 +8,15 @@ public class LocalConnection implements INetworkSender, INetworkListener{
 	private static NetworkConnection instance = null;
 	private GameHostEngine host;
 	
-	public static NetworkConnection getInstance(){
-		if(instance == null)
-			instance = new NetworkConnection();
-		return instance;
-	}
+//	public static NetworkConnection getInstance(){
+//		if(instance == null)
+//			//instance = new NetworkConnection();
+//		return instance;
+//	}
 	
 	@Override
 	public HostMessageObject listenToBroadcast() {
-		while(true){
-			HostMsg = socket.recive();
-			clientEng.send(HostMsg)
-		}
+
 		return null;
 	}
 
@@ -37,5 +34,11 @@ public class LocalConnection implements INetworkSender, INetworkListener{
 	
 	public void registerHost(GameHostEngine host){
 		this.host = host;
+	}
+
+	@Override
+	public void closeConnection() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -10,11 +10,8 @@ import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
-import fh.tagmon.guiParts.Fight;
-import fh.tagmon.guiParts.GuiPartsToUpdate;
 
-
-public class GameHostEngine{
+public class GameHostEngine implements Runnable {
 
     private PlayerList playerList;
     private IPlayer currentPlayer;
@@ -33,6 +30,7 @@ public class GameHostEngine{
     }
 
     //function for testing for rolle
+    @Override
     public void run() {
         
         while (runGame) {
@@ -53,7 +51,53 @@ public class GameHostEngine{
         }
 
     }
+/*
 
+    private ActionObject waitForAction() {
+        ActionObject action = null;
+
+
+        if (currentPlayer.getId() == 0) {
+            onPause();
+
+            ((Fight) context).chooseAbility(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId(), this);
+            currentPlayer.sendNewRoundEvent(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
+
+            synchronized (waitForPlayer) {
+                while (wait) {
+                    try {
+                        waitForPlayer.wait();
+                    } catch (InterruptedException e) {
+                    }
+                }
+            }
+            action = actionFromUser;
+        } else {
+            action = currentPlayer.yourTurn(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
+        }
+        return action;
+    }
+
+
+    public void onPause() {
+        synchronized (waitForPlayer) {
+            wait = true;
+        }
+    }
+
+    public void onResume() {
+        synchronized (waitForPlayer) {
+            wait = false;
+            waitForPlayer.notifyAll();
+        }
+    }
+
+
+    public void setActionFromUser(ActionObject action) {
+        actionFromUser = action;
+        onResume();
+    }
+    */
     private void myLogger(String toLog) {
         Log.i("GameEngine", toLog);
     }

@@ -8,6 +8,7 @@ import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.IPlayer;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 import fh.tagmon.network.HostMessageObject;
 import fh.tagmon.network.INetworkListener;
@@ -55,7 +56,7 @@ public class LocalPlayer implements IPlayer{
 	}
 
 	@Override
-	public LinkedList getAbilityTargetRestriction(Ability chosenAbility) {
+	public AbilityTargetRestriction getAbilityTargetRestriction(Ability chosenAbility) {
 		// TODO Auto-generated method stub
 		return null;
 	}
