@@ -1,7 +1,5 @@
 package fh.tagmon.gameengine.gameengine;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.LinkedList;
@@ -12,11 +10,9 @@ import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
-import fh.tagmon.guiParts.Fight;
-import fh.tagmon.guiParts.GuiPartsToUpdate;
 
 
-public class GameHostEngine extends AsyncTask implements Runnable {
+public class GameHostEngine implements Runnable {
 
     private PlayerList playerList;
     private IPlayer currentPlayer;
@@ -56,7 +52,7 @@ public class GameHostEngine extends AsyncTask implements Runnable {
         }
 
     }
-
+/*
     private ActionObject waitForAction() {
         ActionObject action = null;
 
@@ -82,18 +78,13 @@ public class GameHostEngine extends AsyncTask implements Runnable {
         return action;
     }
 
-    /**
-     * Call this on pause.
-     */
+
     public void onPause() {
         synchronized (waitForPlayer) {
             wait = true;
         }
     }
 
-    /**
-     * Call this on resume.
-     */
     public void onResume() {
         synchronized (waitForPlayer) {
             wait = false;
@@ -101,14 +92,12 @@ public class GameHostEngine extends AsyncTask implements Runnable {
         }
     }
 
-    /**
-    * call this function from the Fight Activity to set the user choosen action
-    **/
+
     public void setActionFromUser(ActionObject action) {
         actionFromUser = action;
         onResume();
     }
-
+    */
     private void myLogger(String toLog) {
         Log.i("GameEngine", toLog);
     }

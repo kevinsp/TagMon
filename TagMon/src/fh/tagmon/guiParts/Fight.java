@@ -18,7 +18,6 @@ import java.util.List;
 import fh.tagmon.R;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.GameEngineModule;
-import fh.tagmon.gameengine.gameengine.GameHostEngine;
 import fh.tagmon.gameengine.gameengine.PlayerListNode;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.player.IPlayer;
@@ -34,6 +33,7 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
     private Context context = this;
     private DialogBuilder chooseDialog;
     private GameEngineModule engineModule;
+    private ISetAbility iSetAbility;
 
     private IPlayer player;
 
@@ -44,7 +44,7 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
         setContentView(R.layout.activity_fight);
 
         //init game engine
-        //Todo : Kondition einbauen für nicht-host-spieler
+        //Todo : Kondition einbauen fï¿½r nicht-host-spieler
         engineModule = new GameEngineModule(this);
 
     }
@@ -151,9 +151,8 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
 
     */
     @Override
-    public void chooseAbility(HashMap<Integer, IPlayer> targetList, int yourTargetId, GameHostEngine gpe) {
-
-        this.gpe = gpe;
+    public void chooseAbility(HashMap<Integer, IPlayer> targetList, int yourTargetId, ISetAbility setAbility) {
+        this.iSetAbility = setAbility;
         HashMap<Integer, IPlayer> targetListF = targetList;
         int yourTargetIdF = yourTargetId;
 
@@ -259,12 +258,7 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
     }
 
     public void finishActivity() {
-        if (gpe != null) {
-            gpe.cancel(true);
-            gpe.onResume();
-        }
         battleGuiInit = false;
-        gpe = null;
         finish();
     }
 
@@ -360,7 +354,7 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
                 TableLayout table = (TableLayout) v.getParent().getParent();
                 if (table != null) {
                     Ability choosenAbility = (Ability) table.getTag();
-                    gpe.setActionFromUser(new ActionObject(choosenAbility, choosenAbility.getTargetRestriction().get(item)));
+                    iSetAbility.setAbility(new ActionObject(choosenAbility, choosenAbility.getTargetRestriction()));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
