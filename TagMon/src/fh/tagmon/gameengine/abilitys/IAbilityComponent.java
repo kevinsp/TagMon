@@ -11,5 +11,5 @@ public interface IAbilityComponent {
 	public AbilityComponentTypes getComponentType();
 	public void setReqStats(Monster monster);
 	public AbilityTargetRestriction getComponentTargetRestriction();
-
+	
 }

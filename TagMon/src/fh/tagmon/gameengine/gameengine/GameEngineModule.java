@@ -7,7 +7,6 @@ import fh.tagmon.BuildConfig;
 import fh.tagmon.client.GameClientEngine;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
-import fh.tagmon.gameengine.player.MyPlayerCreator;
 import fh.tagmon.network.ConnectionType;
 
 public class GameEngineModule {
@@ -20,19 +19,6 @@ public class GameEngineModule {
 
     public GameEngineModule(Activity context) {
 
-        if (BuildConfig.DEBUG) {
-            // der erste part ist zum testen für rolle ;)
-            // das else ist für pascal zum testen mit der gui
-            if (fuerRolleZumTesten) {
-                
-                
-            	
-//            	RunTestDmgAbsorbationHandler testDmgAb = new RunTestDmgAbsorbationHandler();
-//            	testDmgAb.run();
-            	
-            }
-            
-        }
         PlayerList playerList = preparePlayerList();
         initializeHost(playerList);
         initializeClient(context);
@@ -50,12 +36,12 @@ public class GameEngineModule {
 	private PlayerList preparePlayerList(){
 		
 		
-		
-		IPlayer redKi = MyPlayerCreator.getPlayer("Red", "RedMonster", 0, true);
-        IPlayer blueKi = MyPlayerCreator.getPlayer("Blue", "BlueMonster", 1, true);
+//		
+//		IPlayer redKi = MyPlayerCreator.getPlayer("Red", "RedMonster", 0, true);
+//        IPlayer blueKi = MyPlayerCreator.getPlayer("Blue", "BlueMonster", 1, true);
         PlayerList playerList = new PlayerList();
-        playerList.addPlayer(redKi);
-        playerList.addPlayer(blueKi);
+//        playerList.addPlayer(redKi);
+//        playerList.addPlayer(blueKi);
         return playerList;
 	}
 	
@@ -66,7 +52,7 @@ public class GameEngineModule {
 	private void startEngines(){
 		if(hostEngine != null)
 			hostEngine.run();
-		if(clientEngine != null)
-			clientEngine.run();
+		//if(clientEngine != null) auskommentiert Rolle
+			//clientEngine.run();	auskommentiert Rolle
 	}
 }

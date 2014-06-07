@@ -1,6 +1,7 @@
 package fh.tagmon.gameengine.abilitys;
 
 
+
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
@@ -52,5 +53,7 @@ public class Damage extends AbilityComponent implements IAbilityComponent {
 	public AbilityTargetRestriction getComponentTargetRestriction() {
 		return this.componentTargetRestr;
 	}
+
+
 	
 }

@@ -1,7 +1,5 @@
 package fh.tagmon.gameengine.gameengine;
 
-import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.LinkedList;
@@ -16,7 +14,7 @@ import fh.tagmon.guiParts.Fight;
 import fh.tagmon.guiParts.GuiPartsToUpdate;
 
 
-public class GameHostEngine extends AsyncTask implements Runnable {
+public class GameHostEngine{
 
     private PlayerList playerList;
     private IPlayer currentPlayer;
@@ -35,7 +33,6 @@ public class GameHostEngine extends AsyncTask implements Runnable {
     }
 
     //function for testing for rolle
-    @Override
     public void run() {
         
         while (runGame) {
@@ -55,58 +52,6 @@ public class GameHostEngine extends AsyncTask implements Runnable {
             this.sendAbilityComponentToPlayer(action);
         }
 
-    }
-
-    private ActionObject waitForAction() {
-        ActionObject action = null;
-
-
-        if (currentPlayer.getId() == 0) {
-            onPause();
-
-            ((Fight) context).chooseAbility(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId(), this);
-            currentPlayer.sendNewRoundEvent(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
-
-            synchronized (waitForPlayer) {
-                while (wait) {
-                    try {
-                        waitForPlayer.wait();
-                    } catch (InterruptedException e) {
-                    }
-                }
-            }
-            action = actionFromUser;
-        } else {
-            action = currentPlayer.yourTurn(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
-        }
-        return action;
-    }
-
-    /**
-     * Call this on pause.
-     */
-    public void onPause() {
-        synchronized (waitForPlayer) {
-            wait = true;
-        }
-    }
-
-    /**
-     * Call this on resume.
-     */
-    public void onResume() {
-        synchronized (waitForPlayer) {
-            wait = false;
-            waitForPlayer.notifyAll();
-        }
-    }
-
-    /**
-    * call this function from the Fight Activity to set the user choosen action
-    **/
-    public void setActionFromUser(ActionObject action) {
-        actionFromUser = action;
-        onResume();
     }
 
     private void myLogger(String toLog) {

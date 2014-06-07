@@ -23,8 +23,8 @@ public class Monster {
 	private int additionalConstitution = 0;
 	private int additionalIntelligence = 0;
 	
-	private final BuffListHandler buffListHandler = new BuffListHandler();
-	private final DamageAbsorbationHandler dmgAbsHandler = new DamageAbsorbationHandler(this.buffListHandler);
+	private final DurationAbilityListHandler durationAbilityListHandler = new DurationAbilityListHandler();
+	private final DamageAbsorbationHandler dmgAbsHandler = new DamageAbsorbationHandler(this.durationAbilityListHandler);
 	
 	public Monster(int id, String name, Attribut attribut, ArrayList<Koerperteil> koerperteile, Stats stats){
 		this.id = id;
@@ -120,8 +120,8 @@ public class Monster {
 	}
 
 
-	public BuffListHandler getBuffListHandler(){
-		return this.buffListHandler;
+	public DurationAbilityListHandler getDurationAbilityListHandler(){
+		return this.durationAbilityListHandler;
 	}
 
 	

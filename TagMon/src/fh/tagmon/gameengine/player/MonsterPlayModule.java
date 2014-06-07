@@ -17,7 +17,7 @@ public class MonsterPlayModule {
 	private AbilityUpdater gamePlayAbilityUpdater;
 	
 	
-	public MonsterPlayModule(Monster myNewMonster, EventManager eventManager){
+	public MonsterPlayModule(Monster myNewMonster){
 		this.internalEventManager = new EventManager();
 		this.myMonster = myNewMonster;
 		this.myMonstersAbilityComponentDirector = new AbilityComponentDirector(myNewMonster);
@@ -30,7 +30,6 @@ public class MonsterPlayModule {
 	public AbilityChooser getAbilityChooser() {
 		return abilityChooser;
 	}
-
 
 	private void addNewRoundListeners(){
 		this.internalEventManager.addListener(gamePlayAbilityUpdater);
@@ -45,12 +44,12 @@ public class MonsterPlayModule {
 		return this.myMonstersAbilityComponentDirector.getLatestLog();
 	}
 	
-	public AbilityChooser getPrep(){
-		return this.abilityChooser;
-	}
 	
 	public AbilityComponentDirector getMyMonstersAbilityComponentDirector() {
 		return myMonstersAbilityComponentDirector;
 	}
 	
+	public Monster getMonster(){
+		return this.myMonster;
+	}
 }

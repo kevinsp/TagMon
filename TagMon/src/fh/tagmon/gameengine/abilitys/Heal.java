@@ -32,4 +32,6 @@ public class Heal extends AbilityComponent implements IAbilityComponent {
 	public AbilityTargetRestriction getComponentTargetRestriction() {
 		return this.componentTargetRestr;
 	}
+
+
 }

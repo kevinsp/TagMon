@@ -5,10 +5,12 @@ import java.util.LinkedList;
 
 
 
+
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 public interface IPlayer {
@@ -19,5 +21,5 @@ public interface IPlayer {
 	public Monster getMonster();
     public int getId();
     void sendNewRoundEvent(HashMap<Integer, IPlayer> playerTargetList, int currentPlayerTargetId);
-    public LinkedList getAbilityTargetRestriction(Ability chosenAbility);
+    public AbilityTargetRestriction getAbilityTargetRestriction(Ability chosenAbility);
 }

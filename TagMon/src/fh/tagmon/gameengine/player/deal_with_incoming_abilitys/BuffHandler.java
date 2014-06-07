@@ -3,9 +3,12 @@ package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
 import java.util.LinkedList;
 
+import fh.tagmon.gameengine.abilitys.AbilityComponentTypes;
 import fh.tagmon.gameengine.abilitys.Buff;
-import fh.tagmon.model.BuffListElement;
-import fh.tagmon.model.BuffListHandler;
+import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.abilitys.IDurationAbilityComponent;
+import fh.tagmon.model.DurationAbilityListElement;
+import fh.tagmon.model.DurationAbilityListHandler;
 import fh.tagmon.model.Monster;
 
 
@@ -13,7 +16,7 @@ public class BuffHandler{
 	
 	
 	private Monster monster;
-	private BuffListHandler buffListHandler;
+	private DurationAbilityListHandler durationAbilityListHandler;
 	private AbilityComponentLogger componentLogger;
 
 	
@@ -21,29 +24,29 @@ public class BuffHandler{
 	public BuffHandler(Monster monster, AbilityComponentLogger componentLogger){
 		this.monster = monster;
 		this.componentLogger = componentLogger;
-		this.buffListHandler = monster.getBuffListHandler();
+		this.durationAbilityListHandler = monster.getDurationAbilityListHandler();
 	}
 	
 	
 	public void handleBuff(Buff newBuff){
-		this.buffListHandler.addBuff(newBuff);
+		this.durationAbilityListHandler.addDurationAbilityListElement(newBuff);
 		this.refreshBuffEffects();
 	}
 
 	public void refreshBuffEffects() {
-		LinkedList<BuffListElement> activBuffList = this.scanForActiveBuffs();
+		LinkedList<Buff> activBuffList = this.scanForActiveBuffs();
 //		if(activBuffList.size() > 0){
 			this.putActivBuffsIntoEffect(activBuffList);
 //		}
 	}
 	
-	private void putActivBuffsIntoEffect(LinkedList<BuffListElement> activBuffList){
+	private void putActivBuffsIntoEffect(LinkedList<Buff> activBuffList){
 		int strengthBuff = 0;
 		int armorValueBuff = 0;
 		int constitutionBuff = 0;
 		
-		for(BuffListElement buffListElement: activBuffList){
-			Buff theBuff = buffListElement.getBuff(); 
+		for(Buff buff: activBuffList){
+			Buff theBuff = buff;
 			strengthBuff += theBuff.getStrengthBuff();
 			armorValueBuff += theBuff.getArmorValueBuff();
 			constitutionBuff += theBuff.getConstitutionBuff();
@@ -83,27 +86,31 @@ public class BuffHandler{
 		return retStr;
 	}
 	
-	private LinkedList<BuffListElement> scanForActiveBuffs(){
-		LinkedList<BuffListElement> activBuffList = new LinkedList<BuffListElement>();
+	private LinkedList<Buff> scanForActiveBuffs(){
+		LinkedList<Buff> activBuffList = new LinkedList<Buff>();
 		
-		for(BuffListElement buffListElement: this.buffListHandler.getBuffList()){
-			Buff theBuff = buffListElement.getBuff(); 
+		for(DurationAbilityListElement durationAbilityListElement: this.durationAbilityListHandler.getDurationAbilityList()){
+			IDurationAbilityComponent durationAbilityComponent = durationAbilityListElement.getDurationAbilityComponent();
+			IAbilityComponent abilityComponent = (IAbilityComponent) durationAbilityComponent;
 			
-			int strengthBuff = theBuff.getStrengthBuff();
-			int armorValueBuff = theBuff.getArmorValueBuff();
-			int constitutionBuff = theBuff.getConstitutionBuff();
-			
+			if(abilityComponent.getComponentType() == AbilityComponentTypes.BUFF){
+				Buff theBuff = (Buff) abilityComponent;
+				int strengthBuff = theBuff.getStrengthBuff();
+				int armorValueBuff = theBuff.getArmorValueBuff();
+				int constitutionBuff = theBuff.getConstitutionBuff();
 
-			
-			if( strengthBuff > 0 || armorValueBuff > 0 || constitutionBuff > 0 ){
-				activBuffList.add(buffListElement);
+				if( strengthBuff > 0 || armorValueBuff > 0 || constitutionBuff > 0 ){
+					activBuffList.add(theBuff);
+				}
 			}
+			
+			
 		}
 		return activBuffList;
 	}
 	
 	public void newRound() {
-		this.buffListHandler.newRound();
+		this.durationAbilityListHandler.newRound();
 		this.refreshBuffEffects();
 	}
 }

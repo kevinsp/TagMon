@@ -5,7 +5,7 @@ import fh.tagmon.model.Monster;
 
 
 
-public class Buff extends AbilityComponent implements IAbilityComponent {
+public class Buff extends AbilityComponent implements IAbilityComponent,IDurationAbilityComponent {
 
 	private int duration;
 	private int strengthBuff = 0;
@@ -24,7 +24,10 @@ public class Buff extends AbilityComponent implements IAbilityComponent {
 		this.setDamageAbsorbationAmount(damageAbsorbationAmount);
 	}
 
-	public Buff clone(){
+	
+	//brauch man nicht mehr sobalt über netzwerk die objecte transportiert werden
+	@Override
+	public Buff cloneMe(){
 		return new Buff(this.duration, this.strengthBuff, this.armorValueBuff, this.constitutionBuff, this.damageAbsorbationAmount,this.componentTargetRestr);
 	}
 	
@@ -53,7 +56,7 @@ public class Buff extends AbilityComponent implements IAbilityComponent {
 		this.constitutionBuff = constitutionBuff;
 	}
 
-	
+	@Override
 	public int getDuration(){
 		return this.duration;
 	}

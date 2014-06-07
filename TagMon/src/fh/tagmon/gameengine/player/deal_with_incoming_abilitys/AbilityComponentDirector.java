@@ -7,11 +7,13 @@ import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.EventManager;
 import fh.tagmon.gameengine.player.IListener;
 import fh.tagmon.gameengine.player.IPlayer;
-import fh.tagmon.model.BuffListElement;
+
+import fh.tagmon.model.DamageAbsorbationHandler;
 import fh.tagmon.model.Monster;
 
 public class AbilityComponentDirector implements IListener{
@@ -20,6 +22,7 @@ public class AbilityComponentDirector implements IListener{
 	//private Monster monster;
 	private BuffHandler BuffHandler;
 	private DamageHandler dmgHandler;
+	private DamageAbsorbationHandler dmgAbsHandler;
 	private AbilityComponentLogger compLogger = new AbilityComponentLogger();
 	
 	
@@ -27,11 +30,11 @@ public class AbilityComponentDirector implements IListener{
 		//this.monster = monster;
 		this.BuffHandler = new BuffHandler(monster,compLogger);
 		this.dmgHandler = new DamageHandler(monster,compLogger);
-
+		this.dmgAbsHandler = monster.getDmgAbsHandler();
 	}
 	
 	
-	public AnswerObject handleAbilityComponent(IAbilityComponent abilityComponent){
+	public void handleAbilityComponent(IAbilityComponent abilityComponent){
 
 		switch(abilityComponent.getComponentType()){
 		case BUFF:
@@ -42,13 +45,19 @@ public class AbilityComponentDirector implements IListener{
 			Damage dmgObj = (Damage) abilityComponent;
 			this.dmgHandler.handleDamage(dmgObj);
 			break;
+		case HEAL:
+			break;
+		case SCHADENSABSORBATION:
+			this.dmgAbsHandler.addDamageAbsorbationComponant((Schadensabsorbation) abilityComponent);
+		case STUN:
+			break;
 		default:
 			break;
 		
 		}
 			
 		//TODO answer zusammenbauen
-		return null;
+		
 	}
 	
 	public String getLatestLog(){
