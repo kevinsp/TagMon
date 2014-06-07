@@ -69,9 +69,8 @@ public class GameClientEngine implements Observer, ISetAbility{
 	public void update(Observable observable, Object hostMsg) {
 		switch(((HostMessageObject) hostMsg).getType()){
 		case ABILITY_COMPONENT:
-			AnswerObject answerObject = monster.getMyMonstersAbilityComponentDirector().
-				handleAbilityComponent(((HostMessageObject) hostMsg).getAbilityComponent());
-			connection.sendAnswerToHost(answerObject);
+			//AnswerObject answerObject = monster.getMyMonstersAbilityComponentDirector().handleAbilityComponent(((HostMessageObject) hostMsg).getAbilityComponent());
+			//connection.sendAnswerToHost(answerObject);
 			break;
 		case ENEMY_TURN_LOG:
 			//TODO Wenn eine Kampfstatistik kommt, zeige sie zeitlich begrenzt an

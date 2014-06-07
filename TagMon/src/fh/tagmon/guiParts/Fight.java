@@ -279,13 +279,15 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
 
 
                 final Ability choosenAbility = player.getMonster().getAbilitys().get(item);
-                final LinkedList<AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
-
+                // ist keine liste mehr
+                //final LinkedList<AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
+                final AbilityTargetRestriction atr = player.getAbilityTargetRestriction(choosenAbility);
+                
                 List<String> targetNames = new ArrayList<String>();
-                for (Enum target : atr) {
-                    String targetName = target.name();
+                //for (Enum target : atr) {
+                    String targetName = atr.name();
                     targetNames.add(targetName);
-                }
+                //}
 
                 final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
 
@@ -318,9 +320,10 @@ public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
                 TableLayout table = (TableLayout) v.getParent().getParent();
                 if (table != null) {
                     final Ability choosenAbility = (Ability) table.getTag();
-                    LinkedList<AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
-
-                    LinkedList<Integer> targetList = atr.get(item).getTargetList();
+                    //ist keine liste mehr
+                    //LinkedList<AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
+                    AbilityTargetRestriction atr = player.getAbilityTargetRestriction(choosenAbility);
+                    LinkedList<Integer> targetList = atr.getTargetList();
 
                     List<String> targetNames = new ArrayList<String>();
                     for (Integer target : targetList) {
