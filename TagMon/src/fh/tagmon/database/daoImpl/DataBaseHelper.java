@@ -166,8 +166,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	
 	
 	public Attribut getAttribute(int monsterID) throws MonsterDAOException{
-
-		String sqlQuery = 	   "SELECT tAttr.staerke, tAttr.intelligenz, tAttr.konstitution, tAttr.verteidigung " +
+		
+		String sqlQuery = 	   "SELECT tAttr.id, tAttr.staerke, tAttr.intelligenz, tAttr.konstitution, tAttr.verteidigung " +
 					 		   "FROM tagdb_monster tMonster INNER JOIN tagdb_attribute tAttr " +
 					 		   "	ON tMonster.id = tAttr.monster_id " + 
 				 			   "WHERE tMonster.id = " + monsterID;
@@ -175,6 +175,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		 Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
 		 
 		 ArrayList<Integer> attribList = new ArrayList<Integer>();
+		 
 		 
 		 if(cursor.moveToFirst()){
 			 for (int i=0; i<cursor.getColumnCount(); i++) {
@@ -189,7 +190,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	
 	
 	public ArrayList<Koerperteil> getKoerperteile(int monsterID) throws MonsterDAOException{
-	 
+	 		
 		 String sqlQuery = 	"SELECT tKM.koerperteile_id, tK.name, tK.art " +
 				 			"FROM tagdb_monster tMonster " + 
 				 			"INNER JOIN tagdb_koerperteile_monster tKM " +
@@ -199,6 +200,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 				 			"WHERE tMonster.id = " + monsterID;
 		 
 		 Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
+		 
 		 
 		 int kId = 0;
 		 String name = "";
@@ -210,10 +212,10 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			 kId = cursor.getInt(0);
 			 name = cursor.getString(1);
 			 art = cursor.getInt(2);
-			 
-			 AttributModifikator attrMod = getAttributModifikator(kId);
+			 			 
+			 AttributModifikator attrMod = getAttributModifikator(kId);	 
 			 ArrayList<Ability> abilityList = getAbilities(kId);
-			 
+			 			 
 			 KoerperteilArt koerperteileArt;
 			 
 			 // 1=Kopf, 2=Torso, 3=Arm, 4=Bein
@@ -256,7 +258,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		 
 		 if(attribList.isEmpty())
 			 throw new MonsterDAOException("Koerperteil has no 'attributModifikator'");
-		 
+		 		 
 		 return new AttributModifikator(attribList.get(0), attribList.get(1), attribList.get(2), attribList.get(3));	
 	}
 	
@@ -265,15 +267,18 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		
 		 String sqlQuery = 	"SELECT tFaehigkeit.id, tFaehigkeit.name, tFaehigkeit.ziel, tFaehigkeit.energiekosten, tFaehigkeit.angriffsziel, tFaehigkeit.angriffswert, " +
 				 					"tFaehigkeit.heilungsziel, tFaehigkeit.heilungswert, tFaehigkeit.stunziel, tFaehigkeit.stundauer, " +
-				 					"tFaehigkeit.absorbationsziel, tFaehigkeit.schadensabsorbation " +
+				 					"tFaehigkeit.absorbationsziel, tFaehigkeit.absorbationsdauer, tFaehigkeit.schadensabsorbation " +
 				 			"FROM tagdb_faehigkeit tFaehigkeit " + 
 				 			"INNER JOIN tagdb_faehigkeit_koerperteile tFK " +
 				 				"ON tFaehigkeit.id = tFK.faehigkeit_id " +
 				 			"INNER JOIN tagdb_faehigkeit tF " +
 				 				"ON tFK.koerperteile_id = tF.id " +
 				 			"WHERE tFK.koerperteile_id = " + koerperteileID;
-
+		 
+		
+		
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
+		
 		ArrayList<Ability> abilityList = new ArrayList<Ability>();
 		
 		int id;
@@ -307,6 +312,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			absorbationziel = cursor.getInt(10);
 			absorbationsdauer = cursor.getInt(11);
 			schadensabsorbation = cursor.getInt(12);
+						
 			
 			if(angriffswert!=0){
 				abilityComponents.add(new Damage(angriffswert, getAbilityTargetRestriction(angriffsziel)));
@@ -405,7 +411,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	
 	
 	public Monster getMonsterByID(int monsterID) throws MonsterDAOException{
-		
+				
 		Attribut attribut = getAttribute(monsterID);
 		
 		ArrayList<Koerperteil> koerperteile = null;
@@ -414,7 +420,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		} catch (MonsterDAOException e) {
 			Log.d("tagmonDB", "Koerperteil could not be created");
 		}
-		
+				
 		Stats stats = getStats(monsterID);
 		
 		String sqlQuery = 	"SELECT name " +
