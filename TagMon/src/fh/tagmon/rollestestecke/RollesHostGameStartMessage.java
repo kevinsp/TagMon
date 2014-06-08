@@ -13,4 +13,8 @@ public class RollesHostGameStartMessage extends RollesHostNetworkMessage impleme
 		return yourTargetId;
 	}
 
+	@Override
+	public RollesHostNetworkMessageTypes getMessageType() {
+		return super.messageType;
+	}
 }

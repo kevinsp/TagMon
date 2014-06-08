@@ -96,4 +96,10 @@ public class Player implements IPlayer {
 		return null;
 	}
 
+	@Override
+	public void gameOver() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

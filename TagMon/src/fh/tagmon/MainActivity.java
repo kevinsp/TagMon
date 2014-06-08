@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
+import fh.tagmon.gameengine.gameengine.GameEngineModule;
 import fh.tagmon.guiParts.Fight;
 //import fh.tagmon.guiParts.Stats;
 //import fh.tagmon.guiParts.Train;
@@ -33,7 +33,8 @@ public class MainActivity extends Activity {
      /*   onFirstRun();
         initTagMon();
         */
-
+        
+       
     }
 
     //TODO: call this function on the first time the app is started,

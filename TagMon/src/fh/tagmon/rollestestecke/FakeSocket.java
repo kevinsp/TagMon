@@ -1,7 +1,7 @@
 package fh.tagmon.rollestestecke;
 
 
-public class FakeSocet {
+public class FakeSocket implements IClientConnector, IHostConnector{
 	
 	private volatile IHostNetworkMessage  msgFromHost = null;
 	private volatile IClientNetworkMessage msgFromClient = null;
@@ -19,15 +19,38 @@ public class FakeSocet {
 		return retStr;
 	}
 	
-	public void setMsgFromHost(IHostNetworkMessage msg){
+	@Override
+	public boolean sendMsgToHost(IClientNetworkMessage msgToHost) {
+		this.msgFromClient = msgToHost;
+		return true;
+	}
+	
+	@Override
+	public boolean sendMsgToClient(IHostNetworkMessage msg){
 		this.msgFromHost = msg;
+		return true;
 	}
 	
-	public void setMsgFromClient(IClientNetworkMessage msg){
-		this.msgFromClient = msg;
+
+	@Override
+	public IClientNetworkMessage reciveMsgFromClient() {
+		while(true){
+			IClientNetworkMessage msgFromClient = this.popMsgFromClient();
+			if( msgFromClient != null){
+				return msgFromClient;
+			}
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		
+		}
 	}
-	
-	public IHostNetworkMessage scanForHostMsg(){
+
+	@Override
+	public IHostNetworkMessage reciveMsgFromHost() {
 		while(true){
 
 			IHostNetworkMessage msgFromHost = this.popMsgFromHost();
@@ -43,19 +66,6 @@ public class FakeSocet {
 		}
 	}
 
-	public IClientNetworkMessage scanForClientMsg(){
-		while(true){
-			IClientNetworkMessage msgFromClient = this.popMsgFromClient();
-			if( msgFromClient != null){
-				return msgFromClient;
-			}
-			try {
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-	}
+
+	
 }

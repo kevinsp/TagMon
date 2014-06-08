@@ -35,9 +35,9 @@ public class BuffHandler{
 
 	public void refreshBuffEffects() {
 		LinkedList<Buff> activBuffList = this.scanForActiveBuffs();
-//		if(activBuffList.size() > 0){
+		if(activBuffList.size() > 0){
 			this.putActivBuffsIntoEffect(activBuffList);
-//		}
+		}
 	}
 	
 	private void putActivBuffsIntoEffect(LinkedList<Buff> activBuffList){
@@ -71,12 +71,8 @@ public class BuffHandler{
 		if( constitutionBuff != 0){
 			stringToLog += this.prepForLog("CON", constitutionBuff);
 		}
-		
-		int dmgAbsorg = this.monster.getDmgAbsHandler().getDamageAbsorbationAmount();
-		
-		if( dmgAbsorg != 0 ){
-			stringToLog += this.prepForLog("DMG_ABSORB", dmgAbsorg);
-		}
+				
+	
 		
 		this.componentLogger.addLogMsg(stringToLog);
 	}

@@ -1,6 +1,11 @@
 package fh.tagmon.rollestestecke;
 
+import java.util.Random;
+
 import fh.tagmon.gameengine.abilitys.Ability;
+import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.helperobjects.ActionObject;
+import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
@@ -9,12 +14,13 @@ public class RollesTestKi {
 
     private String kiName;
     private MonsterPlayModule playModule;
-    private int id;
+    private int id = 0;
+    private ClientConnector myConnector;
     
-    public RollesTestKi(String name, Monster myMonster, int id) {
+    public RollesTestKi(String name, Monster myMonster, ClientConnector connector) {
         this.kiName = name;
+        this.myConnector = connector;
 
-        this.id = id;
         this.playModule = new MonsterPlayModule(myMonster);
     }   
     
@@ -33,9 +39,76 @@ public class RollesTestKi {
     }
 
     private AbilityTargetRestriction choseRandomTarget(Ability chosenAbility) {
-        return chosenAbility.getTargetRestriction();
+    	
+    	AbilityTargetRestriction targetRest = chosenAbility.getTargetRestriction();
+    	int targetRestListSize = targetRest.getTargetList().size();
+    	Random rand = new Random();
+    	int randomTargetId = targetRest.getTargetList().get(rand.nextInt(targetRestListSize));
+    	targetRest.cleanTargetList();
+    	targetRest.addTarget(randomTargetId);
+    	return targetRest;
     }
  
+    
+    public void playTheGame(){
+    	boolean gameIsNotOver = true;
+    	while(gameIsNotOver){
+    		IHostNetworkMessage msgFromHost = this.myConnector.waitForMsgFromHost();
+    		
+    		switch(msgFromHost.getMessageType()){
+			case DEAL_WITH:
+				RollesHostDealWithMessage dealWithMsg = (RollesHostDealWithMessage) msgFromHost;
+				doDealWith(dealWithMsg);
+				break;
+			case GAME_OVER:
+				RollesHostGameOverMessage gameOverMsg = (RollesHostGameOverMessage) msgFromHost;
+				gameIsNotOver = false;
+				break;
+			case GAME_START:
+				RollesHostGameStartMessage gameStartmsg = (RollesHostGameStartMessage) msgFromHost;
+				this.id = gameStartmsg.getYourTargetId();
+				this.myConnector.sendGameStartsMsg(this.kiName);
+				break;
+			case YOUR_TURN:
+				RollesHostYourTurnMessage yourTurnMsg = (RollesHostYourTurnMessage) msgFromHost;
+				doMyTurn(yourTurnMsg);
+				break;
+			default:
+				break;
+    		
+    		}
+    		
+    		
+    	}
+    		
+    }
+    
+    private void doMyTurn(RollesHostYourTurnMessage yourTurnMsg){
+    	//ULTRA WICHTIG muss jedes mal befor ich drann bin ausgeführt werden
+    	this.playModule.newRound(yourTurnMsg.getTargetList(), yourTurnMsg.getYourTargetId()); 
+    	
+    	Ability chosenAbility = choseRandomAbility();
+    	AbilityTargetRestriction targetRes = this.choseRandomTarget(chosenAbility);
+    	
+    	ActionObject myAction = new ActionObject(chosenAbility,targetRes);
+    	this.myConnector.sendActionMsg(myAction);
+    	
+    }
+    
+    private void doDealWith(RollesHostDealWithMessage dealWithMsg){
+    	IAbilityComponent abilityCompToDealWith = dealWithMsg.getAbilityComponent();
+    	this.playModule.getMyMonstersAbilityComponentDirector().handleAbilityComponent(abilityCompToDealWith);
+    	String retMsg = this.playModule.getLatestLogEntry();
+    	boolean isMyMonsterDead = false;
+    	if(this.playModule.getMonster().getCurrentLifePoints() <= 0){
+    		isMyMonsterDead = true;
+    	}
+    	AnswerObject answer = new AnswerObject(retMsg, isMyMonsterDead);
+    	
+    	this.myConnector.sendAnswerMsg(answer);
+    	
+    	
+    }
     
     
 }

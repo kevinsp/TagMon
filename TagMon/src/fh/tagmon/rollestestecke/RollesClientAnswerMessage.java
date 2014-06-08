@@ -1,21 +1,27 @@
 package fh.tagmon.rollestestecke;
 
-public class RollesClientAnswerMessage extends RollesClientNetworkMessage{
+import fh.tagmon.gameengine.helperobjects.AnswerObject;
 
-	private String msg;
-	private boolean monsterIsDead;
+public class RollesClientAnswerMessage extends RollesClientNetworkMessage implements IClientNetworkMessage{
+
+	private final AnswerObject answer;
 	
-	public RollesClientAnswerMessage(String msg, boolean monsterIsDead){
+	public RollesClientAnswerMessage(AnswerObject answer){
 		super(RollesClientNetworkMessageTypes.ANSWER);
-		this.msg = msg;
-		this.monsterIsDead = monsterIsDead;
+		this.answer = answer;
+
 	}
 	
-	public boolean isMonsterDead(){
-		return this.monsterIsDead;
-	}
+
 	
-	public String getMsg(){
-		return this.msg;
+	@Override
+	public RollesClientNetworkMessageTypes getMessageType() {
+		return super.messageType;
+	}
+
+
+
+	public AnswerObject getAnswer() {
+		return answer;
 	}
 }

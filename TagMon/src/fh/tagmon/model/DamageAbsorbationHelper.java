@@ -9,12 +9,12 @@ import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.abilitys.IDurationAbilityComponent;
 import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 
-public class DamageAbsorbationHandler {
+public class DamageAbsorbationHelper {
 
 	private DurationAbilityListHandler durationAbilityListHandler;
 	
 	
-	public DamageAbsorbationHandler(DurationAbilityListHandler durationAbilityListHandler){
+	public DamageAbsorbationHelper(DurationAbilityListHandler durationAbilityListHandler){
 		this.durationAbilityListHandler = durationAbilityListHandler;
 	}
 	
