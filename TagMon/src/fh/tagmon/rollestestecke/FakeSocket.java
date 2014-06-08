@@ -1,7 +1,7 @@
 package fh.tagmon.rollestestecke;
 
 
-public class FakeSocket implements IClientConnector, IHostConnector{
+public class FakeSocket implements IClientConnection, IHostConnection{
 	
 	private volatile IHostNetworkMessage  msgFromHost = null;
 	private volatile IClientNetworkMessage msgFromClient = null;
