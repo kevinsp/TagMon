@@ -2,7 +2,7 @@ package fh.tagmon.rollestestecke;
 
 public interface IHostConnector {
 
-	public boolean send(IHostNetworkMessage msgToClient);
-	public IClientNetworkMessage recive();
+	public boolean sendMsgToClient(IHostNetworkMessage msgToClient);
+	public IClientNetworkMessage reciveMsgFromClient();
 	
 }

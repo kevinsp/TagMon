@@ -12,12 +12,13 @@ import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
-public class GameHostEngine implements Runnable {
+public class GameHostEngine {
 
     private PlayerList playerList;
     private IPlayer currentPlayer;
     private int roundCounter = 0;
     private boolean runGame = true;
+    private String logTag = "GameEngine";
 
 
     public GameHostEngine(PlayerList newPList) {
@@ -31,9 +32,16 @@ public class GameHostEngine implements Runnable {
     	}
     }
     
+    private void gameOver(){
+    	for(Entry<Integer, IPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
+    		entry.getValue().gameOver();
+    	}
+    	myLogger("GAME_OVER");
+    	this.runGame = false;
+    }
+    
     //function for testing for rolle
-    @Override
-    public void run() {
+    public void go() {
     	initGameStart();
        
     	while (runGame) {
@@ -58,7 +66,7 @@ public class GameHostEngine implements Runnable {
     }
 
     private void myLogger(String toLog) {
-        Log.i("GameEngine", toLog);
+        Log.i(this.logTag, toLog);
     }
 
 
@@ -95,7 +103,8 @@ public class GameHostEngine implements Runnable {
             myLogger("====");
             /////////////////////////////////////////// TESTHALBER
             if (answer.isMonsterDead()) {
-                this.runGame = false;
+                this.gameOver();
+            	
             }
             //////////////////////////////
         }

@@ -22,4 +22,9 @@ public class RollesHostYourTurnMessage extends RollesHostNetworkMessage implemen
 	public int getYourTargetId() {
 		return yourTargetId;
 	}
+	
+	@Override
+	public RollesHostNetworkMessageTypes getMessageType() {
+		return super.messageType;
+	}
 }

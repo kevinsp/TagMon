@@ -27,10 +27,10 @@ public class HostConnector implements IPlayer{
 		//ACHTUNG TARGETLIST MUSS GEÄNDERT WERDEN
 		
 		RollesHostYourTurnMessage yourTurnMsg = new RollesHostYourTurnMessage(targetList, yourTargetId);
-		this.connector.send(yourTurnMsg);
-		RollesClientActionMessage action = (RollesClientActionMessage) connector.recive();
+		this.connector.sendMsgToClient(yourTurnMsg);
+		RollesClientActionMessage actionMsg = (RollesClientActionMessage) connector.reciveMsgFromClient();
 		
-		return new ActionObject(action.getAbility(), action.getTargetRestriction());
+		return actionMsg.getAction();
 	}
 
 	@Override
@@ -43,11 +43,11 @@ public class HostConnector implements IPlayer{
 			IAbilityComponent abilityComponent) {
 		RollesHostDealWithMessage dealWithMsg = new RollesHostDealWithMessage(abilityComponent);
 		
-		this.connector.send(dealWithMsg);
+		this.connector.sendMsgToClient(dealWithMsg);
 		
-		RollesClientAnswerMessage answer = (RollesClientAnswerMessage) connector.recive();
+		RollesClientAnswerMessage answerMsg = (RollesClientAnswerMessage) connector.reciveMsgFromClient();
 		
-		return new AnswerObject(answer.getMsg(), answer.isMonsterDead());
+		return answerMsg.getAnswer();
 	}
 
 	@Override
@@ -79,11 +79,17 @@ public class HostConnector implements IPlayer{
 	@Override
 	public PlayerInfo getReady(int id) {
 		RollesHostGameStartMessage gameStartMsg = new RollesHostGameStartMessage(id);
-		this.connector.send(gameStartMsg);
+		this.connector.sendMsgToClient(gameStartMsg);
 		
-		RollesClientGameStartMessage gameStart= (RollesClientGameStartMessage) this.connector.recive();
+		RollesClientGameStartMessage gameStart= (RollesClientGameStartMessage) this.connector.reciveMsgFromClient();
 		
 		return new PlayerInfo(gameStart.getPlayerName());
+	}
+
+	@Override
+	public void gameOver() {
+		RollesHostGameOverMessage gameOverMsg = new RollesHostGameOverMessage();
+		this.connector.sendMsgToClient(gameOverMsg);
 	}
 	
 	

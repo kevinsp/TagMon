@@ -5,7 +5,6 @@ import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 public class RollesHostDealWithMessage extends RollesHostNetworkMessage implements IHostNetworkMessage{
 	
 	private final IAbilityComponent abilityComponent;
-	
 
 
 	public RollesHostDealWithMessage(IAbilityComponent abilityComponent){
@@ -15,5 +14,10 @@ public class RollesHostDealWithMessage extends RollesHostNetworkMessage implemen
 	
 	public IAbilityComponent getAbilityComponent() {
 		return abilityComponent;
+	}
+
+	@Override
+	public RollesHostNetworkMessageTypes getMessageType() {
+		return super.messageType;
 	}
 }

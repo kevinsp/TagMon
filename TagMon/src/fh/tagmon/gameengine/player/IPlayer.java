@@ -22,7 +22,9 @@ public interface IPlayer {
 	public AnswerObject workWithAbilityComponent(IAbilityComponent abilityComponent);
 	public Monster getMonster();
     public int getId();
-    void sendNewRoundEvent(HashMap<Integer, IPlayer> playerTargetList, int currentPlayerTargetId);
+    public void sendNewRoundEvent(HashMap<Integer, IPlayer> playerTargetList, int currentPlayerTargetId);
     public AbilityTargetRestriction getAbilityTargetRestriction(Ability chosenAbility);
     public PlayerInfo getReady(int id);
+    public void gameOver();
+    
 }

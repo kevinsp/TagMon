@@ -24,7 +24,7 @@ public class Monster {
 	private int additionalIntelligence = 0;
 	
 	private final DurationAbilityListHandler durationAbilityListHandler = new DurationAbilityListHandler();
-	private final DamageAbsorbationHandler dmgAbsHandler = new DamageAbsorbationHandler(this.durationAbilityListHandler);
+	private final DamageAbsorbationHelper dmgAbsHandler = new DamageAbsorbationHelper(this.durationAbilityListHandler);
 	
 	public Monster(int id, String name, Attribut attribut, ArrayList<Koerperteil> koerperteile, Stats stats){
 		this.id = id;
@@ -115,7 +115,7 @@ public class Monster {
 		this.additionalIntelligence = additionalIntelligence;
 	}
 	
-	public DamageAbsorbationHandler getDmgAbsHandler() {
+	public DamageAbsorbationHelper getDmgAbsHelper() {
 		return dmgAbsHandler;
 	}
 

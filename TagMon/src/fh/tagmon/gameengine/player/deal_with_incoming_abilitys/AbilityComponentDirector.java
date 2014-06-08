@@ -13,7 +13,7 @@ import fh.tagmon.gameengine.player.EventManager;
 import fh.tagmon.gameengine.player.IListener;
 import fh.tagmon.gameengine.player.IPlayer;
 
-import fh.tagmon.model.DamageAbsorbationHandler;
+import fh.tagmon.model.DamageAbsorbationHelper;
 import fh.tagmon.model.Monster;
 
 public class AbilityComponentDirector implements IListener{
@@ -30,7 +30,7 @@ public class AbilityComponentDirector implements IListener{
 		//this.monster = monster;
 		this.BuffHandler = new BuffHandler(monster,compLogger);
 		this.dmgHandler = new DamageHandler(monster,compLogger);
-		this.dmgAbsHandler = monster.getDmgAbsHandler();
+		this.dmgAbsHandler = new DamageAbsorbationHandler(monster, compLogger);
 	}
 	
 	
@@ -48,7 +48,8 @@ public class AbilityComponentDirector implements IListener{
 		case HEAL:
 			break;
 		case SCHADENSABSORBATION:
-			this.dmgAbsHandler.addDamageAbsorbationComponant((Schadensabsorbation) abilityComponent);
+			Schadensabsorbation schadenAbs = (Schadensabsorbation) abilityComponent;
+			this.dmgAbsHandler.handleDamageAbsorbation(schadenAbs);
 		case STUN:
 			break;
 		default:
