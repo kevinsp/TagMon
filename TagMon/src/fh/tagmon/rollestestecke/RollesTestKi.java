@@ -15,9 +15,9 @@ public class RollesTestKi {
     private String kiName;
     private MonsterPlayModule playModule;
     private int id = 0;
-    private ClientConnector myConnector;
+    private ClientMsgPreparer myConnector;
     
-    public RollesTestKi(String name, Monster myMonster, ClientConnector connector) {
+    public RollesTestKi(String name, Monster myMonster, ClientMsgPreparer connector) {
         this.kiName = name;
         this.myConnector = connector;
 
@@ -97,7 +97,7 @@ public class RollesTestKi {
     
     private void doDealWith(RollesHostDealWithMessage dealWithMsg){
     	IAbilityComponent abilityCompToDealWith = dealWithMsg.getAbilityComponent();
-    	this.playModule.getMyMonstersAbilityComponentDirector().handleAbilityComponent(abilityCompToDealWith);
+    	this.playModule.getMonstersAbilityComponentDirector().handleAbilityComponent(abilityCompToDealWith);
     	String retMsg = this.playModule.getLatestLogEntry();
     	boolean isMyMonsterDead = false;
     	if(this.playModule.getMonster().getCurrentLifePoints() <= 0){

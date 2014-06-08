@@ -12,9 +12,9 @@ import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.model.Monster;
 import fh.tagmon.network.ConnectionType;
 import fh.tagmon.rollestestecke.AsynkTaskDummy;
-import fh.tagmon.rollestestecke.ClientConnector;
+import fh.tagmon.rollestestecke.ClientMsgPreparer;
 import fh.tagmon.rollestestecke.FakeSocket;
-import fh.tagmon.rollestestecke.HostConnector;
+import fh.tagmon.rollestestecke.NetworkPlayer;
 import fh.tagmon.rollestestecke.MyMonsterCreator;
 import fh.tagmon.rollestestecke.RollesTestKi;
 
@@ -45,9 +45,9 @@ public class GameEngineModule {
     	//network Emulator
     	FakeSocket contBetweenHostAndRed = new FakeSocket();
     	//verbinde Host mit RedKi
-    	HostConnector conToRed = new HostConnector(contBetweenHostAndRed);
+    	NetworkPlayer conToRed = new NetworkPlayer(contBetweenHostAndRed);
     	//verbinde RedKi mit Host
-    	ClientConnector conRedToHost = new ClientConnector(contBetweenHostAndRed);
+    	ClientMsgPreparer conRedToHost = new ClientMsgPreparer(contBetweenHostAndRed);
     	//erstelle RedKi
     	Monster redMonster = myMonsterCreator.getMonsterDummy();
     	RollesTestKi redKi = new RollesTestKi("RedKi", redMonster, conRedToHost);
@@ -57,9 +57,9 @@ public class GameEngineModule {
     	//network Emulator
     	FakeSocket contBetweenHostAndBlue = new FakeSocket();
     	//verbinde Host mit BlueKi
-    	HostConnector conToBlue = new HostConnector(contBetweenHostAndBlue);
+    	NetworkPlayer conToBlue = new NetworkPlayer(contBetweenHostAndBlue);
     	//verbinde BlueKi mit Host
-    	ClientConnector conBlueToHost = new ClientConnector(contBetweenHostAndBlue);
+    	ClientMsgPreparer conBlueToHost = new ClientMsgPreparer(contBetweenHostAndBlue);
     	//erstelle BlueKi
     	Monster blueMonster = myMonsterCreator.getMonsterDummy();
     	RollesTestKi blueKi = new RollesTestKi("BlueKi", blueMonster, conBlueToHost);

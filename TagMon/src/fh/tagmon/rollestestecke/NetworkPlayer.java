@@ -11,12 +11,12 @@ import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
-public class HostConnector implements IPlayer{
+public class NetworkPlayer implements IPlayer{
 
-	private IHostConnector connector;
+	private IHostConnection connector;
 
 
-	public HostConnector(IHostConnector connector) {
+	public NetworkPlayer(IHostConnection connector) {
 		super();
 		this.connector = connector;
 	}
