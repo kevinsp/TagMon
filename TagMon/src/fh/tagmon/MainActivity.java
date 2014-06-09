@@ -1,19 +1,11 @@
 package fh.tagmon;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Intent;
-import android.database.SQLException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import fh.tagmon.gameengine.gameengine.GameEngineModule;
-import fh.tagmon.database.dao.MonsterDAO;
-import fh.tagmon.database.daoImpl.MonsterDAOImpl;
-import fh.tagmon.exception.MonsterDAOException;
+
 import fh.tagmon.guiParts.Fight;
-import fh.tagmon.model.Monster;
 //import fh.tagmon.guiParts.Stats;
 //import fh.tagmon.guiParts.Train;
 
@@ -36,14 +28,7 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // app = ((GlobalVariables) getApplicationContext());
-        //TODO: check if first run!
-     /*   onFirstRun();
-        initTagMon();
-        */
 
-        
-        
         // Start of MonsterDAO test
         
 //        Monster monster = null;
@@ -75,33 +60,6 @@ public class MainActivity extends Activity {
         
     }
 
-    //TODO: call this function on the first time the app is started,
-    //TODO: create TagMon etc, save tagmon in sql lite db
-  /*  public void onFirstRun() {
-        if (app.getTagMon() == null) {
-            app.setTagMon(new TagMon(this.tagMonName));
-        }
-    }
-
-
-    private void initTagMon() {
-        TagMon tagMon = app.getTagMon();
-        if (tagMon != null) {
-            TextView tagMonLevelTextView = (TextView) findViewById(R.id.tagMonLevel);
-            tagMonLevelTextView.setText(String.valueOf(tagMon.getLevel()));
-            tagMonLevelTextView.setTextAppearance(getApplicationContext(), R.style.standardDarkeningBackGroundAndTextColor);
-
-            TextView tagMonNameTextView = (TextView) findViewById(R.id.tagMonName);
-            tagMonNameTextView.setText(String.valueOf(tagMon.getName()));
-            tagMonNameTextView.setTextAppearance(getApplicationContext(), R.style.standardDarkeningBackGroundAndTextColor);
-
-            ImageView image = (ImageView) findViewById(R.id.tagMonImage);
-            String enemyDrawable = tagMon.getDrawable();
-            int resID = getResources().getIdentifier(enemyDrawable, "drawable", getPackageName());
-            image.setImageResource(resID);
-        }
-    }
-*/
     public void switchToStatsActivity(View view) {
 //        Intent myIntent = new Intent(this, Stats.class);
 //        startActivity(myIntent);

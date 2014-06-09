@@ -9,7 +9,6 @@ import java.util.Observer;
 
 import fh.tagmon.gameengine.gameengine.PlayerList;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
-import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.guiParts.Fight;
 import fh.tagmon.guiParts.ISetAbility;
@@ -74,12 +73,12 @@ public class GameClientEngine implements Observer, ISetAbility{
 			break;
 		case ENEMY_TURN_LOG:
 			//TODO Wenn eine Kampfstatistik kommt, zeige sie zeitlich begrenzt an
-            //TODO teste DialogBuilder(Context context, String text, int timeTilClose)
+            //TODO  DialogBuilder(Context context,String title, String text, int timeTilClose)
 			break;
 		case GAME_OVER:
 			stop(); 
-			//Statistik ausgeben und zum Hauptbildschirm zur�ck.
-			//Optional: h�chster Damage, gespielte Runden bla bla mitloggen..
+			//Statistik ausgeben und zum Hauptbildschirm zurck.
+			//Optional: hchster Damage, gespielte Runden bla bla mitloggen..
 			break;
 		case YOUR_TURN_ORDER:
 			//TODO Wenn eine Aufforderung kommt mach deinen Zug
