@@ -9,7 +9,7 @@ import fh.tagmon.gameengine.player.IPlayer;
 public class PlayerList {
 
     private LinkedList<PlayerListNode> playList = new LinkedList<PlayerListNode>();
-    private HashMap<Integer, IPlayer> playerTargetList = new HashMap<Integer, IPlayer>();
+    private HashMap<Integer, IHostPlayer> playerTargetList = new HashMap<Integer, IHostPlayer>();
     private HashMap<Integer, PlayerInfo> playerInfoList = new HashMap<Integer, PlayerInfo>();
 
     public HashMap<Integer, PlayerInfo> getPlayerInfoList() {
@@ -26,7 +26,7 @@ public class PlayerList {
         this.currentPlayListPos++;
     }
 
-    public IPlayer getNextPlayer() {
+    public IHostPlayer getNextPlayer() {
         this.selectNextPlayerNode();
         return this.currentSelectedPlayerNode.getPlayer();
     }
@@ -35,18 +35,18 @@ public class PlayerList {
         return this.currentSelectedPlayerNode.getOwnTargetId();
     }
 
-    public void addPlayer(IPlayer newPlayer) {
+    public void addPlayer(IHostPlayer newPlayer) {
         PlayerListNode newNode = new PlayerListNode(newPlayer, this.playerCounter, 0);
         this.playList.add(newNode);
         this.playerTargetList.put(this.playerCounter, newPlayer);
         this.playerCounter++;
     }
 
-    public HashMap<Integer, IPlayer> getPlayerTargetList() {
+    public HashMap<Integer, IHostPlayer> getPlayerTargetList() {
         return this.playerTargetList;
     }
 
-    public IPlayer getPlayerByTargetId(int id) {
+    public IHostPlayer getPlayerByTargetId(int id) {
         return this.playerTargetList.get(id);
     }
 
@@ -60,6 +60,10 @@ public class PlayerList {
 	
 	public PlayerInfo getPlayerInfo(int id){
 		return this.playerInfoList.get(id);
+	}
+	
+	public HashMap<Integer, PlayerInfo> getPlayerInfoMap(){
+		return this.playerInfoList;
 	}
 
     

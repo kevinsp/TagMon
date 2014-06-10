@@ -47,14 +47,13 @@ public class Player implements IPlayer {
         return chosenAbility.getTargetRestriction();
     }
 
-    public void sendNewRoundEvent (HashMap<Integer, IPlayer> targetList,
+    public void sendNewRoundEvent (HashMap<Integer, PlayerInfo> targetList,
                                    int yourTargetId) {
         this.eventManager.sendNewRoundEvent(targetList, yourTargetId);
     }
 
     @Override
-    public ActionObject yourTurn(HashMap<Integer, IPlayer> targetList,
-                                 int yourTargetId) {
+    public ActionObject yourTurn(HashMap<Integer, PlayerInfo> targetList, int yourTargetId) {
         sendNewRoundEvent(targetList, yourTargetId);
 
         Ability chosenAbility = this.choseRandomAbility();
@@ -101,5 +100,7 @@ public class Player implements IPlayer {
 		// TODO Auto-generated method stub
 		
 	}
+
+
 
 }

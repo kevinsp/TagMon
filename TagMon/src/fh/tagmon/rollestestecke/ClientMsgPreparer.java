@@ -17,7 +17,7 @@ public class ClientMsgPreparer {
 		return true;
 	}
 	
-	public IHostNetworkMessage waitForMsgFromHost(){
+	public HostNetworkMessage waitForMsgFromHost(){
 		return this.myConnection.reciveMsgFromHost();
 	}
 	

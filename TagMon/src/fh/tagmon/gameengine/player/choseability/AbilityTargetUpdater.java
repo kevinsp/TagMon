@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map.Entry;
 
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.player.IPlayer;
 
 
 public class AbilityTargetUpdater{
 
-	protected void prepareAllTargetRestrictions(HashMap<Integer, IPlayer> targetList, int yourTargetId){
+	protected void prepareAllTargetRestrictions(HashMap<Integer, PlayerInfo> targetList, int yourTargetId){
 		EnumSet<AbilityTargetRestriction> allAbilityTargetRestriction = EnumSet.allOf(AbilityTargetRestriction.class);
 		
 		for(AbilityTargetRestriction ablTarRes: allAbilityTargetRestriction){
@@ -24,6 +25,11 @@ public class AbilityTargetUpdater{
 			case SELF:
 				ablTarRes.addTarget(yourTargetId);
 				break;
+			case ENEMYGROUP:
+			case OWNGROUP:
+			case OWNGROUPANDENEMY:
+			case SELFANDENEMY:
+			case SELFANDENEMYGROUP:
 			default:
 				break;
 			
@@ -32,9 +38,9 @@ public class AbilityTargetUpdater{
 		
 	}
 		
- 	private void prepareEnemy(HashMap<Integer, IPlayer> targetList, int yourTargetId, AbilityTargetRestriction ablTarRes){
+ 	private void prepareEnemy(HashMap<Integer, PlayerInfo> targetList, int yourTargetId, AbilityTargetRestriction ablTarRes){
 		LinkedList<Integer> enemyTargetIds = new LinkedList<Integer>();
-		for(Entry<Integer,IPlayer> entry: targetList.entrySet()){
+		for(Entry<Integer,PlayerInfo> entry: targetList.entrySet()){
 			int targetId = entry.getKey();
 			if(targetId != yourTargetId){
 				enemyTargetIds.add(targetId);

@@ -2,6 +2,7 @@ package fh.tagmon.gameengine.player.choseability;
 
 import java.util.HashMap;
 
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.player.IListener;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.model.Monster;
@@ -19,9 +20,10 @@ public class AbilityUpdater implements IListener {
 	}
 
 	@Override
-	public void newRound(HashMap<Integer, IPlayer> targetList, int yourTargetId) {
+	public void newRound(HashMap<Integer, PlayerInfo> targetList, int yourTargetId) {
 		this.targetUpdater.prepareAllTargetRestrictions(targetList, yourTargetId);
 		this.statsUpdater.prepareAllAbilitys(this.monster);
 	}
+
 	
 }

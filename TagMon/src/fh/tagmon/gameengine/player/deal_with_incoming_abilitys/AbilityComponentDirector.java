@@ -8,11 +8,11 @@ import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.EventManager;
 import fh.tagmon.gameengine.player.IListener;
 import fh.tagmon.gameengine.player.IPlayer;
-
 import fh.tagmon.model.DamageAbsorbationHelper;
 import fh.tagmon.model.Monster;
 
@@ -66,11 +66,13 @@ public class AbilityComponentDirector implements IListener{
 	}
 
 	@Override
-	public void newRound(HashMap<Integer, IPlayer> targetList, int yourTargetId) {
+	public void newRound(HashMap<Integer, PlayerInfo> targetList, int yourTargetId) {
 
 		this.compLogger.newRound();
 		this.BuffHandler.newRound();
 		
 	}
+
+
 	
 }
