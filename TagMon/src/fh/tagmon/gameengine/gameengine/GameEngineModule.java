@@ -1,12 +1,18 @@
 package fh.tagmon.gameengine.gameengine;
 
 
+import java.io.IOException;
+
 import android.app.Activity;
 import android.content.Context;
+import android.database.SQLException;
 import android.os.AsyncTask;
+import android.util.Log;
 import fh.tagmon.BuildConfig;
 import fh.tagmon.client.GameClientEngine;
+import fh.tagmon.database.dao.MonsterDAO;
 import fh.tagmon.database.daoImpl.MonsterDAOImpl;
+import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.model.Monster;
@@ -49,7 +55,8 @@ public class GameEngineModule {
     	//verbinde RedKi mit Host
     	ClientMsgPreparer conRedToHost = new ClientMsgPreparer(contBetweenHostAndRed);
     	//erstelle RedKi
-    	Monster redMonster = myMonsterCreator.getMonsterDummy();
+    	//Monster redMonster = myMonsterCreator.getMonsterDummy();
+    	Monster redMonster = getMonsterFromTobi(context);
     	RollesTestKi redKi = new RollesTestKi("RedKi", redMonster, conRedToHost);
      
     	//BlueKi
@@ -61,7 +68,9 @@ public class GameEngineModule {
     	//verbinde BlueKi mit Host
     	ClientMsgPreparer conBlueToHost = new ClientMsgPreparer(contBetweenHostAndBlue);
     	//erstelle BlueKi
-    	Monster blueMonster = myMonsterCreator.getMonsterDummy();
+    	//Monster blueMonster = myMonsterCreator.getMonsterDummy();
+    	Monster blueMonster = getMonsterFromTobi(context);
+    	
     	RollesTestKi blueKi = new RollesTestKi("BlueKi", blueMonster, conBlueToHost);
     	
     	//erstelle PlayList
@@ -116,6 +125,25 @@ public class GameEngineModule {
 			//clientEngine.run();	auskommentiert Rolle
 	}
 	
+	private Monster getMonsterFromTobi(Context context){
+		try {
+			MonsterDAO monsterDAO = new MonsterDAOImpl(context);
+			Monster monster = monsterDAO.getMonster("tag1");
+			
+			return monster;
+		} catch (SQLException e1) {
+			Log.d("tagmonDB", "SQLEX");
+		} catch (IOException e1) {
+			Log.d("tagmonDB", "IOEX");
+		} catch (MonsterDAOException e){
+	    	Log.d("tagmonDB", "MonsterDAO");
+			e.printStackTrace();
+		} catch (Exception e) {
+			Log.d("tagmonDB", "FAIIIIIIIIIIIIIIL");
+			e.printStackTrace();
+		}
 	
+	  return null;
+	}
 	
 }

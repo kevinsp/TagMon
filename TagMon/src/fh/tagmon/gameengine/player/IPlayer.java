@@ -17,12 +17,12 @@ import fh.tagmon.model.Monster;
 
 public interface IPlayer {
 	
-	public ActionObject yourTurn(HashMap<Integer, IPlayer> targetList, int yourTargetId);
+	public ActionObject yourTurn(HashMap<Integer, PlayerInfo> targetList, int yourTargetId);
 	public String getPlayerName();
 	public AnswerObject workWithAbilityComponent(IAbilityComponent abilityComponent);
 	public Monster getMonster();
     public int getId();
-    public void sendNewRoundEvent(HashMap<Integer, IPlayer> playerTargetList, int currentPlayerTargetId);
+    public void sendNewRoundEvent(HashMap<Integer, PlayerInfo> playerTargetList, int currentPlayerTargetId);
     public AbilityTargetRestriction getAbilityTargetRestriction(Ability chosenAbility);
     public PlayerInfo getReady(int id);
     public void gameOver();

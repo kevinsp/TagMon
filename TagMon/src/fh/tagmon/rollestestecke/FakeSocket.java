@@ -3,12 +3,12 @@ package fh.tagmon.rollestestecke;
 
 public class FakeSocket implements IClientConnection, IHostConnection{
 	
-	private volatile IHostNetworkMessage  msgFromHost = null;
+	private volatile HostNetworkMessage  msgFromHost = null;
 	private volatile IClientNetworkMessage msgFromClient = null;
 	
 
-	public IHostNetworkMessage popMsgFromHost(){
-		IHostNetworkMessage retStr = msgFromHost;
+	public HostNetworkMessage popMsgFromHost(){
+		HostNetworkMessage retStr = msgFromHost;
 		msgFromHost = null;
 		return retStr;
 	}
@@ -26,7 +26,7 @@ public class FakeSocket implements IClientConnection, IHostConnection{
 	}
 	
 	@Override
-	public boolean sendMsgToClient(IHostNetworkMessage msg){
+	public boolean sendMsgToClient(HostNetworkMessage msg){
 		this.msgFromHost = msg;
 		return true;
 	}
@@ -50,10 +50,10 @@ public class FakeSocket implements IClientConnection, IHostConnection{
 	}
 
 	@Override
-	public IHostNetworkMessage reciveMsgFromHost() {
+	public HostNetworkMessage reciveMsgFromHost() {
 		while(true){
 
-			IHostNetworkMessage msgFromHost = this.popMsgFromHost();
+			HostNetworkMessage msgFromHost = this.popMsgFromHost();
 			if( msgFromHost != null){
 				return msgFromHost;
 			}

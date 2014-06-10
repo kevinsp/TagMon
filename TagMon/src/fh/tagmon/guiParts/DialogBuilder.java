@@ -29,10 +29,7 @@ public class DialogBuilder extends Dialog {
         super(context, R.style.customDialog);
         this.setCancelable(false);
         this.setCanceledOnTouchOutside(false);
-
-
         this.context = context;
-
         this.title = title;
         this.items = items;
         this.obj = obj;
@@ -46,9 +43,12 @@ public class DialogBuilder extends Dialog {
         initDialog();
     }
 
-    public DialogBuilder(Context context, String text, int timeTilClose) {
+    public DialogBuilder(Context context, String title, String text, int timeTilClose) {
         super(context);
+        this.context = context;
+        this.title = title;
         this.timeTilClose = timeTilClose;
+        this.text = text;
         initDialog();
     }
 

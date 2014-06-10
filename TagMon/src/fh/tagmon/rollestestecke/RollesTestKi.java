@@ -2,6 +2,7 @@ package fh.tagmon.rollestestecke;
 
 import java.util.Random;
 
+import android.util.Log;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
@@ -53,25 +54,21 @@ public class RollesTestKi {
     public void playTheGame(){
     	boolean gameIsNotOver = true;
     	while(gameIsNotOver){
-    		IHostNetworkMessage msgFromHost = this.myConnector.waitForMsgFromHost();
+    		HostNetworkMessage msgFromHost = this.myConnector.waitForMsgFromHost();
     		
     		switch(msgFromHost.getMessageType()){
-			case DEAL_WITH:
-				RollesHostDealWithMessage dealWithMsg = (RollesHostDealWithMessage) msgFromHost;
-				doDealWith(dealWithMsg);
+			case DEAL_WITH_INCOMING_ABILITY_COMPONENT:
+				doDealWith(msgFromHost);
 				break;
 			case GAME_OVER:
-				RollesHostGameOverMessage gameOverMsg = (RollesHostGameOverMessage) msgFromHost;
 				gameIsNotOver = false;
 				break;
 			case GAME_START:
-				RollesHostGameStartMessage gameStartmsg = (RollesHostGameStartMessage) msgFromHost;
-				this.id = gameStartmsg.getYourTargetId();
+				this.id = msgFromHost.getPlayersId();
 				this.myConnector.sendGameStartsMsg(this.kiName);
 				break;
 			case YOUR_TURN:
-				RollesHostYourTurnMessage yourTurnMsg = (RollesHostYourTurnMessage) msgFromHost;
-				doMyTurn(yourTurnMsg);
+				doMyTurn(msgFromHost);
 				break;
 			default:
 				break;
@@ -83,9 +80,9 @@ public class RollesTestKi {
     		
     }
     
-    private void doMyTurn(RollesHostYourTurnMessage yourTurnMsg){
+    private void doMyTurn(HostNetworkMessage yourTurnMsg){
     	//ULTRA WICHTIG muss jedes mal befor ich drann bin ausgeführt werden
-    	this.playModule.newRound(yourTurnMsg.getTargetList(), yourTurnMsg.getYourTargetId()); 
+    	this.playModule.newRound(yourTurnMsg.getTargetList(), this.id); 
     	
     	Ability chosenAbility = choseRandomAbility();
     	AbilityTargetRestriction targetRes = this.choseRandomTarget(chosenAbility);
@@ -95,9 +92,11 @@ public class RollesTestKi {
     	
     }
     
-    private void doDealWith(RollesHostDealWithMessage dealWithMsg){
+    private void doDealWith(HostNetworkMessage dealWithMsg){
     	IAbilityComponent abilityCompToDealWith = dealWithMsg.getAbilityComponent();
+    	
     	this.playModule.getMonstersAbilityComponentDirector().handleAbilityComponent(abilityCompToDealWith);
+    	
     	String retMsg = this.playModule.getLatestLogEntry();
     	boolean isMyMonsterDead = false;
     	if(this.playModule.getMonster().getCurrentLifePoints() <= 0){

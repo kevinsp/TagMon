@@ -15,7 +15,7 @@ import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 public class GameHostEngine {
 
     private PlayerList playerList;
-    private IPlayer currentPlayer;
+    private IHostPlayer currentPlayer;
     private int roundCounter = 0;
     private boolean runGame = true;
     private String logTag = "GameEngine";
@@ -26,14 +26,14 @@ public class GameHostEngine {
     }
     
     private void initGameStart(){
-    	for(Entry<Integer, IPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
-    		PlayerInfo playerInfo = entry.getValue().getReady(entry.getKey());
+    	for(Entry<Integer, IHostPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
+    		PlayerInfo playerInfo = entry.getValue().gameStarts(entry.getKey());
     		this.playerList.addPlayerInfo(entry.getKey(), playerInfo);
     	}
     }
     
     private void gameOver(){
-    	for(Entry<Integer, IPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
+    	for(Entry<Integer, IHostPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
     		entry.getValue().gameOver();
     	}
     	myLogger("GAME_OVER");
@@ -50,7 +50,7 @@ public class GameHostEngine {
             currentPlayer = this.playerList.getNextPlayer();
 
             // 2Phase
-            ActionObject action = currentPlayer.yourTurn(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
+            ActionObject action = currentPlayer.yourTurn(this.playerList.getPlayerInfoMap(), this.playerList.getCurrentPlayerTargetId());
 
             myLogger("##################### ROUND: " + String.valueOf(this.roundCounter));
            
@@ -84,8 +84,13 @@ public class GameHostEngine {
                 case SELF:
                     targetList = aComponent.getComponentTargetRestriction().getTargetList();
                     break;
-                default:
-                    break;
+				case ENEMYGROUP:
+				case OWNGROUP:
+				case OWNGROUPANDENEMY:
+				case SELFANDENEMY:
+				case SELFANDENEMYGROUP:
+	            default:
+	                    break;
             }
 
             this.sendToList(aComponent, targetList);
@@ -95,8 +100,8 @@ public class GameHostEngine {
 
     private void sendToList(IAbilityComponent aComponent, LinkedList<Integer> targetList) {
         for (Integer targetId : targetList) {
-            final IPlayer player = this.playerList.getPlayerByTargetId(targetId);
-            AnswerObject answer = player.workWithAbilityComponent(aComponent);
+            final IHostPlayer player = this.playerList.getPlayerByTargetId(targetId);
+            AnswerObject answer = player.dealWithAbilityComponent(aComponent);
 
             myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(targetId).getPlayerName() + " ====");
             myLogger(answer.getMsg());

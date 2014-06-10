@@ -4,21 +4,21 @@ import fh.tagmon.gameengine.player.IPlayer;
 
 public class PlayerListNode {
 
-	private IPlayer player;
+	private IHostPlayer player;
 	private int ownTargetId;
 	private int ownGroupId;
 	
-	public PlayerListNode(IPlayer player, int ownTargetId, int ownGroupId){
+	public PlayerListNode(IHostPlayer player, int ownTargetId, int ownGroupId){
 		this.setPlayer(player);
 		this.setOwnGroupId(ownTargetId);
 		this.setOwnTargetId(ownTargetId);
 	}
 
-	public IPlayer getPlayer() {
+	public IHostPlayer getPlayer() {
 		return player;
 	}
 
-	public void setPlayer(IPlayer player) {
+	public void setPlayer(IHostPlayer player) {
 		this.player = player;
 	}
 
