@@ -1,4 +1,4 @@
-package fh.tagmon.guiParts;
+package fh.tagmon.client.gui;
 
 /**
  * Created by pasca_000 on 29.05.2014.

@@ -1,4 +1,4 @@
-package fh.tagmon.client;
+package fh.tagmon.client.clientEngine;
 
 import java.util.HashMap;
 

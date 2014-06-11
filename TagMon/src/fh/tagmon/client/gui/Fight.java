@@ -1,4 +1,4 @@
-package fh.tagmon.guiParts;
+package fh.tagmon.client.gui;
 
 
 import android.app.Activity;
@@ -25,7 +25,7 @@ import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 
-public class Fight extends Activity implements fh.tagmon.guiParts.IBattleGUI {
+public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
     private final String TAG = "fight";
     private int userId;

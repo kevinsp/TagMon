@@ -1,4 +1,4 @@
-package fh.tagmon.network;
+package fh.tagmon.network.hostConnection;
 
 import fh.tagmon.network.message.MessageObject;
 

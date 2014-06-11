@@ -1,4 +1,4 @@
-package fh.tagmon.network;
+package fh.tagmon.network.hostConnection;
 
 import java.util.HashMap;
 
@@ -24,7 +24,7 @@ public class NetworkPlayer implements IHostPlayer{
 	
 	@Override
 	public PlayerInfo gameStarts(int playersId) {
-		MessageObject<?> gameStart = sendMsgAndReceiveAnswer(MessageFactory.getHostMessage_GameStart(playersId));
+		MessageObject<?> gameStart = sendMsgAndReceiveAnswer(MessageFactory.createHostMessage_GameStart(playersId));
 		return new PlayerInfo((String) gameStart.getContent());
 	}
 	
@@ -32,14 +32,14 @@ public class NetworkPlayer implements IHostPlayer{
 	@Override
 	public ActionObject yourTurn(HashMap<Integer, PlayerInfo> targetList, int yourTargetId) {
 		//ACHTUNG TARGETLIST MUSS GEÄNDERT WERDEN
-		MessageObject<?> actionMsg = sendMsgAndReceiveAnswer(MessageFactory.getHostMessage_YourTurn(targetList));
+		MessageObject<?> actionMsg = sendMsgAndReceiveAnswer(MessageFactory.createHostMessage_YourTurn(targetList));
 		return (ActionObject) actionMsg.getContent();
 	}
 
 	
 	@Override
 	public AnswerObject dealWithAbilityComponents(AbilityComponentList acl) {
-		MessageObject<?> answerMsg = sendMsgAndReceiveAnswer(MessageFactory.getHostMessage_AbilityComponentList(acl));
+		MessageObject<?> answerMsg = sendMsgAndReceiveAnswer(MessageFactory.createHostMessage_AbilityComponentList(acl));
 		return (AnswerObject) answerMsg.getContent();
 	}
 	@Override
@@ -53,7 +53,7 @@ public class NetworkPlayer implements IHostPlayer{
 	
 	@Override
 	public void gameOver() {
-		this.connector.sendMsgToClient(MessageFactory.getHostMessage_GameOver(""));
+		this.connector.sendMsgToClient(MessageFactory.createHostMessage_GameOver(""));
 	}
 
 	

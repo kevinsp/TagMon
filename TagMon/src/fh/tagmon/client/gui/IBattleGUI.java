@@ -1,4 +1,4 @@
-package fh.tagmon.guiParts;
+package fh.tagmon.client.gui;
 
 
 import java.util.HashMap;

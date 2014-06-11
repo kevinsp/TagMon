@@ -1,5 +1,7 @@
-package fh.tagmon.network;
+package fh.tagmon.network.localConnection;
 
+import fh.tagmon.network.clientConnections.IClientConnection;
+import fh.tagmon.network.hostConnection.IHostConnection;
 import fh.tagmon.network.message.MessageObject;
 
 

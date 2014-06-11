@@ -1,4 +1,4 @@
-package fh.tagmon.client;
+package fh.tagmon.client.clientEngine;
 
 import android.content.Context;
 import android.util.Log;
@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
+import fh.tagmon.client.gui.Fight;
+import fh.tagmon.client.gui.ISetAbility;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.gameengine.PlayerList;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
-import fh.tagmon.guiParts.Fight;
-import fh.tagmon.guiParts.ISetAbility;
 import fh.tagmon.network.ConnectionType;
 import fh.tagmon.network.clientConnections.ANetworkConnection;
 import fh.tagmon.network.clientConnections.NetworkSocketConnection;
@@ -79,7 +79,7 @@ public class GameClientEngine implements Observer, ISetAbility{
 		case ABILITY_COMPONENT:
 			AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
 			AnswerObject answerObject = monster.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
-			connection.sendToHost(MessageFactory.getClientMessage_Answer(answerObject, ID));
+			connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, ID));
 			break;
 		case SUMMARY:
 			//TODO Durch korrekte Methode ersetzen
@@ -96,7 +96,7 @@ public class GameClientEngine implements Observer, ISetAbility{
             //TODO nicht jedes mal die gui initialisieren -> UPDATEN
 			((Fight) context).updateBattleGUI(playerMap, ID);
 			ActionObject actionObject = waitForAction(playerMap);
-			connection.sendToHost(MessageFactory.getClientMessage_Action(actionObject, ID));
+			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 			break;
 		default:
 			//TODO evtl Meldung auf Screen ausgeben

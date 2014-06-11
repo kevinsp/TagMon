@@ -1,4 +1,4 @@
-package fh.tagmon.guiParts;
+package fh.tagmon.client.gui;
 
 import android.app.Dialog;
 import android.content.Context;
