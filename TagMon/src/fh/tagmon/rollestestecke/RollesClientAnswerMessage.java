@@ -2,7 +2,7 @@ package fh.tagmon.rollestestecke;
 
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 
-public class RollesClientAnswerMessage extends RollesClientNetworkMessage implements IClientNetworkMessage{
+public class RollesClientAnswerMessage extends RollesClientNetworkMessage implements RollesIClientNetworkMessage{
 
 	private final AnswerObject answer;
 	

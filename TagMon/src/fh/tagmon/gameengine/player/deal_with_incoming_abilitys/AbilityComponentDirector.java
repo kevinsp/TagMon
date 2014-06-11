@@ -1,19 +1,14 @@
 package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
-import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
+import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
-import fh.tagmon.gameengine.helperobjects.AnswerObject;
-import fh.tagmon.gameengine.player.EventManager;
 import fh.tagmon.gameengine.player.IListener;
-import fh.tagmon.gameengine.player.IPlayer;
-import fh.tagmon.model.DamageAbsorbationHelper;
 import fh.tagmon.model.Monster;
 
 public class AbilityComponentDirector implements IListener{
@@ -33,6 +28,11 @@ public class AbilityComponentDirector implements IListener{
 		this.dmgAbsHandler = new DamageAbsorbationHandler(monster, compLogger);
 	}
 	
+	
+	public void handleAbilityComponents(AbilityComponentList abilityComponents){
+		for(IAbilityComponent ac : abilityComponents.getAbilityList())
+			handleAbilityComponent(ac);
+	}
 	
 	public void handleAbilityComponent(IAbilityComponent abilityComponent){
 

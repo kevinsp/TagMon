@@ -1,7 +1,6 @@
 package fh.tagmon.client;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
@@ -11,18 +10,8 @@ import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
-import fh.tagmon.network.HostMessageObject;
-import fh.tagmon.network.INetworkListener;
-import fh.tagmon.network.INetworkSender;
 
 public class LocalPlayer implements IPlayer{
-
-	@Override
-	public ActionObject yourTurn(HashMap<Integer, IPlayer> targetList,
-			int yourTargetId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public String getPlayerName() {
@@ -50,13 +39,6 @@ public class LocalPlayer implements IPlayer{
 	}
 
 	@Override
-	public void sendNewRoundEvent(HashMap<Integer, IPlayer> playerTargetList,
-			int currentPlayerTargetId) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public AbilityTargetRestriction getAbilityTargetRestriction(Ability chosenAbility) {
 		// TODO Auto-generated method stub
 		return null;
@@ -74,6 +56,18 @@ public class LocalPlayer implements IPlayer{
 		
 	}
 
+	@Override
+	public ActionObject yourTurn(HashMap<Integer, PlayerInfo> targetList,
+			int yourTargetId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-	
+	@Override
+	public void sendNewRoundEvent(
+			HashMap<Integer, PlayerInfo> playerTargetList,
+			int currentPlayerTargetId) {
+		// TODO Auto-generated method stub
+		
+	}
 }

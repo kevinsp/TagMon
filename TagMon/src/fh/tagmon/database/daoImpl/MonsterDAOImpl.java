@@ -6,7 +6,6 @@ import java.util.Random;
 
 import android.content.Context;
 import android.database.SQLException;
-import android.util.Log;
 import fh.tagmon.database.dao.MonsterDAO;
 import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.gameengine.abilitys.Ability;

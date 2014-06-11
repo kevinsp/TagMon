@@ -1,14 +1,13 @@
-package fh.tagmon.network;
+package fh.tagmon.network.clientConnections;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import fh.tagmon.gameengine.helperobjects.ActionObject;
-import fh.tagmon.gameengine.helperobjects.AnswerObject;
+import fh.tagmon.network.message.MessageObject;
 
-public class NetworkSocketConnection extends NetworkConnection implements Runnable{
+public class NetworkSocketConnection extends ANetworkConnection implements Runnable{
 	private Socket connection;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
@@ -23,24 +22,34 @@ public class NetworkSocketConnection extends NetworkConnection implements Runnab
 	@Override
 	public void run() {
 		while(running){
-			HostMessageObject hostMessage = listenToBroadcast();
+			MessageObject<?> hostMessage = listenToBroadcast();
 			setChanged();
 			notifyObservers(hostMessage);
 		}
 	}
 	
 	@Override
-	public HostMessageObject listenToBroadcast() {
+	public MessageObject<?> listenToBroadcast() {
 		try {
-			return (HostMessageObject) in.readObject();
+			return (MessageObject<?>) in.readObject();
 		} catch (IOException e) {
 			System.err.println("Verbindung ist abgebrochen!");
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} return null;
 	}
-	
-	private synchronized void close(){
+
+	@Override
+	public void sendToHost(MessageObject<?> msg) {
+		try {
+			out.writeObject(msg);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public synchronized void closeConnection() {
 		try {
 			if(in != null)
 				in.close();
@@ -52,28 +61,5 @@ public class NetworkSocketConnection extends NetworkConnection implements Runnab
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void sendActionToHost(ActionObject ao) {
-		send(ao);
-	}
-
-	@Override
-	public void sendAnswerToHost(AnswerObject ao) {
-		send(ao);
-	}
-	
-	private <M> void send(M msg){
-		try {
-			out.writeObject(msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void closeConnection() {
-		close();
 	}
 }

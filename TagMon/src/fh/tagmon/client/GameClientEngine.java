@@ -4,18 +4,23 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
+import fh.tagmon.gameengine.gameengine.AbilityComponentList;
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.gameengine.PlayerList;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
+import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.guiParts.Fight;
 import fh.tagmon.guiParts.ISetAbility;
 import fh.tagmon.network.ConnectionType;
-import fh.tagmon.network.HostMessageObject;
-import fh.tagmon.network.NetworkConnection;
-import fh.tagmon.network.NetworkSocketConnection;
+import fh.tagmon.network.clientConnections.ANetworkConnection;
+import fh.tagmon.network.clientConnections.NetworkSocketConnection;
+import fh.tagmon.network.message.MessageFactory;
+import fh.tagmon.network.message.MessageObject;;
 
 public class GameClientEngine implements Observer, ISetAbility{
 	
@@ -23,12 +28,15 @@ public class GameClientEngine implements Observer, ISetAbility{
     private final Object waitForPlayer;
     private boolean wait;
     private ActionObject choosenAbility;
+    
+    //TODO durch zentralgespeicherte eigene player-ID ersetzen
+    private final int ID = 0;
 	
 	//GAMEPLAY
 	private MonsterPlayModule monster;
 	
 	//NETWORK
-	private NetworkConnection connection;
+	private ANetworkConnection connection;
 	
 	public GameClientEngine(Context context, MonsterPlayModule mPM, ConnectionType type){
 		this.context = context;
@@ -66,28 +74,29 @@ public class GameClientEngine implements Observer, ISetAbility{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable observable, Object hostMsg) {
-		switch(((HostMessageObject) hostMsg).getType()){
+		MessageObject<?> msg = (MessageObject<?>) hostMsg;
+		switch(msg.messageType){
 		case ABILITY_COMPONENT:
-			//AnswerObject answerObject = monster.getMyMonstersAbilityComponentDirector().handleAbilityComponent(((HostMessageObject) hostMsg).getAbilityComponent());
-			//connection.sendAnswerToHost(answerObject);
+			AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
+			AnswerObject answerObject = monster.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
+			connection.sendToHost(MessageFactory.getClientMessage_Answer(answerObject, ID));
 			break;
-		case ENEMY_TURN_LOG:
-			//TODO Wenn eine Kampfstatistik kommt, zeige sie zeitlich begrenzt an
-            //TODO  DialogBuilder(Context context,String title, String text, int timeTilClose)
+		case SUMMARY:
+			//TODO Durch korrekte Methode ersetzen
+			((Fight)context).showTemporaryDialog((String) msg.getContent());
 			break;
 		case GAME_OVER:
 			stop(); 
 			//Statistik ausgeben und zum Hauptbildschirm zurck.
 			//Optional: hchster Damage, gespielte Runden bla bla mitloggen..
 			break;
-		case YOUR_TURN_ORDER:
-			//TODO Wenn eine Aufforderung kommt mach deinen Zug
-			//Aufforderung an GUI weiterleiten und als Antwort ActionObject erhalten
-			PlayerList playerList = ((HostMessageObject) hostMsg).getPlayerList(); // WARUM GREIFT DIE GUI AUF DIE SPIELER LISTE DES HOSTS ZU???
+		case YOUR_TURN:
+			HashMap<Integer, PlayerInfo> playerMap = (HashMap<Integer, PlayerInfo>) msg.getContent();
+			
             //TODO nicht jedes mal die gui initialisieren -> UPDATEN
-			((Fight) context).initBattleGUI(playerList.getPlayList(), 0); // player id is '0' for testing
-			ActionObject actionObject = waitForAction(playerList);
-			connection.sendActionToHost(actionObject);
+			((Fight) context).updateBattleGUI(playerMap, ID);
+			ActionObject actionObject = waitForAction(playerMap);
+			connection.sendToHost(MessageFactory.getClientMessage_Action(actionObject, ID));
 			break;
 		default:
 			//TODO evtl Meldung auf Screen ausgeben
@@ -95,14 +104,14 @@ public class GameClientEngine implements Observer, ISetAbility{
 		}
 	}
 	
-	private ActionObject waitForAction(PlayerList playerList) {
+	private ActionObject waitForAction(HashMap<Integer, PlayerInfo> playerMap) {
         ActionObject action = null;
 
 
       //  if (currentPlayer.getId() == 0) {
             onPause();
 
-            ((Fight) context).chooseAbility(playerList.getPlayerTargetList(), playerList.getCurrentPlayerTargetId(), this);
+            ((Fight) context).chooseAbility(playerMap, ID, this);
 
             //currentPlayer.sendNewRoundEvent(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
 
@@ -111,6 +120,7 @@ public class GameClientEngine implements Observer, ISetAbility{
                     try {
                         waitForPlayer.wait();
                     } catch (InterruptedException e) {
+                    	//TODO Fehlermeldung als Toast ausgeben
                     }
                 }
             }

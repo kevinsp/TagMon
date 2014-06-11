@@ -1,6 +1,6 @@
 package fh.tagmon.rollestestecke;
 
-public interface IClientNetworkMessage {
+public interface RollesIClientNetworkMessage {
 
 	public RollesClientNetworkMessageTypes getMessageType();
 }

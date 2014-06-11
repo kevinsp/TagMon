@@ -3,8 +3,6 @@ package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import android.util.Log;
-
 public class AbilityComponentLogger {
 
 	private final HashMap<Integer, LinkedList<String>> roundLog = new HashMap<Integer, LinkedList<String>>();

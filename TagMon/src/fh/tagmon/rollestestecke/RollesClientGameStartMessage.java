@@ -1,6 +1,6 @@
 package fh.tagmon.rollestestecke;
 
-public class RollesClientGameStartMessage extends RollesClientNetworkMessage implements IClientNetworkMessage{
+public class RollesClientGameStartMessage extends RollesClientNetworkMessage implements RollesIClientNetworkMessage{
 
 	private String playerName;
 

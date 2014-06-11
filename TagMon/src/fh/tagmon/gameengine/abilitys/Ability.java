@@ -1,7 +1,7 @@
 package fh.tagmon.gameengine.abilitys;
 
 import java.util.LinkedList;
-import java.util.ListIterator;
+
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
@@ -31,6 +31,7 @@ public class Ability {
 		return this.abilityComponents.add(abilityComp);
 	}
 	
+	@SuppressWarnings("unchecked")
 	public LinkedList<IAbilityComponent> getAbilityComponents(){
 		return (LinkedList<IAbilityComponent>) this.abilityComponents.clone();
 	}
@@ -47,6 +48,10 @@ public class Ability {
 
 	public AbilityTargetRestriction getTargetRestriction() {
 		return targetRestriction;
+	}
+	
+	public int getEnergyCosts(){
+		return energyCost;
 	}
 
 }

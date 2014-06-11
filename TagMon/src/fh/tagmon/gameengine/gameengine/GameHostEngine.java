@@ -3,6 +3,7 @@ package fh.tagmon.gameengine.gameengine;
 import android.util.Log;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 
 import fh.tagmon.gameengine.abilitys.Ability;
@@ -71,6 +72,15 @@ public class GameHostEngine {
 
 
     private void sendAbilityComponentToPlayer(ActionObject action) {
+    	/* TODO was ich mir hier vorstelle:
+    	 * Hier sollte die Ability zerpflückt werden soweit klar
+    	 * dann sollten die verschiedenen AbilityComponents gesammelt werden und zwar nach targets getrennt
+    	 * dafür hab ich die AbilityComponentList gebaut, die kannst dafür dann verwendet.
+    	 * dann geht für jeden Spieler genau eine Message raus, die alle AbilityComponents enthält, die ihn betreffen.
+    	 */
+    	
+    	
+    	
         Ability ability = action.getAbility();
         for (IAbilityComponent aComponent : ability.getAbilityComponents()) {
             LinkedList<Integer> targetList = null;
@@ -101,6 +111,13 @@ public class GameHostEngine {
     private void sendToList(IAbilityComponent aComponent, LinkedList<Integer> targetList) {
         for (Integer targetId : targetList) {
             final IHostPlayer player = this.playerList.getPlayerByTargetId(targetId);
+            
+            
+            //TODO evtl hier umbauen - Chris
+            //AbilityComponentList acl = new AbilityComponentList(0)
+            //player.dealWithAbilityComponents(acl);
+            
+            
             AnswerObject answer = player.dealWithAbilityComponent(aComponent);
 
             myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(targetId).getPlayerName() + " ====");

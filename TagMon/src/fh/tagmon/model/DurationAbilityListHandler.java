@@ -3,8 +3,6 @@ package fh.tagmon.model;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import fh.tagmon.gameengine.abilitys.Buff;
-import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.abilitys.IDurationAbilityComponent;
 
 public class DurationAbilityListHandler {

@@ -2,12 +2,7 @@ package fh.tagmon.model;
 
 import java.util.LinkedList;
 
-import android.util.Log;
-import fh.tagmon.gameengine.abilitys.AbilityComponentTypes;
-import fh.tagmon.gameengine.abilitys.Buff;
-import fh.tagmon.gameengine.abilitys.IAbilityComponent;
-import fh.tagmon.gameengine.abilitys.IDurationAbilityComponent;
-import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
+import fh.tagmon.gameengine.abilitys.*;
 
 public class DamageAbsorbationHelper {
 

@@ -1,10 +1,8 @@
 package fh.tagmon.rollestestecke;
 
-import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
-import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
-public class RollesClientActionMessage extends RollesClientNetworkMessage implements IClientNetworkMessage{
+public class RollesClientActionMessage extends RollesClientNetworkMessage implements RollesIClientNetworkMessage{
 
 	private final ActionObject action;
 	

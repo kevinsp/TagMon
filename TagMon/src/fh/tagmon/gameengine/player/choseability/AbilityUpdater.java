@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.player.IListener;
-import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.model.Monster;
 
 public class AbilityUpdater implements IListener {

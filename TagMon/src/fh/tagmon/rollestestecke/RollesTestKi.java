@@ -1,24 +1,27 @@
 package fh.tagmon.rollestestecke;
 
+import java.util.HashMap;
 import java.util.Random;
 
-import android.util.Log;
 import fh.tagmon.gameengine.abilitys.Ability;
-import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.gameengine.AbilityComponentList;
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
+import fh.tagmon.network.message.MessageObject;
+import fh.tagmon.network.message.MessageType;
 
 public class RollesTestKi {
 
     private String kiName;
     private MonsterPlayModule playModule;
     private int id = 0;
-    private ClientMsgPreparer myConnector;
+    private Rolles_ClientMsgPreparer myConnector;
     
-    public RollesTestKi(String name, Monster myMonster, ClientMsgPreparer connector) {
+    public RollesTestKi(String name, Monster myMonster, Rolles_ClientMsgPreparer connector) {
         this.kiName = name;
         this.myConnector = connector;
 
@@ -51,24 +54,25 @@ public class RollesTestKi {
     }
  
     
-    public void playTheGame(){
+    @SuppressWarnings("unchecked")
+	public void playTheGame(){
     	boolean gameIsNotOver = true;
     	while(gameIsNotOver){
-    		HostNetworkMessage msgFromHost = this.myConnector.waitForMsgFromHost();
+    		MessageObject<?> msgFromHost = this.myConnector.waitForMsgFromHost();
     		
-    		switch(msgFromHost.getMessageType()){
-			case DEAL_WITH_INCOMING_ABILITY_COMPONENT:
+    		switch(msgFromHost.messageType){
+			case ABILITY_COMPONENT:
 				doDealWith(msgFromHost);
 				break;
 			case GAME_OVER:
 				gameIsNotOver = false;
 				break;
 			case GAME_START:
-				this.id = msgFromHost.getPlayersId();
+				this.id = (Integer)msgFromHost.getContent();
 				this.myConnector.sendGameStartsMsg(this.kiName);
 				break;
 			case YOUR_TURN:
-				doMyTurn(msgFromHost);
+				doMyTurn((MessageObject<HashMap<Integer, PlayerInfo>>)msgFromHost);
 				break;
 			default:
 				break;
@@ -80,9 +84,10 @@ public class RollesTestKi {
     		
     }
     
-    private void doMyTurn(HostNetworkMessage yourTurnMsg){
+    private void doMyTurn(MessageObject<HashMap<Integer, PlayerInfo>> yourTurnMsg){
     	//ULTRA WICHTIG muss jedes mal befor ich drann bin ausgeführt werden
-    	this.playModule.newRound(yourTurnMsg.getTargetList(), this.id); 
+    	if(yourTurnMsg.messageType == MessageType.YOUR_TURN)
+    	this.playModule.newRound((HashMap<Integer, PlayerInfo>)yourTurnMsg.getContent(), this.id); 
     	
     	Ability chosenAbility = choseRandomAbility();
     	AbilityTargetRestriction targetRes = this.choseRandomTarget(chosenAbility);
@@ -92,10 +97,10 @@ public class RollesTestKi {
     	
     }
     
-    private void doDealWith(HostNetworkMessage dealWithMsg){
-    	IAbilityComponent abilityCompToDealWith = dealWithMsg.getAbilityComponent();
+    private void doDealWith(MessageObject<?> dealWithMsg){
+    	AbilityComponentList abilityCompToDealWith = (AbilityComponentList)dealWithMsg.getContent();
     	
-    	this.playModule.getMonstersAbilityComponentDirector().handleAbilityComponent(abilityCompToDealWith);
+    	this.playModule.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityCompToDealWith);
     	
     	String retMsg = this.playModule.getLatestLogEntry();
     	boolean isMyMonsterDead = false;

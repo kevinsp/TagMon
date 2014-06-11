@@ -5,16 +5,16 @@ import java.util.HashMap;
 
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
-import fh.tagmon.gameengine.player.IPlayer;
 
-public class HostNetworkMessage implements Serializable{
+public class RollesHostNetworkMessage implements Serializable{
 
-	private HostNetworkMessageTypes messageType;
+	private static final long serialVersionUID = 1L;
+	private RollesHostNetworkMessageTypes messageType;
 	private IAbilityComponent abilityComponent = null;
 	private int playersId = -1;
 	private HashMap<Integer, PlayerInfo> targetList = null;
 
-	public HostNetworkMessage(HostNetworkMessageTypes messageType){
+	public RollesHostNetworkMessage(RollesHostNetworkMessageTypes messageType){
 		this.messageType = messageType;
 	}
 	
@@ -37,7 +37,7 @@ public class HostNetworkMessage implements Serializable{
 		//evtl noch was adden
 	}
 	
-	public HostNetworkMessageTypes getMessageType(){
+	public RollesHostNetworkMessageTypes getMessageType(){
 		return this.messageType;
 	}
 

@@ -8,19 +8,17 @@ import android.content.Context;
 import android.database.SQLException;
 import android.os.AsyncTask;
 import android.util.Log;
-import fh.tagmon.BuildConfig;
 import fh.tagmon.client.GameClientEngine;
 import fh.tagmon.database.dao.MonsterDAO;
 import fh.tagmon.database.daoImpl.MonsterDAOImpl;
 import fh.tagmon.exception.MonsterDAOException;
-import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.model.Monster;
 import fh.tagmon.network.ConnectionType;
+import fh.tagmon.network.FakeSocket;
+import fh.tagmon.network.NetworkPlayer;
 import fh.tagmon.rollestestecke.AsynkTaskDummy;
-import fh.tagmon.rollestestecke.ClientMsgPreparer;
-import fh.tagmon.rollestestecke.FakeSocket;
-import fh.tagmon.rollestestecke.NetworkPlayer;
+import fh.tagmon.rollestestecke.Rolles_ClientMsgPreparer;
 import fh.tagmon.rollestestecke.MyMonsterCreator;
 import fh.tagmon.rollestestecke.RollesTestKi;
 
@@ -53,7 +51,7 @@ public class GameEngineModule {
     	//verbinde Host mit RedKi
     	NetworkPlayer conToRed = new NetworkPlayer(contBetweenHostAndRed);
     	//verbinde RedKi mit Host
-    	ClientMsgPreparer conRedToHost = new ClientMsgPreparer(contBetweenHostAndRed);
+    	Rolles_ClientMsgPreparer conRedToHost = new Rolles_ClientMsgPreparer(contBetweenHostAndRed);
     	//erstelle RedKi
     	//Monster redMonster = myMonsterCreator.getMonsterDummy();
     	Monster redMonster = getMonsterFromTobi(context);
@@ -66,7 +64,7 @@ public class GameEngineModule {
     	//verbinde Host mit BlueKi
     	NetworkPlayer conToBlue = new NetworkPlayer(contBetweenHostAndBlue);
     	//verbinde BlueKi mit Host
-    	ClientMsgPreparer conBlueToHost = new ClientMsgPreparer(contBetweenHostAndBlue);
+    	Rolles_ClientMsgPreparer conBlueToHost = new Rolles_ClientMsgPreparer(contBetweenHostAndBlue);
     	//erstelle BlueKi
     	//Monster blueMonster = myMonsterCreator.getMonsterDummy();
     	Monster blueMonster = getMonsterFromTobi(context);
