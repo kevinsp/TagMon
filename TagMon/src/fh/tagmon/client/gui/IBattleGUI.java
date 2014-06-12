@@ -1,15 +1,14 @@
 package fh.tagmon.client.gui;
 
 
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.List;
 
-import fh.tagmon.gameengine.gameengine.PlayerListNode;
-import fh.tagmon.gameengine.player.IPlayer;
+import fh.tagmon.gameengine.abilitys.Ability;
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
 
 public interface IBattleGUI {
 
-    public boolean initBattleGUI(LinkedList<PlayerListNode> players, int userId);
-    public void refreshGUI(IPlayer player, Enum <GuiPartsToUpdate> partToUpdate);
-    public void chooseAbility(HashMap<Integer, IPlayer> targetList, int yourTargetId, ISetAbility iSetAbility);
+    public boolean initBattleGUI(List<PlayerInfo> players, int userId, List<Ability> abilities);
+    void refreshGUI(List<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate);
+    void chooseAbility(ISetAbility setAbility);
 }

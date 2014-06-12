@@ -5,14 +5,16 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import fh.tagmon.client.gui.Fight;
+import fh.tagmon.client.gui.GuiPartsToUpdate;
 import fh.tagmon.client.gui.ISetAbility;
+import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
-import fh.tagmon.gameengine.gameengine.PlayerList;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
@@ -20,7 +22,9 @@ import fh.tagmon.network.ConnectionType;
 import fh.tagmon.network.clientConnections.ANetworkConnection;
 import fh.tagmon.network.clientConnections.NetworkSocketConnection;
 import fh.tagmon.network.message.MessageFactory;
-import fh.tagmon.network.message.MessageObject;;
+import fh.tagmon.network.message.MessageObject;
+
+;
 
 public class GameClientEngine implements Observer, ISetAbility{
 	
@@ -62,8 +66,9 @@ public class GameClientEngine implements Observer, ISetAbility{
 		default:
 			break;
 		}
-		if(connection != null)
-			connection.addObserver(this);
+		if(connection != null) {
+            connection.addObserver(this);
+        }
 	}
 	
 	private void stop(){
@@ -75,7 +80,8 @@ public class GameClientEngine implements Observer, ISetAbility{
 	@Override
 	public void update(Observable observable, Object hostMsg) {
 		MessageObject<?> msg = (MessageObject<?>) hostMsg;
-		switch(msg.messageType){
+        List<PlayerInfo> players;
+        switch(msg.messageType){
 		case ABILITY_COMPONENT:
 			AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
 			AnswerObject answerObject = monster.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
@@ -91,27 +97,42 @@ public class GameClientEngine implements Observer, ISetAbility{
 			//Optional: hchster Damage, gespielte Runden bla bla mitloggen..
 			break;
 		case YOUR_TURN:
-			HashMap<Integer, PlayerInfo> playerMap = (HashMap<Integer, PlayerInfo>) msg.getContent();
+			 players = (List <PlayerInfo>) msg.getContent();
 			
             //TODO nicht jedes mal die gui initialisieren -> UPDATEN
-			((Fight) context).updateBattleGUI(playerMap, ID);
-			ActionObject actionObject = waitForAction(playerMap);
+            //TODO:  LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate
+            ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
+
+			ActionObject actionObject = waitForAction();
 			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 			break;
+        case GAME_START:
+            //TODO: list with players and the id of the client
+            //TODO: list with abilitys!
+            players = (List <PlayerInfo>) msg.getContent();
+
+            List<Ability> abilitylist = monster.getMonster().getAbilitys();
+            ((Fight) context).initBattleGUI(players, ID, abilitylist);
+            //TODO: LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate
+            ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
+            break;
 		default:
 			//TODO evtl Meldung auf Screen ausgeben
 			break;
 		}
 	}
 	
-	private ActionObject waitForAction(HashMap<Integer, PlayerInfo> playerMap) {
+	private ActionObject waitForAction() {
         ActionObject action = null;
 
 
       //  if (currentPlayer.getId() == 0) {
             onPause();
 
-            ((Fight) context).chooseAbility(playerMap, ID, this);
+
+
+
+            ((Fight) context).chooseAbility(this);
 
             //currentPlayer.sendNewRoundEvent(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
 
