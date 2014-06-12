@@ -46,7 +46,7 @@
         <activity
             android:name="fh.tagmon.client.gui.Fight"
             android:label="@string/title_activity_fight"
-            android:screenOrientation="portrait"
+            android:screenOrientation="landscape"
             android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" />
     </application>
 
