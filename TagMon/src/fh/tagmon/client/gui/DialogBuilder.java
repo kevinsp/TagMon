@@ -44,6 +44,7 @@ public class DialogBuilder extends Dialog {
     }
 
     public DialogBuilder(Context context, String title, String text, int timeTilClose) {
+        //timeTilClose = -1 -> isn't closed automatically
         super(context);
         this.context = context;
         this.title = title;
@@ -87,13 +88,15 @@ public class DialogBuilder extends Dialog {
     }
 
     private void closeAfterTime() {
-        final Dialog d = this;
-        closeTimeHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                d.dismiss();
-            }
-        }, timeTilClose);
+        if (this.timeTilClose != -1) {
+            final Dialog d = this;
+            closeTimeHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    d.dismiss();
+                }
+            }, timeTilClose);
+        }
     }
 
     private void setItemsInScrollList() {

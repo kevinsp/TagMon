@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -12,7 +13,6 @@ import fh.tagmon.client.gui.Fight;
 import fh.tagmon.client.gui.ISetAbility;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
-import fh.tagmon.gameengine.gameengine.PlayerList;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
@@ -20,7 +20,9 @@ import fh.tagmon.network.ConnectionType;
 import fh.tagmon.network.clientConnections.ANetworkConnection;
 import fh.tagmon.network.clientConnections.NetworkSocketConnection;
 import fh.tagmon.network.message.MessageFactory;
-import fh.tagmon.network.message.MessageObject;;
+import fh.tagmon.network.message.MessageObject;
+
+;
 
 public class GameClientEngine implements Observer, ISetAbility{
 	
@@ -62,8 +64,12 @@ public class GameClientEngine implements Observer, ISetAbility{
 		default:
 			break;
 		}
-		if(connection != null)
-			connection.addObserver(this);
+		if(connection != null) {
+            connection.addObserver(this);
+            //TODO: list with players and the id of the client
+            //TODO: list with abilitys!
+            ((Fight) context).initBattleGUI( players, userId, abilitylist);
+        }
 	}
 	
 	private void stop(){
@@ -94,7 +100,9 @@ public class GameClientEngine implements Observer, ISetAbility{
 			HashMap<Integer, PlayerInfo> playerMap = (HashMap<Integer, PlayerInfo>) msg.getContent();
 			
             //TODO nicht jedes mal die gui initialisieren -> UPDATEN
-			((Fight) context).updateBattleGUI(playerMap, ID);
+            //TODO:  int id, final Enum<GuiPartsToUpdate> partToUpdate, Object value
+            //TODO: call for every part which should be updated, for example own life, enemy life etc
+			((Fight) context).refreshGUI(ID, partToUpdate, value);
 			ActionObject actionObject = waitForAction(playerMap);
 			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 			break;
@@ -111,7 +119,10 @@ public class GameClientEngine implements Observer, ISetAbility{
       //  if (currentPlayer.getId() == 0) {
             onPause();
 
-            ((Fight) context).chooseAbility(playerMap, ID, this);
+
+
+
+            ((Fight) context).chooseAbility(this);
 
             //currentPlayer.sendNewRoundEvent(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
 

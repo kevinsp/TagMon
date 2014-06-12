@@ -16,8 +16,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import fh.tagmon.R;
+import fh.tagmon.client.clientEngine.GameClientEngine;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.GameEngineModule;
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.gameengine.PlayerListNode;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.player.IPlayer;
@@ -44,7 +46,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         setContentView(R.layout.activity_fight);
 
         //init game engine
-        //Todo : Kondition einbauen f�r nicht-host-spieler
+        //Todo : Kondition einbauen f""r nicht-host-spieler
         engineModule = new GameEngineModule(this);
 
     }
@@ -74,7 +76,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         @return:
         boolean: true if the GUI could initialize successful, otherwise false
         */
-    public boolean initBattleGUI(LinkedList<PlayerListNode> players, int userId) {
+    public boolean initBattleGUI(LinkedList<PlayerInfo> players, int userId, LinkedList<Ability> abilities) {
         if (!battleGuiInit) {
             battleGuiInit = true;
             this.userId = userId;
@@ -113,7 +115,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         absValue: the absolute value to which the 'refreshAttribute' is changed to
         */
 
-
+/*
     @Override
     public void refreshGUI(final IPlayer player, final Enum<GuiPartsToUpdate> partToUpdate) {
         if (battleGuiInit) {
@@ -140,7 +142,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         }
 
     }
-
+*/
     /*
     @desc:
     opens a dialog with all possible attacks the player can use
@@ -150,6 +152,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         //TODO documentation
 
     */
+    /*
     @Override
     public void chooseAbility(HashMap<Integer, IPlayer> targetList, int yourTargetId, ISetAbility setAbility) {
         this.iSetAbility = setAbility;
@@ -177,6 +180,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                       }
         );
     }
+    */
 
     public void initUserGui(int maxLife, int currentLife, int level, String name) {
 
@@ -364,4 +368,45 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             }
         }
     };
+
+    public void showTemporaryDialog(String content) {
+        DialogBuilder db = new DialogBuilder(this, "Zusammenfassung", content, -1);
+    }
+
+    @Override
+    public void refreshGUI(int id, final Enum<GuiPartsToUpdate> partToUpdate, Object value) {
+        if (battleGuiInit) {
+
+        } else {
+            //TODO: do something on error, throw exception for example
+        }
+    }
+
+    @Override
+    public void chooseAbility(ISetAbility setAbility) {
+     /*   this.iSetAbility = setAbility;
+        HashMap<Integer, IPlayer> targetListF = targetList;
+        int yourTargetIdF = yourTargetId;
+
+        player = targetListF.get(yourTargetIdF);
+        LinkedList<Ability> abilities = player.getMonster().getAbilitys();
+
+        List<String> abilityNames = new ArrayList<String>();
+        for (Ability ability : abilities) {
+            String abilityName = ability.getAbilityName();
+            abilityNames.add(abilityName);
+        }
+        final CharSequence[] items = abilityNames.toArray(new CharSequence[abilityNames.size()]);
+
+        runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+                              if (chooseDialog != null) {
+                                  chooseDialog.dismiss();
+                              }
+                              chooseDialog = new DialogBuilder(context, getString(R.string.chooseAbility), items, null, chooseAbilityListener);
+                          }
+                      }
+        );*/
+    }
 }

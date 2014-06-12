@@ -46,5 +46,7 @@
     <string name="title_activity_fight">Fight</string>
     <string name="chooseAbility">Fähigkeit auswählen</string>
     <string name="chooseTarget">Ziel auswählen</string>
+    <string name="summary">Zusammenfassung</string>
+
 
 </resources>
