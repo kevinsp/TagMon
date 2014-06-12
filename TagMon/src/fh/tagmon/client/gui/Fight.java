@@ -32,7 +32,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     private DialogBuilder chooseDialog;
     private GameEngineModule engineModule;
     private ISetAbility iSetAbility;
-    private LinkedList<Ability> abilities;
+    private List<Ability> abilities;
 
     private IPlayer player;
 
@@ -62,7 +62,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         @return:
         boolean: true if the GUI could initialize successful, otherwise false
         */
-    public boolean initBattleGUI(LinkedList<PlayerInfo> players, int userId, LinkedList<Ability> abilities) {
+    public boolean initBattleGUI(List<PlayerInfo> players, int userId, List<Ability> abilities) {
         if (!battleGuiInit) {
             battleGuiInit = true;
             this.userId = userId;
@@ -281,7 +281,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     }
 
     @Override
-    public void refreshGUI(final LinkedList<PlayerInfo> players, final Enum<GuiPartsToUpdate> partToUpdate) {
+    public void refreshGUI(final List<PlayerInfo> players, final Enum<GuiPartsToUpdate> partToUpdate) {
         if (battleGuiInit) {
             runOnUiThread(new Runnable() {
                 @Override

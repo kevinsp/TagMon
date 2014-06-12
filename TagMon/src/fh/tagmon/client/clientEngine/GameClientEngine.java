@@ -5,13 +5,14 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import fh.tagmon.client.gui.Fight;
 import fh.tagmon.client.gui.GuiPartsToUpdate;
 import fh.tagmon.client.gui.ISetAbility;
+import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
@@ -67,12 +68,6 @@ public class GameClientEngine implements Observer, ISetAbility{
 		}
 		if(connection != null) {
             connection.addObserver(this);
-            //TODO: list with players and the id of the client
-            //TODO: list with abilitys!
-            ((Fight) context).initBattleGUI( players, userId, abilitylist);
-            //TODO: LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate
-            ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
-
         }
 	}
 	
@@ -85,7 +80,8 @@ public class GameClientEngine implements Observer, ISetAbility{
 	@Override
 	public void update(Observable observable, Object hostMsg) {
 		MessageObject<?> msg = (MessageObject<?>) hostMsg;
-		switch(msg.messageType){
+        List<PlayerInfo> players;
+        switch(msg.messageType){
 		case ABILITY_COMPONENT:
 			AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
 			AnswerObject answerObject = monster.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
@@ -101,22 +97,32 @@ public class GameClientEngine implements Observer, ISetAbility{
 			//Optional: hchster Damage, gespielte Runden bla bla mitloggen..
 			break;
 		case YOUR_TURN:
-			HashMap<Integer, PlayerInfo> playerMap = (HashMap<Integer, PlayerInfo>) msg.getContent();
+			 players = (List <PlayerInfo>) msg.getContent();
 			
             //TODO nicht jedes mal die gui initialisieren -> UPDATEN
             //TODO:  LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate
             ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
 
-			ActionObject actionObject = waitForAction(playerMap);
+			ActionObject actionObject = waitForAction();
 			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 			break;
+        case GAME_START:
+            //TODO: list with players and the id of the client
+            //TODO: list with abilitys!
+            players = (List <PlayerInfo>) msg.getContent();
+
+            List<Ability> abilitylist = monster.getMonster().getAbilitys();
+            ((Fight) context).initBattleGUI(players, ID, abilitylist);
+            //TODO: LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate
+            ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
+            break;
 		default:
 			//TODO evtl Meldung auf Screen ausgeben
 			break;
 		}
 	}
 	
-	private ActionObject waitForAction(HashMap<Integer, PlayerInfo> playerMap) {
+	private ActionObject waitForAction() {
         ActionObject action = null;
 
 
