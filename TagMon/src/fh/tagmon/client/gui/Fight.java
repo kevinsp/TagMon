@@ -145,11 +145,11 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
 
     //disable buttons
-   /* public void toggleButtons(boolean enable) {
+    public void toggleButtons(boolean enable) {
         findViewById(R.id.tryToEscape).setEnabled(enable);
         findViewById(R.id.chooseAttack).setEnabled(enable);
         findViewById(R.id.openInventory).setEnabled(enable);
-    }*/
+    }
 
     //try to escape from the fight
     public void tryToEscape() {
@@ -157,7 +157,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     }
 
     //handling button clicks
-   /* public void onBtnClicked(View v) {
+    public void onBtnClicked(View v) {
         if (v.getId() == R.id.chooseAttack) {
             // showAttackPossibilites(v);
             // disableButtons();
@@ -166,7 +166,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         } else if (v.getId() == R.id.tryToEscape) {
             // tryToEscape();
         }
-    }*/
+    }
 
     public void finishActivity() {
         battleGuiInit = false;
