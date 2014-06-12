@@ -98,6 +98,11 @@ public class Monster {
 		return stats.getCurHP();
 	}
 	
+	public int increaseLifePoints(int increaseValue){
+		stats.setCurHP(stats.getCurHP() + increaseValue);
+		return stats.getCurHP();
+		
+	}
 	
 	public void setAdditionalStrength(int additionalStrength) {
 		this.additionalStrength = additionalStrength;

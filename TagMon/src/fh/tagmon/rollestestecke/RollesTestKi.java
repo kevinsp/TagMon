@@ -1,8 +1,11 @@
 package fh.tagmon.rollestestecke;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Random;
 
+import android.util.Log;
+import android.widget.Toast;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
@@ -11,6 +14,8 @@ import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
+import fh.tagmon.network.clientConnections.NetworkSocketConnection;
+import fh.tagmon.network.message.MessageFactory;
 import fh.tagmon.network.message.MessageObject;
 import fh.tagmon.network.message.MessageType;
 
@@ -18,13 +23,17 @@ public class RollesTestKi {
 
     private String kiName;
     private MonsterPlayModule playModule;
+    private NetworkSocketConnection connection;
     private int id = 0;
-    private Rolles_ClientMsgPreparer myConnector;
+    private final String TAG = "KI";
     
-    public RollesTestKi(String name, Monster myMonster, Rolles_ClientMsgPreparer connector) {
+    public RollesTestKi(String name, Monster myMonster) {
         this.kiName = name;
-        this.myConnector = connector;
-
+        try {
+			this.connection = new NetworkSocketConnection("localhost");
+		} catch (IOException e) {
+			Log.e(TAG, "Unable to Connect to localhost!");
+		}
         this.playModule = new MonsterPlayModule(myMonster);
     }   
     
@@ -58,7 +67,7 @@ public class RollesTestKi {
 	public void playTheGame(){
     	boolean gameIsNotOver = true;
     	while(gameIsNotOver){
-    		MessageObject<?> msgFromHost = this.myConnector.waitForMsgFromHost();
+    		MessageObject<?> msgFromHost = this.connection.listenToBroadcast();
     		
     		switch(msgFromHost.messageType){
 			case ABILITY_COMPONENT:
@@ -69,7 +78,7 @@ public class RollesTestKi {
 				break;
 			case GAME_START:
 				this.id = (Integer)msgFromHost.getContent();
-				this.myConnector.sendGameStartsMsg(this.kiName);
+				this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(kiName, id));
 				break;
 			case YOUR_TURN:
 				doMyTurn((MessageObject<HashMap<Integer, PlayerInfo>>)msgFromHost);
@@ -93,7 +102,7 @@ public class RollesTestKi {
     	AbilityTargetRestriction targetRes = this.choseRandomTarget(chosenAbility);
     	
     	ActionObject myAction = new ActionObject(chosenAbility,targetRes);
-    	this.myConnector.sendActionMsg(myAction);
+    	this.connection.sendToHost(MessageFactory.createClientMessage_Action(myAction, id));
     	
     }
     
@@ -109,8 +118,7 @@ public class RollesTestKi {
     	}
     	AnswerObject answer = new AnswerObject(retMsg, isMyMonsterDead);
     	
-    	this.myConnector.sendAnswerMsg(answer);
-    	
+    	this.connection.sendToHost(MessageFactory.createClientMessage_Answer(answer, id));
     	
     }
     

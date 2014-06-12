@@ -84,7 +84,9 @@ public class GameClientEngine implements Observer, ISetAbility{
         switch(msg.messageType){
 		case ABILITY_COMPONENT:
 			AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
-			AnswerObject answerObject = monster.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
+			// Auskommentiert durch Rolle 
+			//AnswerObject answerObject = monster.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
+			AnswerObject answerObject = new AnswerObject("Test", false);
 			connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, ID));
 			break;
 		case SUMMARY:

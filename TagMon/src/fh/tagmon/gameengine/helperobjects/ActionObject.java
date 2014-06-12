@@ -3,6 +3,7 @@ package fh.tagmon.gameengine.helperobjects;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
+
 public class ActionObject {
 	
 	
@@ -13,7 +14,7 @@ public class ActionObject {
 		
 		this.abilityComp = ability;
 		this.targetRes = targetRes;
-		
+
 	}
 	
 	public AbilityTargetRestriction getTargetRestriction(){
