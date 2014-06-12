@@ -21,6 +21,8 @@ public class NetworkServerTCPConnection implements IHostConnection{
 		this.connection = socket;
 		this.in = new ObjectInputStream(socket.getInputStream());
 		this.out = new ObjectOutputStream(socket.getOutputStream());
+		
+		
 	}
 	
 	@Override
@@ -36,10 +38,11 @@ public class NetworkServerTCPConnection implements IHostConnection{
 
 	@Override
 	public MessageObject<?> reciveMsgFromClient() {
+		Log.i(TAG, "SOCKET OPEN " + connection.isClosed());
 		try {
 			return (MessageObject<?>) in.readObject();
 		} catch (IOException e) {
-			Log.e(TAG, "Verbindung ist abgebrochen!");
+			Log.e(TAG, e.getMessage());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} return null;

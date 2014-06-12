@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import android.util.Log;
 import fh.tagmon.network.message.MessageObject;
 
 public class NetworkSocketConnection extends ANetworkConnection implements Runnable{
@@ -12,6 +13,7 @@ public class NetworkSocketConnection extends ANetworkConnection implements Runna
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
 	private boolean running = true;
+	private String TAG = "NetworkSocketConnection";
 	
 	public NetworkSocketConnection(String host) throws IOException{
 		connection = new Socket(host, 21665);
@@ -33,7 +35,7 @@ public class NetworkSocketConnection extends ANetworkConnection implements Runna
 		try {
 			return (MessageObject<?>) in.readObject();
 		} catch (IOException e) {
-			System.err.println("Verbindung ist abgebrochen!");
+			Log.e(TAG, e.getMessage());
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} return null;
