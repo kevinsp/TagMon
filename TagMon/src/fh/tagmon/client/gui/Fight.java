@@ -43,7 +43,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         setContentView(R.layout.activity_fight);
 
         //init game engine
-        //Todo : Kondition einbauen f""r nicht-host-spieler
+        //Todo : Kondition einbauen fuer nicht-host-spieler
         engineModule = new GameEngineModule(this);
 
     }
@@ -87,13 +87,37 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         //refreshUserLife(maxLife, currentLife);
 
         //level
-       // TextView ownLevelView = (TextView) findViewById(R.id.ownLevel);
-       // ownLevelView.setText(String.valueOf(level));
+        // TextView ownLevelView = (TextView) findViewById(R.id.ownLevel);
+        // ownLevelView.setText(String.valueOf(level));
+
+        ImageView image = (ImageView) findViewById(R.id.ownImage);
+       /* String enemyDrawable = tagMon.getDrawable();
+        int resID = getResources().getIdentifier(enemyDrawable, "drawable", getPackageName());
+        image.setImageResource(resID);
+        */
 
         //name
         TextView ownNameView = (TextView) findViewById(R.id.ownName);
         ownNameView.setText(name);
 
+    }
+    public void initEnemyGui(String name) {
+
+        //set the image for the enemy
+        ImageView image = (ImageView) findViewById(R.id.enemyImage);
+       /* String enemyDrawable = tagMon.getDrawable();
+        int resID = getResources().getIdentifier(enemyDrawable, "drawable", getPackageName());
+        image.setImageResource(resID);
+        */
+
+        //  refreshEnemyLife(maxLife, currentLife);
+        //level
+        //   TextView enemyLevelView = (TextView) findViewById(R.id.enemyLevel);
+        // enemyLevelView.setText(String.valueOf(level));
+
+        //name
+        TextView enemyNameView = (TextView) findViewById(R.id.enemyName);
+        enemyNameView.setText(name);
     }
 
     public void refreshUserLife(int maxLife, int currentLife) {
@@ -117,24 +141,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         enemyHealthBarNumberTextView.setText(enemyLifeProgress);
     }
 
-    public void initEnemyGui(String name) {
 
-        //set the image for the enemy
-        ImageView image = (ImageView) findViewById(R.id.enemyImage);
-       /* String enemyDrawable = tagMon.getDrawable();
-        int resID = getResources().getIdentifier(enemyDrawable, "drawable", getPackageName());
-        image.setImageResource(resID);
-        */
-
-      //  refreshEnemyLife(maxLife, currentLife);
-        //level
-     //   TextView enemyLevelView = (TextView) findViewById(R.id.enemyLevel);
-       // enemyLevelView.setText(String.valueOf(level));
-
-        //name
-        TextView enemyNameView = (TextView) findViewById(R.id.enemyName);
-        enemyNameView.setText(name);
-    }
 
 
     //disable buttons
@@ -157,7 +164,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         } else if (v.getId() == R.id.openInventory) {
             // openInventory();
         } else if (v.getId() == R.id.tryToEscape) {
-           // tryToEscape();
+            // tryToEscape();
         }
     }
 
@@ -186,11 +193,11 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 // ist keine liste mehr
                 //final LinkedList<AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
                 final AbilityTargetRestriction atr = player.getAbilityTargetRestriction(choosenAbility);
-                
+
                 List<String> targetNames = new ArrayList<String>();
                 //for (Enum target : atr) {
-                    String targetName = atr.name();
-                    targetNames.add(targetName);
+                String targetName = atr.name();
+                targetNames.add(targetName);
                 //}
 
                 final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
@@ -220,7 +227,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         public void onClick(View v) {
             //Log.d(TAG, v.getTag().toString());
             try {
-                int item = Integer.parseInt(v.getTag().toString());
+                //int item = Integer.parseInt(v.getTag().toString());
                 TableLayout table = (TableLayout) v.getParent().getParent();
                 if (table != null) {
                     final Ability choosenAbility = (Ability) table.getTag();
@@ -257,7 +264,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         @Override
         public void onClick(View v) {
             try {
-                int item = Integer.parseInt(v.getTag().toString());
+                // int item = Integer.parseInt(v.getTag().toString());
                 TableLayout table = (TableLayout) v.getParent().getParent();
                 if (table != null) {
                     Ability choosenAbility = (Ability) table.getTag();
