@@ -14,4 +14,16 @@ public class PlayerInfo {
 	public String getPlayerName(){
 		return this.playerName;
 	}
+
+    public int getCurrentLife() {
+        return currentLife;
+    }
+
+    public int getMaxLife() {
+        return maxLife;
+    }
+
+    public int getId() {
+        return id;
+    }
 }

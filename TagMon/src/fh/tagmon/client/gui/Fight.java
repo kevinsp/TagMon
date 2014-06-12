@@ -11,20 +11,16 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import fh.tagmon.R;
-import fh.tagmon.client.clientEngine.GameClientEngine;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.GameEngineModule;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
-import fh.tagmon.gameengine.gameengine.PlayerListNode;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
-import fh.tagmon.model.Monster;
 
 
 public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
@@ -36,6 +32,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     private DialogBuilder chooseDialog;
     private GameEngineModule engineModule;
     private ISetAbility iSetAbility;
+    private LinkedList<Ability> abilities;
 
     private IPlayer player;
 
@@ -52,26 +49,15 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     }
 
 
-    //  private static ArrayList<View> dynamicViews = null;
-
-    /* constants for refreshing the battleGui */
-    //public static final int REFRESH_LIFE = 0;
-    // public static final int REFRESH_ENERGY = 1;
-
-
     /**
      * ** functions ****
      */
         /*
         @desc:
         init the gui when starting a battle
-        set the battleGuiInit flag to true
 
         @params:
-        players: A list with all participating players in this battle,
-        every element of 'players' should contain the id of the player,
-        the name, if it's an enemy or an ally and the life/energy of
-        the player's TagMon
+
 
         @return:
         boolean: true if the GUI could initialize successful, otherwise false
@@ -80,17 +66,14 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         if (!battleGuiInit) {
             battleGuiInit = true;
             this.userId = userId;
-            for (PlayerListNode playerNode : players) {
-                IPlayer player = playerNode.getPlayer();
+            this.abilities = abilities;
+            for (PlayerInfo player : players) {
                 String playerName = player.getPlayerName();
-                Monster playerMonster = player.getMonster();
 
-                int level = 5; //TODO: remove hardcoded
-
-                if (player.getId() == userId) {
-                    initUserGui(playerMonster.getMaxLifePoints(), playerMonster.getCurrentLifePoints(), level, playerName);
+                if (player.getId() == this.userId) {
+                    initUserGui(playerName);
                 } else {
-                    initEnemyGui(playerMonster.getMaxLifePoints(), playerMonster.getCurrentLifePoints(), level, playerName);
+                    initEnemyGui(playerName);
                 }
             }
             return true;
@@ -99,96 +82,13 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         }
     }
 
+    public void initUserGui(String name) {
 
-
-        /*
-        @desc:
-        refresh the battleGUI
-        battleGUI need to be initialized before
-
-        @params:
-        playerId: the id of the player where an attribute has changed
-
-        refreshAttribute: the attribute which should be refreshed
-        possible values are defined on the top
-
-        absValue: the absolute value to which the 'refreshAttribute' is changed to
-        */
-
-/*
-    @Override
-    public void refreshGUI(final IPlayer player, final Enum<GuiPartsToUpdate> partToUpdate) {
-        if (battleGuiInit) {
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    fh.tagmon.model.Monster monster = player.getMonster();
-                    if (partToUpdate == GuiPartsToUpdate.HEALTH) {
-                        int currentLife = monster.getCurrentLifePoints();
-                        int maxLife = monster.getMaxLifePoints();
-                        //Log.d(TAG, "id: " + player.getId() + " -  current: " + currentLife);
-                        if (player.getId() == userId) {
-                            refreshUserLife(maxLife, currentLife);
-                        } else {
-                            refreshEnemyLife(maxLife, currentLife);
-                        }
-                    }
-
-                }
-            });
-        } else {
-            //TODO: do something on error, throw exception for example
-        }
-
-    }
-*/
-    /*
-    @desc:
-    opens a dialog with all possible attacks the player can use
-    and let the player choose one of them
-
-    @params:
-        //TODO documentation
-
-    */
-    /*
-    @Override
-    public void chooseAbility(HashMap<Integer, IPlayer> targetList, int yourTargetId, ISetAbility setAbility) {
-        this.iSetAbility = setAbility;
-        HashMap<Integer, IPlayer> targetListF = targetList;
-        int yourTargetIdF = yourTargetId;
-
-        player = targetListF.get(yourTargetIdF);
-        LinkedList<Ability> abilities = player.getMonster().getAbilitys();
-
-        List<String> abilityNames = new ArrayList<String>();
-        for (Ability ability : abilities) {
-            String abilityName = ability.getAbilityName();
-            abilityNames.add(abilityName);
-        }
-        final CharSequence[] items = abilityNames.toArray(new CharSequence[abilityNames.size()]);
-
-        runOnUiThread(new Runnable() {
-                          @Override
-                          public void run() {
-                              if (chooseDialog != null) {
-                                  chooseDialog.dismiss();
-                              }
-                              chooseDialog = new DialogBuilder(context, getString(R.string.chooseAbility), items, null, chooseAbilityListener);
-                          }
-                      }
-        );
-    }
-    */
-
-    public void initUserGui(int maxLife, int currentLife, int level, String name) {
-
-        refreshUserLife(maxLife, currentLife);
+        //refreshUserLife(maxLife, currentLife);
 
         //level
-        TextView ownLevelView = (TextView) findViewById(R.id.ownLevel);
-        ownLevelView.setText(String.valueOf(level));
+       // TextView ownLevelView = (TextView) findViewById(R.id.ownLevel);
+       // ownLevelView.setText(String.valueOf(level));
 
         //name
         TextView ownNameView = (TextView) findViewById(R.id.ownName);
@@ -217,7 +117,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         enemyHealthBarNumberTextView.setText(enemyLifeProgress);
     }
 
-    public void initEnemyGui(int maxLife, int currentLife, int level, String name) {
+    public void initEnemyGui(String name) {
 
         //set the image for the enemy
         ImageView image = (ImageView) findViewById(R.id.enemyImage);
@@ -226,10 +126,10 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         image.setImageResource(resID);
         */
 
-        refreshEnemyLife(maxLife, currentLife);
+      //  refreshEnemyLife(maxLife, currentLife);
         //level
-        TextView enemyLevelView = (TextView) findViewById(R.id.enemyLevel);
-        enemyLevelView.setText(String.valueOf(level));
+     //   TextView enemyLevelView = (TextView) findViewById(R.id.enemyLevel);
+       // enemyLevelView.setText(String.valueOf(level));
 
         //name
         TextView enemyNameView = (TextView) findViewById(R.id.enemyName);
@@ -257,7 +157,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         } else if (v.getId() == R.id.openInventory) {
             // openInventory();
         } else if (v.getId() == R.id.tryToEscape) {
-            tryToEscape();
+           // tryToEscape();
         }
     }
 
@@ -374,9 +274,25 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     }
 
     @Override
-    public void refreshGUI(int id, final Enum<GuiPartsToUpdate> partToUpdate, Object value) {
+    public void refreshGUI(final LinkedList<PlayerInfo> players, final Enum<GuiPartsToUpdate> partToUpdate) {
         if (battleGuiInit) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (partToUpdate == GuiPartsToUpdate.HEALTH) {
+                        for (PlayerInfo playerInfo : players) {
+                            int maxLife = playerInfo.getMaxLife();
+                            int currentLife = playerInfo.getCurrentLife();
+                            if (playerInfo.getId() == userId) {
+                                refreshUserLife(maxLife, currentLife);
+                            } else {
+                                refreshEnemyLife(maxLife, currentLife);
+                            }
+                        }
+                    }
 
+                }
+            });
         } else {
             //TODO: do something on error, throw exception for example
         }
@@ -384,15 +300,15 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
     @Override
     public void chooseAbility(ISetAbility setAbility) {
-     /*   this.iSetAbility = setAbility;
-        HashMap<Integer, IPlayer> targetListF = targetList;
+        this.iSetAbility = setAbility;
+      /*  HashMap<Integer, IPlayer> targetListF = targetList;
         int yourTargetIdF = yourTargetId;
 
         player = targetListF.get(yourTargetIdF);
         LinkedList<Ability> abilities = player.getMonster().getAbilitys();
-
+*/
         List<String> abilityNames = new ArrayList<String>();
-        for (Ability ability : abilities) {
+        for (Ability ability : this.abilities) {
             String abilityName = ability.getAbilityName();
             abilityNames.add(abilityName);
         }
@@ -407,6 +323,6 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                               chooseDialog = new DialogBuilder(context, getString(R.string.chooseAbility), items, null, chooseAbilityListener);
                           }
                       }
-        );*/
+        );
     }
 }

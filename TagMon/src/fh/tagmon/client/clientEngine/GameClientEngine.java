@@ -10,6 +10,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import fh.tagmon.client.gui.Fight;
+import fh.tagmon.client.gui.GuiPartsToUpdate;
 import fh.tagmon.client.gui.ISetAbility;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
@@ -69,6 +70,9 @@ public class GameClientEngine implements Observer, ISetAbility{
             //TODO: list with players and the id of the client
             //TODO: list with abilitys!
             ((Fight) context).initBattleGUI( players, userId, abilitylist);
+            //TODO: LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate
+            ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
+
         }
 	}
 	
@@ -100,9 +104,9 @@ public class GameClientEngine implements Observer, ISetAbility{
 			HashMap<Integer, PlayerInfo> playerMap = (HashMap<Integer, PlayerInfo>) msg.getContent();
 			
             //TODO nicht jedes mal die gui initialisieren -> UPDATEN
-            //TODO:  int id, final Enum<GuiPartsToUpdate> partToUpdate, Object value
-            //TODO: call for every part which should be updated, for example own life, enemy life etc
-			((Fight) context).refreshGUI(ID, partToUpdate, value);
+            //TODO:  LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate
+            ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
+
 			ActionObject actionObject = waitForAction(playerMap);
 			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 			break;

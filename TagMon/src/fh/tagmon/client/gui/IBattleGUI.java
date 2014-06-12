@@ -3,11 +3,12 @@ package fh.tagmon.client.gui;
 
 import java.util.LinkedList;
 
-import fh.tagmon.gameengine.gameengine.PlayerListNode;
+import fh.tagmon.gameengine.abilitys.Ability;
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
 
 public interface IBattleGUI {
 
-    public boolean initBattleGUI(LinkedList<PlayerListNode> players, int userId);
-    void refreshGUI(int id, Enum<GuiPartsToUpdate> partToUpdate, Object value);
+    public boolean initBattleGUI(LinkedList<PlayerInfo> players, int userId, LinkedList<Ability> abilities);
+    void refreshGUI(LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate);
     void chooseAbility(ISetAbility setAbility);
 }
