@@ -51,7 +51,7 @@ public class MonsterDAOImpl implements MonsterDAO {
 	
 	@Override
 	public Monster getDummyMonster() throws MonsterDAOException {
-		Attribut attribut = new Attribut(0, 10, 11, 12, 13);
+		Attribut attribut = new Attribut(0, 10, 11, 12);
 		Ability ability = new Ability("Beiﬂattacke", 20, AbilityTargetRestriction.ENEMY);
 		
 		IAbilityComponent component = new Damage(7, AbilityTargetRestriction.ENEMY);
@@ -66,10 +66,10 @@ public class MonsterDAOImpl implements MonsterDAO {
 		
 		abilityList.add(ability);
 		
-		Koerperteil koerperteil = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0, 0));
+		Koerperteil koerperteil = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
 		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
 		koerperteilList.add(koerperteil);
-		Stats stats = new Stats(0,100,100,30,111,100,10,123);
+		Stats stats = new Stats(0,100,100,30,111,100,10,123,13);
 		Monster dummyMonster = new Monster(0, "MonsterName", attribut, koerperteilList, stats);
 		
 		return dummyMonster;

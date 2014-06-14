@@ -10,9 +10,10 @@ public class Stats {
 	private int regEP;
 	private int lvl;
 	private int curEXP;
+	private int defense;
 
 	
-	public Stats(int id, int maxHP, int curHP, int mapEP, int curEP, int regEP, int lvl, int curEXP) {
+	public Stats(int id, int maxHP, int curHP, int mapEP, int curEP, int regEP, int lvl, int curEXP, int defense) {
 		this.id = id;
 		this.maxHP = maxHP;
 		this.curHP = curHP;
@@ -21,6 +22,7 @@ public class Stats {
 		this.regEP = regEP;
 		this.lvl = lvl;
 		this.curEXP = curEXP;
+		this.defense = defense;
 	}
 	
 	

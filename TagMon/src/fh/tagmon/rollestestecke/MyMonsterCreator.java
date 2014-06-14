@@ -21,10 +21,10 @@ public class MyMonsterCreator {
 	public Monster getMonsterDummy(){
 		
 		//stats
-		Stats stats = new Stats(0,30,30,30,111,100,10,123);
+		Stats stats = new Stats(0,30,30,30,111,100,10,123,11);
 		
 		//Attribute
-		Attribut attribut = new Attribut(0, 10, 11, 12, 13);
+		Attribut attribut = new Attribut(0, 10, 11, 12);
 		
 		//Abilitys
 		Ability beißAttacke =  getBeißAttacke();
@@ -37,7 +37,7 @@ public class MyMonsterCreator {
 		abilityList.add(absorb);
 		
 		//Körperteile
-		Koerperteil arm = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0, 0));
+		Koerperteil arm = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
 		
 		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
 		koerperteilList.add(arm);

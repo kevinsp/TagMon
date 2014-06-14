@@ -64,11 +64,12 @@ public class Monster {
 	}
 	
 	public int getArmorValue(){
-		int koerperteilArmor = 0;
-		for (Koerperteil koerperteil : koerperteile) {
-			koerperteilArmor += koerperteil.getAttributModifikator().getVerteidigung();
-		}
-		return (attribut.getVerteidigung() + additionalArmorValue + koerperteilArmor);
+//		int koerperteilArmor = 0;
+//		for (Koerperteil koerperteil : koerperteile) {
+//			koerperteilArmor += koerperteil.getAttributModifikator().getVerteidigung();
+//		}
+//		return (attribut.getVerteidigung() + additionalArmorValue + koerperteilArmor);
+		return 1;
 	}
 	
 	public int getIntelligence(){
