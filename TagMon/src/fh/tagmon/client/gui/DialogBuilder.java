@@ -1,5 +1,6 @@
 package fh.tagmon.client.gui;
 
+import fh.tagmon.R;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Handler;
@@ -9,8 +10,6 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-
-import fh.tagmon.R;
 
 
 public class DialogBuilder extends Dialog {
