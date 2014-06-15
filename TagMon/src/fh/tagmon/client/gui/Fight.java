@@ -188,19 +188,18 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 */
                 int item = Integer.parseInt(v.getTag().toString());
 
-
                 final Ability choosenAbility = player.getMonster().getAbilitys().get(item);
                 // ist keine liste mehr
                 //final LinkedList<AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
                 final AbilityTargetRestriction atr = player.getAbilityTargetRestriction(choosenAbility);
 
-                List<String> targetNames = new ArrayList<String>();
+                final List<String> targetNames = new ArrayList<String>();
                 //for (Enum target : atr) {
                 String targetName = atr.name();
                 targetNames.add(targetName);
                 //}
 
-                final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
+               // final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
 
                 runOnUiThread(new Runnable() {
                                   @Override
@@ -208,7 +207,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                                       if (chooseDialog != null) {
                                           chooseDialog.dismiss();
                                       }
-                                      chooseDialog = new DialogBuilder(context, getString(R.string.chooseTarget), targetItems, choosenAbility, chooseTargetRestrictionListener);
+                                      chooseDialog = new DialogBuilder(context, getString(R.string.chooseTarget), targetNames, choosenAbility, chooseTargetRestrictionListener, DialogAction.CHOOSE_TARGET_RESTRICTION);
                                   }
                               }
                 );
@@ -236,19 +235,20 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                     AbilityTargetRestriction atr = player.getAbilityTargetRestriction(choosenAbility);
                     LinkedList<Integer> targetList = atr.getTargetList();
 
-                    List<String> targetNames = new ArrayList<String>();
+                    final List<String> targetNames = new ArrayList<String>();
                     for (Integer target : targetList) {
                         targetNames.add(target.toString());
                     }
 
-                    final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
+                    //final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
+
                     runOnUiThread(new Runnable() {
                                       @Override
                                       public void run() {
                                           if (chooseDialog != null) {
                                               chooseDialog.dismiss();
                                           }
-                                          chooseDialog = new DialogBuilder(context, getString(R.string.chooseTarget), targetItems, choosenAbility, sendActionToGamePlayEngineListener);
+                                          chooseDialog = new DialogBuilder(context, getString(R.string.chooseTarget), targetNames, choosenAbility, sendActionToGamePlayEngineListener, DialogAction.CHOOSE_TARGET);
                                       }
                                   }
                     );
@@ -297,7 +297,6 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                             }
                         }
                     }
-
                 }
             });
         } else {
@@ -314,20 +313,25 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         player = targetListF.get(yourTargetIdF);
         LinkedList<Ability> abilities = player.getMonster().getAbilitys();
 */
+
+
+
+
+        /*
         List<String> abilityNames = new ArrayList<String>();
         for (Ability ability : this.abilities) {
             String abilityName = ability.getAbilityName();
             abilityNames.add(abilityName);
         }
         final CharSequence[] items = abilityNames.toArray(new CharSequence[abilityNames.size()]);
-
+*/
         runOnUiThread(new Runnable() {
                           @Override
                           public void run() {
                               if (chooseDialog != null) {
                                   chooseDialog.dismiss();
                               }
-                              chooseDialog = new DialogBuilder(context, getString(R.string.chooseAbility), items, null, chooseAbilityListener);
+                              chooseDialog = new DialogBuilder(context, getString(R.string.chooseAbility), abilities, null, chooseAbilityListener, DialogAction.CHOOSE_ABILITY);
                           }
                       }
         );

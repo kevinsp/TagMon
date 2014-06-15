@@ -1,30 +1,43 @@
 package fh.tagmon.client.gui;
 
-import fh.tagmon.R;
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import fh.tagmon.R;
+import fh.tagmon.gameengine.abilitys.Ability;
+import fh.tagmon.gameengine.abilitys.AbilityComponentTypes;
+import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
 
 public class DialogBuilder extends Dialog {
 
     private Context context;
     private String title = "";
-    private CharSequence[] items;
+    private List<?> items;
     private View.OnClickListener onClickListener;
     private int timeTilClose;
     private Object obj;
     private Handler closeTimeHandler = new Handler();
     private String text;
+    private DialogAction dialogAction;
 
 
-    public DialogBuilder(Context context, String title, CharSequence[] items, Object obj, View.OnClickListener onClickListener) {
+
+    //ability choose Dialog
+    public DialogBuilder(Context context, String title, List<?> items, Object obj, View.OnClickListener onClickListener, DialogAction dialogAction) {
         super(context, R.style.customDialog);
         this.setCancelable(false);
         this.setCanceledOnTouchOutside(false);
@@ -33,6 +46,7 @@ public class DialogBuilder extends Dialog {
         this.items = items;
         this.obj = obj;
         this.onClickListener = onClickListener;
+        this.dialogAction = dialogAction;
         initDialog();
 
     }
@@ -103,12 +117,23 @@ public class DialogBuilder extends Dialog {
         table.setTag(obj);
 
         int counter = 0;
-        for (CharSequence item : items) {
+        for (Object item : items) {
             TableRow tr = new TableRow(context);
 
+            List <Drawable> drawables = getDrawableForItem(item);
+            if (!drawables.isEmpty()) {
+                for (Drawable drawable : drawables) {
+                    ImageView iv = new ImageView(context);
+                    iv.setImageDrawable(drawable);
+                    //TODO: set layout/size of the image
+                    tr.addView(iv);
+                }
+            }
+
             TextView tv = new TextView(context);
-            tv.setText(item);
-            tv.setOnClickListener(onClickListener);
+            String itemName = getTextForItem(item);
+            tv.setText(itemName);
+            tr.setOnClickListener(onClickListener); //TODO: set the listener to the tr (have to change the listener itself)
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.text_size));
             tv.setLayoutParams(new TableRow.LayoutParams(1));
             tv.setGravity(Gravity.CENTER);
@@ -119,5 +144,63 @@ public class DialogBuilder extends Dialog {
             tr.addView(tv);
             table.addView(tr);
         }
+    }
+
+    private List <Drawable> getDrawableForItem(Object obj) {
+        List <Drawable> drawables = new LinkedList<Drawable>();
+
+        if (obj instanceof Ability && dialogAction == DialogAction.CHOOSE_ABILITY) {
+            // targetRestriction 0=default, 1=self, 2=enemy, 3=selfANDenemy, 4=enemygroup, 5=owngroup, 6=selfANDenemygroup, 7=owngroupANDenemy
+            AbilityTargetRestriction atr = ((Ability) obj).getTargetRestriction();
+            atr.getTargetList();
+            switch(atr) {
+                case SELF:
+                    drawables.add(context.getResources().getDrawable(R.drawable.target_self));
+                    break;
+                case ENEMY:
+                    drawables.add(context.getResources().getDrawable(R.drawable.target_enemy));
+                    break;
+            }
+
+            LinkedList<IAbilityComponent> acl = ((Ability) obj).getAbilityComponents();
+            for (IAbilityComponent iac : acl) {
+                AbilityComponentTypes act = iac.getComponentType();
+                //DAMAGE, BUFF, HEAL, STUN, SCHADENSABSORBATION;
+                switch (act) {
+                    case DAMAGE:
+                        drawables.add(context.getResources().getDrawable(R.drawable.attack));
+                        break;
+                    case BUFF:
+                        drawables.add(context.getResources().getDrawable(R.drawable.buff));
+                        break;
+                    case HEAL:
+                        drawables.add(context.getResources().getDrawable(R.drawable.heal));
+                        break;
+                    case STUN:
+                        drawables.add(context.getResources().getDrawable(R.drawable.debuff));
+                        break;
+                    case SCHADENSABSORBATION:
+                        drawables.add(context.getResources().getDrawable(R.drawable.buff));
+                        break;
+
+                }
+            }
+        }
+
+        return drawables;
+    }
+
+    private String getTextForItem(Object obj) {
+        String name = "";
+
+        if (obj instanceof Ability && dialogAction == DialogAction.CHOOSE_ABILITY) {
+            name = ((Ability) obj).getAbilityName();
+        } else if (obj instanceof String) {
+            name = (String) obj;
+        }
+
+
+
+        return name;
     }
 }
