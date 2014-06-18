@@ -3,6 +3,8 @@ package fh.tagmon.model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import android.app.DatePickerDialog;
+import android.widget.DatePicker;
 import fh.tagmon.gameengine.abilitys.Ability;
 
 public class Monster {
@@ -35,6 +37,8 @@ public class Monster {
 	}
 	
 	public int getCurrentLifePoints(){
+		DatePickerDialog date = new DatePicker(null);
+		
 		return stats.getCurHP();
 	}
 
