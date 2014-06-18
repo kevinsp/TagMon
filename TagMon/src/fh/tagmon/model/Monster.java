@@ -37,8 +37,6 @@ public class Monster {
 	}
 	
 	public int getCurrentLifePoints(){
-		DatePickerDialog date = new DatePicker(null);
-		
 		return stats.getCurHP();
 	}
 
