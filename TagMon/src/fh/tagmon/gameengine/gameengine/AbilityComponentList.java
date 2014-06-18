@@ -1,11 +1,12 @@
 package fh.tagmon.gameengine.gameengine;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 
-public class AbilityComponentList{
+public class AbilityComponentList implements Serializable{
     private List<IAbilityComponent> abiComp = new LinkedList<IAbilityComponent>();
     final int target;
     	

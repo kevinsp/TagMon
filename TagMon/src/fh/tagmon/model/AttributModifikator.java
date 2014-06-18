@@ -5,16 +5,14 @@ public class AttributModifikator {
 	private int staerke;
 	private int intelligenz;
 	private int konstitution;
-	private int verteidigung;
 
 	
 	
 	
-	public AttributModifikator(int staerke, int intelligenz, int konstitution,int verteidigung) {
+	public AttributModifikator(int staerke, int intelligenz, int konstitution) {
 		this.staerke = staerke;
 		this.intelligenz = intelligenz;
 		this.konstitution = konstitution;
-		this.verteidigung = verteidigung;
 	}
 	
 	public int getStaerke() {
@@ -35,11 +33,4 @@ public class AttributModifikator {
 	public void setKonstitution(int konstitution) {
 		this.konstitution = konstitution;
 	}
-	public int getVerteidigung() {
-		return verteidigung;
-	}
-	public void setVerteidigung(int verteidigung) {
-		this.verteidigung = verteidigung;
-	}
-
 }

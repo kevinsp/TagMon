@@ -6,15 +6,13 @@ public class Attribut {
 	private int staerke;
 	private int intelligenz;
 	private int konstitution;
-	private int verteidigung;
 	
 	
-	public Attribut(int id, int staerke, int intelligenz, int konstitution, int verteidigung){
+	public Attribut(int id, int staerke, int intelligenz, int konstitution){
 		this.id = id;
 		this.staerke = staerke;
 		this.intelligenz = intelligenz;
 		this.konstitution = konstitution;
-		this.verteidigung = verteidigung;
 	}
 	
 	
@@ -35,12 +33,6 @@ public class Attribut {
 	}
 	public void setKonstitution(int konstitution) {
 		this.konstitution = konstitution;
-	}
-	public int getVerteidigung() {
-		return verteidigung;
-	}
-	public void setVerteidigung(int verteidigung) {
-		this.verteidigung = verteidigung;
 	}
 	public int getId() {
 		return id;

@@ -1,11 +1,12 @@
 package fh.tagmon.gameengine.abilitys;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
-public class Ability {
+public class Ability implements Serializable {
 	
 	private String abilityName;
 	private int energyCost;

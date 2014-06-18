@@ -1,6 +1,8 @@
 package fh.tagmon.gameengine.helperobjects;
 
-public class AnswerObject {
+import java.io.Serializable;
+
+public class AnswerObject implements Serializable{
 
 	private String msg;
 	private boolean monsterIsDead;

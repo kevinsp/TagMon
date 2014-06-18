@@ -155,7 +155,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	
 	public Attribut getAttribute(int monsterID) throws MonsterDAOException{
 		
-		String sqlQuery = 	   "SELECT tAttr.id, tAttr.staerke, tAttr.intelligenz, tAttr.konstitution, tAttr.verteidigung " +
+		String sqlQuery = 	   "SELECT tAttr.id, tAttr.staerke, tAttr.intelligenz, tAttr.konstitution " +
 					 		   "FROM tagdb_monster tMonster INNER JOIN tagdb_attribute tAttr " +
 					 		   "	ON tMonster.id = tAttr.monster_id " + 
 				 			   "WHERE tMonster.id = " + monsterID;
@@ -173,7 +173,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		 else
 			 throw new MonsterDAOException("Monster could not be created cause no attributes were found");
 		 
-		 return new Attribut(attribList.get(0), attribList.get(1), attribList.get(2), attribList.get(3), attribList.get(4));
+		 return new Attribut(attribList.get(0), attribList.get(1), attribList.get(2), attribList.get(3));
 	}
 	
 	
@@ -230,7 +230,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	
 	public AttributModifikator getAttributModifikator(int koerperteileID) throws MonsterDAOException{
 		
-		 String sqlQuery = 	"SELECT tAttrM.staerke, tAttrM.intelligenz, tAttrM.konstitution, tAttrM.verteidigung " +
+		 String sqlQuery = 	"SELECT tAttrM.staerke, tAttrM.intelligenz, tAttrM.konstitution " +
 							"FROM tagdb_attributmodifikator tAttrM " +
 							"WHERE tAttrM.koerperteile_id = " + koerperteileID;
 
@@ -247,7 +247,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		 if(attribList.isEmpty())
 			 throw new MonsterDAOException("Koerperteil has no 'attributModifikator'");
 		 		 
-		 return new AttributModifikator(attribList.get(0), attribList.get(1), attribList.get(2), attribList.get(3));	
+		 return new AttributModifikator(attribList.get(0), attribList.get(1), attribList.get(2));	
 	}
 	
 	
@@ -383,7 +383,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	public Stats getStats(int monsterID) throws MonsterDAOException{
 		
 		 String sqlQuery = 	"SELECT tagdb_stats.maxHP,tagdb_stats.curHP,tagdb_stats.curHP,tagdb_stats.maxEP, " +
-				 			"		tagdb_stats.curEP,tagdb_stats.regEP, tagdb_stats.lvl, tagdb_stats.curEXP " +
+				 			"		tagdb_stats.curEP,tagdb_stats.regEP, tagdb_stats.lvl, tagdb_stats.curEXP, tagdb_stats.defense " +
 				 			"FROM tagdb_stats " +
 				 			"WHERE tagdb_stats.monster_id = " + monsterID;
 
@@ -393,7 +393,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			throw new MonsterDAOException("Monster has no stats");
 			
 		
-		return new Stats(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6), cursor.getInt(7));			
+		return new Stats(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6), cursor.getInt(7), cursor.getInt(8));			
 
 	}
 	

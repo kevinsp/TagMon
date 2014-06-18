@@ -1,5 +1,7 @@
 package fh.tagmon.gameengine.abilitys;
 
+import java.io.Serializable;
+
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
 
@@ -8,7 +10,7 @@ import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
 
 
-abstract class AbilityComponent {
+abstract class AbilityComponent implements Serializable{
 	protected final AbilityComponentTypes componentType;
 	protected final AbilityTargetRestriction componentTargetRestr;
 	

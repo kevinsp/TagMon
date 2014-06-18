@@ -68,11 +68,12 @@ public class Monster {
 	}
 	
 	public int getArmorValue(){
-		int koerperteilArmor = 0;
-		for (Koerperteil koerperteil : koerperteile) {
-			koerperteilArmor += koerperteil.getAttributModifikator().getVerteidigung();
-		}
-		return (attribut.getVerteidigung() + additionalArmorValue + koerperteilArmor);
+//		int koerperteilArmor = 0;
+//		for (Koerperteil koerperteil : koerperteile) {
+//			koerperteilArmor += koerperteil.getAttributModifikator().getVerteidigung();
+//		}
+//		return (attribut.getVerteidigung() + additionalArmorValue + koerperteilArmor);
+		return 1;
 	}
 	
 	public int getIntelligence(){
@@ -102,6 +103,11 @@ public class Monster {
 		return stats.getCurHP();
 	}
 	
+	public int increaseLifePoints(int increaseValue){
+		stats.setCurHP(stats.getCurHP() + increaseValue);
+		return stats.getCurHP();
+		
+	}
 	
 	public void setAdditionalStrength(int additionalStrength) {
 		this.additionalStrength = additionalStrength;

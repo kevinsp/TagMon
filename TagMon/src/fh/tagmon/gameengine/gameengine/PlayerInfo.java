@@ -1,6 +1,8 @@
 package fh.tagmon.gameengine.gameengine;
 
-public class PlayerInfo {
+import java.io.Serializable;
+
+public class PlayerInfo implements Serializable{
 
 	private String playerName;
     private int currentLife;

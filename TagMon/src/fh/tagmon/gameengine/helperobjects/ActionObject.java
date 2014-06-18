@@ -1,9 +1,12 @@
 package fh.tagmon.gameengine.helperobjects;
 
+import java.io.Serializable;
+
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
-public class ActionObject {
+
+public class ActionObject implements Serializable {
 	
 	
 	private final Ability abilityComp;
@@ -13,7 +16,7 @@ public class ActionObject {
 		
 		this.abilityComp = ability;
 		this.targetRes = targetRes;
-		
+
 	}
 	
 	public AbilityTargetRestriction getTargetRestriction(){

@@ -17,8 +17,9 @@ import fh.tagmon.model.Monster;
 import fh.tagmon.network.ConnectionType;
 import fh.tagmon.network.hostConnection.NetworkPlayer;
 import fh.tagmon.network.localConnection.FakeSocket;
-import fh.tagmon.rollestestecke.AsynkTaskDummy;
-import fh.tagmon.rollestestecke.Rolles_ClientMsgPreparer;
+import fh.tagmon.rollestestecke.AsynkTaskHostDummy;
+import fh.tagmon.rollestestecke.AsynkTaskKiDummy;
+
 import fh.tagmon.rollestestecke.MyMonsterCreator;
 import fh.tagmon.rollestestecke.RollesTestKi;
 
@@ -29,10 +30,6 @@ public class GameEngineModule {
     private GameHostEngine hostEngine;
     private GameClientEngine clientEngine;
     
-    
-
-    
-
 
     public GameEngineModule(Activity context) {
 
@@ -40,54 +37,7 @@ public class GameEngineModule {
 //        initializeHost(playerList);
 //        initializeClient(context);
     	
-    	/*      Rolles Tests          */
-    	
-    	//RedKi
-    	//Monster emulator
-    	MyMonsterCreator myMonsterCreator = new MyMonsterCreator();
-    	
-    	//network Emulator
-    	FakeSocket contBetweenHostAndRed = new FakeSocket();
-    	//verbinde Host mit RedKi
-    	NetworkPlayer conToRed = new NetworkPlayer(contBetweenHostAndRed);
-    	//verbinde RedKi mit Host
-    	Rolles_ClientMsgPreparer conRedToHost = new Rolles_ClientMsgPreparer(contBetweenHostAndRed);
-    	//erstelle RedKi
-    	//Monster redMonster = myMonsterCreator.getMonsterDummy();
-    	Monster redMonster = getMonsterFromTobi(context);
-    	RollesTestKi redKi = new RollesTestKi("RedKi", redMonster, conRedToHost);
-     
-    	//BlueKi
-    	
-    	//network Emulator
-    	FakeSocket contBetweenHostAndBlue = new FakeSocket();
-    	//verbinde Host mit BlueKi
-    	NetworkPlayer conToBlue = new NetworkPlayer(contBetweenHostAndBlue);
-    	//verbinde BlueKi mit Host
-    	Rolles_ClientMsgPreparer conBlueToHost = new Rolles_ClientMsgPreparer(contBetweenHostAndBlue);
-    	//erstelle BlueKi
-    	//Monster blueMonster = myMonsterCreator.getMonsterDummy();
-    	Monster blueMonster = getMonsterFromTobi(context);
-    	
-    	RollesTestKi blueKi = new RollesTestKi("BlueKi", blueMonster, conBlueToHost);
-    	
-    	//erstelle PlayList
-		PlayerList playerList = new PlayerList();
-		playerList.addPlayer(conToBlue);
-		playerList.addPlayer(conToRed);
-    	 
-    	//erstelle hostengine
-    	GameHostEngine gameHost = new GameHostEngine(playerList);
-
-    	// bereite Spiel Start vor
-    	AsynkTaskDummy host = new AsynkTaskDummy(gameHost, null);
-    	AsynkTaskDummy red = new AsynkTaskDummy(null, redKi);
-    	AsynkTaskDummy blue = new AsynkTaskDummy(null, blueKi);
-    	
-    	// starte Spiel
-    	host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenläufig
-    	red.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
-    	blue.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
+    	this.testWithLocalSocket();
     	
     }
 
@@ -144,4 +94,72 @@ public class GameEngineModule {
 	  return null;
 	}
 	
+	
+	private void testWithFakeSocket(){
+//    	/*      Rolles Tests          */
+//    	
+//    	//RedKi
+//    	//Monster emulator
+//    	MyMonsterCreator myMonsterCreator = new MyMonsterCreator();
+//    	
+//    	//network Emulator
+//    	FakeSocket contBetweenHostAndRed = new FakeSocket();
+//    	//verbinde Host mit RedKi
+//    	NetworkPlayer conToRed = new NetworkPlayer(contBetweenHostAndRed);
+//    	//verbinde RedKi mit Host
+//    	Rolles_ClientMsgPreparer conRedToHost = new Rolles_ClientMsgPreparer(contBetweenHostAndRed);
+//    	//erstelle RedKi
+//    	//Monster redMonster = myMonsterCreator.getMonsterDummy();
+//    	Monster redMonster = getMonsterFromTobi(context);
+//    	RollesTestKi redKi = new RollesTestKi("RedKi", redMonster, conRedToHost);
+//     
+//    	//BlueKi
+//    	
+//    	//network Emulator
+//    	FakeSocket contBetweenHostAndBlue = new FakeSocket();
+//    	//verbinde Host mit BlueKi
+//    	NetworkPlayer conToBlue = new NetworkPlayer(contBetweenHostAndBlue);
+//    	//verbinde BlueKi mit Host
+//    	Rolles_ClientMsgPreparer conBlueToHost = new Rolles_ClientMsgPreparer(contBetweenHostAndBlue);
+//    	//erstelle BlueKi
+//    	//Monster blueMonster = myMonsterCreator.getMonsterDummy();
+//    	Monster blueMonster = getMonsterFromTobi(context);
+//    	
+//    	RollesTestKi blueKi = new RollesTestKi("BlueKi", blueMonster, conBlueToHost);
+//    	
+//    	//erstelle PlayList
+//		PlayerList playerList = new PlayerList();
+//		playerList.addPlayer(conToBlue);
+//		playerList.addPlayer(conToRed);
+//    	 
+//    	//erstelle hostengine
+//    	GameHostEngine gameHost = new GameHostEngine(playerList);
+//
+//    	// bereite Spiel Start vor
+//    	AsynkTaskDummy host = new AsynkTaskDummy(gameHost, null);
+//    	AsynkTaskDummy red = new AsynkTaskDummy(null, redKi);
+//    	AsynkTaskDummy blue = new AsynkTaskDummy(null, blueKi);
+//    	
+//    	// starte Spiel
+//    	host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenläufig
+//    	red.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
+//    	blue.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
+	}
+	
+	private void testWithLocalSocket(){
+		MyMonsterCreator mCreator = new MyMonsterCreator();
+		Monster redM = mCreator.getMonsterDummy();
+		Monster blueM = mCreator.getMonsterDummy();
+		
+		AsynkTaskKiDummy kiRed = new AsynkTaskKiDummy(redM, "RED");
+		AsynkTaskKiDummy kiBlue = new AsynkTaskKiDummy(blueM, "BLUE");
+		
+		AsynkTaskHostDummy host = new AsynkTaskHostDummy();
+		
+		host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenläufig
+		kiRed.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
+		kiBlue.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
+		
+		
+	}
 }
