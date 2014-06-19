@@ -3,7 +3,6 @@ package fh.tagmon.gameengine.player;
 import java.util.HashMap;
 
 import fh.tagmon.gameengine.abilitys.Ability;
-import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;

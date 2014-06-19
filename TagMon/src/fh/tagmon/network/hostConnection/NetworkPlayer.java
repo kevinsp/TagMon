@@ -63,4 +63,10 @@ public class NetworkPlayer implements IHostPlayer{
 	}
 
 
+	@Override
+	public void printSummary(String msg) {
+		this.connector.sendMsgToClient(MessageFactory.createHostMessage_Summary(msg));
+	}
+
+
 }

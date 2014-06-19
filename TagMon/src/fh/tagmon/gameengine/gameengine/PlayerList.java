@@ -3,8 +3,6 @@ package fh.tagmon.gameengine.gameengine;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-import fh.tagmon.gameengine.player.IPlayer;
-
 
 public class PlayerList {
 

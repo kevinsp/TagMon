@@ -10,6 +10,7 @@ public interface IHostPlayer {
 	public ActionObject yourTurn(HashMap<Integer, PlayerInfo> targetList, int yourTargetId);
 	public AnswerObject dealWithAbilityComponents(AbilityComponentList acl);
 	public AnswerObject dealWithAbilityComponent(IAbilityComponent iac);
+	public void	printSummary(String msg);
     public PlayerInfo gameStarts(int playersId);
     public void gameOver();
 }

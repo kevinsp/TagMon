@@ -3,14 +3,12 @@ package fh.tagmon.model;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import android.app.DatePickerDialog;
-import android.widget.DatePicker;
 import fh.tagmon.gameengine.abilitys.Ability;
 
 public class Monster {
 	
-	private int id;
-	private String name;
+	public final int id;
+	public final String name;
 	
 	private Attribut attribut;
 	

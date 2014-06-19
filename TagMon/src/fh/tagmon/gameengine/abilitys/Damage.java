@@ -8,6 +8,7 @@ import fh.tagmon.model.Monster;
 
 
 public class Damage extends AbilityComponent implements IAbilityComponent {
+	private static final long serialVersionUID = 1L;
 
 	private int baseDmg;
 	

@@ -15,13 +15,10 @@ import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.model.Monster;
 import fh.tagmon.network.ConnectionType;
-import fh.tagmon.network.hostConnection.NetworkPlayer;
-import fh.tagmon.network.localConnection.FakeSocket;
 import fh.tagmon.rollestestecke.AsynkTaskHostDummy;
 import fh.tagmon.rollestestecke.AsynkTaskKiDummy;
 
 import fh.tagmon.rollestestecke.MyMonsterCreator;
-import fh.tagmon.rollestestecke.RollesTestKi;
 
 public class GameEngineModule {
 

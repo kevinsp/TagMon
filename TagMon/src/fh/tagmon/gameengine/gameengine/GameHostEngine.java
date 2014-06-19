@@ -2,16 +2,13 @@ package fh.tagmon.gameengine.gameengine;
 
 import android.util.Log;
 
-import java.util.LinkedList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Map.Entry;
 
-import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
-import fh.tagmon.gameengine.player.IPlayer;
-import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
 public class GameHostEngine {
 
@@ -81,6 +78,29 @@ public class GameHostEngine {
     	
     	
     	
+        
+        List<AbilityComponentList> affectedPlayers = new ArrayList<AbilityComponentList>();
+        
+        for(IAbilityComponent component : action.getAbility().getAbilityComponents()){
+        	for(Integer clientID : component.getComponentTargetRestriction().getTargetList()){
+        		AbilityComponentList curList = null;
+        		for(AbilityComponentList affectedPlayer : affectedPlayers)
+        			if(affectedPlayer.target == clientID){
+        				curList = affectedPlayer;
+        				break;
+        			}
+        		if(curList == null){
+        			curList = new AbilityComponentList(clientID);
+        			affectedPlayers.add(curList);
+        		}
+        		curList.addAbilityCommponent(component);
+        	}
+        }
+        
+        String summary = sendComponentListsToPlayersAndReceiveTheirAnswers(affectedPlayers);
+        broadcastSummary(summary);
+        
+        /*
         Ability ability = action.getAbility();
         for (IAbilityComponent aComponent : ability.getAbilityComponents()) {
             LinkedList<Integer> targetList = null;
@@ -105,18 +125,12 @@ public class GameHostEngine {
 
             this.sendToList(aComponent, targetList);
         }
-
+		//*/
     }
-
+    /* Auskommentiert von Chris
     private void sendToList(IAbilityComponent aComponent, LinkedList<Integer> targetList) {
         for (Integer targetId : targetList) {
             final IHostPlayer player = this.playerList.getPlayerByTargetId(targetId);
-            
-            
-            //TODO evtl hier umbauen - Chris
-            //AbilityComponentList acl = new AbilityComponentList(0)
-            //player.dealWithAbilityComponents(acl);
-            
             
             AnswerObject answer = player.dealWithAbilityComponent(aComponent);
 
@@ -126,9 +140,30 @@ public class GameHostEngine {
             /////////////////////////////////////////// TESTHALBER
             if (answer.isMonsterDead()) {
                 this.gameOver();
-            	
             }
             //////////////////////////////
         }
     }
+    */
+    private void broadcastSummary(String summary){
+    	for(PlayerListNode player : playerList.getPlayList())
+        	player.getPlayer().printSummary(summary);
+    }
+    private String sendComponentListsToPlayersAndReceiveTheirAnswers(List<AbilityComponentList> affectedPlayers){
+    	StringBuilder summary = new StringBuilder();
+        for(AbilityComponentList al : affectedPlayers){
+        	AnswerObject answer = sendComponentListToPlayer(al);
+        	summary.append(answer.getMsg());
+        }
+        return summary.toString();
+    }
+    private AnswerObject sendComponentListToPlayer(AbilityComponentList al){
+    	final IHostPlayer player = this.playerList.getPlayerByTargetId(al.target);
+    	AnswerObject answer  = player.dealWithAbilityComponents(al);
+    	myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(al.target).getPlayerName() + " ====");
+        myLogger(answer.getMsg());
+        myLogger("====");
+        return answer;
+    }
+    
 }

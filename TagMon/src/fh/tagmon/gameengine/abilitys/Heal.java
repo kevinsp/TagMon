@@ -4,7 +4,7 @@ import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 public class Heal extends AbilityComponent implements IAbilityComponent {
-
+	private static final long serialVersionUID = 1L;
 	private int healValue;
 	
 	public Heal(int healValue, AbilityTargetRestriction abilityTargetRestriction){

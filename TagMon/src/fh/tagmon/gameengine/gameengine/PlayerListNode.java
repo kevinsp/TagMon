@@ -1,7 +1,5 @@
 package fh.tagmon.gameengine.gameengine;
 
-import fh.tagmon.gameengine.player.IPlayer;
-
 public class PlayerListNode {
 
 	private IHostPlayer player;

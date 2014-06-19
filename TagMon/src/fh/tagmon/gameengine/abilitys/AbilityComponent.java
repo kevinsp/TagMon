@@ -4,13 +4,8 @@ import java.io.Serializable;
 
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
-
-
-
-
-
-
 abstract class AbilityComponent implements Serializable{
+	private static final long serialVersionUID = 1L;
 	protected final AbilityComponentTypes componentType;
 	protected final AbilityTargetRestriction componentTargetRestr;
 	

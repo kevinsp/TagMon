@@ -2,7 +2,6 @@ package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
 import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.model.DamageAbsorbationHelper;
-import fh.tagmon.model.DurationAbilityListHandler;
 import fh.tagmon.model.Monster;
 
 public class DamageAbsorbationHandler {

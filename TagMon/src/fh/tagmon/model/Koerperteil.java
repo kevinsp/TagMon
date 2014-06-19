@@ -6,13 +6,13 @@ import fh.tagmon.gameengine.abilitys.Ability;
 
 public class Koerperteil {
 	
-	private int id;
-	private String name;
+	public final int id;
+	public final String name;
 	
 	private ArrayList<Ability> abilityList;
 	//private ArrayList<Faehigkeit> faehigkeiten;
 	
-	private KoerperteilArt koerperteilArt;
+	public final KoerperteilArt koerperteilArt;
 
 
 	private AttributModifikator attributModifikator;

@@ -7,7 +7,8 @@ import java.util.List;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 
 public class AbilityComponentList implements Serializable{
-    private List<IAbilityComponent> abiComp = new LinkedList<IAbilityComponent>();
+	private static final long serialVersionUID = 1L;
+	private List<IAbilityComponent> abiComp = new LinkedList<IAbilityComponent>();
     final int target;
     	
     public AbilityComponentList(int target){

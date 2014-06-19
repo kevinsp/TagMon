@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Random;
 
 import android.util.Log;
-import android.widget.Toast;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;

@@ -3,12 +3,9 @@ package fh.tagmon.network.hostConnection;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.util.Log;
 import fh.tagmon.gameengine.gameengine.PlayerList;
-import fh.tagmon.network.message.MessageObject;
 
 public class NetworkServerSocketConnection {
 
@@ -47,9 +44,9 @@ public class NetworkServerSocketConnection {
 		return playerList;
 	}
 	
-	
-
-
+	public int getPort(){
+		return port;
+	}
 }
 
 

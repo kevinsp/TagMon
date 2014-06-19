@@ -65,6 +65,12 @@ public class Stats {
 	public int getCurEXP() {
 		return curEXP;
 	}
+	public void setDefense(int defense){
+		this.defense = defense;
+	}
+	public int getDefensye(){
+		return defense;
+	}
 	public void setCurEXP(int curEXP) {
 		this.curEXP = curEXP;
 	}

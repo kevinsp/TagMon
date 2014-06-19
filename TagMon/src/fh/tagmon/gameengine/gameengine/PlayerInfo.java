@@ -3,7 +3,7 @@ package fh.tagmon.gameengine.gameengine;
 import java.io.Serializable;
 
 public class PlayerInfo implements Serializable{
-
+	private static final long serialVersionUID = 1L;
 	private String playerName;
     private int currentLife;
     private int maxLife;
