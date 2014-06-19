@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
@@ -84,13 +83,10 @@ public class GameClientEngine implements Observer, ISetAbility{
         switch(msg.messageType){
 		case ABILITY_COMPONENT:
 			AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
-			// Auskommentiert durch Rolle 
-			//AnswerObject answerObject = monster.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
-			AnswerObject answerObject = new AnswerObject("Test", false);
+			AnswerObject answerObject = monster.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
 			connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, ID));
 			break;
 		case SUMMARY:
-			//TODO Durch korrekte Methode ersetzen
 			((Fight)context).showTemporaryDialog((String) msg.getContent());
 			break;
 		case GAME_OVER:
@@ -109,8 +105,6 @@ public class GameClientEngine implements Observer, ISetAbility{
 			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 			break;
         case GAME_START:
-            //TODO: list with players and the id of the client
-            //TODO: list with abilitys!
             players = (List <PlayerInfo>) msg.getContent();
 
             List<Ability> abilitylist = monster.getMonster().getAbilitys();

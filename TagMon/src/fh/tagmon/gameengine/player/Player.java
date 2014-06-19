@@ -3,7 +3,7 @@ package fh.tagmon.gameengine.player;
 import java.util.HashMap;
 
 import fh.tagmon.gameengine.abilitys.Ability;
-import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
@@ -66,9 +66,9 @@ public class Player implements IPlayer {
     }
 
     @Override
-    public AnswerObject workWithAbilityComponent(
-            IAbilityComponent abilityComponent) {
-        this.playModule.getMonstersAbilityComponentDirector().handleAbilityComponent(abilityComponent);
+    public AnswerObject workWithAbilityComponents(
+            AbilityComponentList abilityComponents) {
+        this.playModule.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
 
         boolean isMonsterDead = false;
         if (this.myMonster.getCurrentLifePoints() <= 0){

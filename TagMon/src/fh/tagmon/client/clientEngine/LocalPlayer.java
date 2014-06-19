@@ -3,7 +3,7 @@ package fh.tagmon.client.clientEngine;
 import java.util.HashMap;
 
 import fh.tagmon.gameengine.abilitys.Ability;
-import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
@@ -20,8 +20,8 @@ public class LocalPlayer implements IPlayer{
 	}
 
 	@Override
-	public AnswerObject workWithAbilityComponent(
-			IAbilityComponent abilityComponent) {
+	public AnswerObject workWithAbilityComponents(
+			AbilityComponentList abilityComponent) {
 		// TODO Auto-generated method stub
 		return null;
 	}

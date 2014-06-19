@@ -7,8 +7,7 @@ import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
 
 public class ActionObject implements Serializable {
-	
-	
+	private static final long serialVersionUID = 1L;
 	private final Ability abilityComp;
 	private final AbilityTargetRestriction targetRes;
 	
