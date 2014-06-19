@@ -27,6 +27,30 @@
 
                 >
 
+                <!--TableRow>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/text_size"
+                        android:layout_gravity="center"
+                        android:orientation="horizontal">
+                    <ImageView
+                        android:src="@drawable/attack"
+                        android:layout_width="@dimen/text_size"
+                        android:layout_height="match_parent"
+                        />
+                    <ImageView
+                        android:src="@drawable/block"
+                        android:layout_width="@dimen/text_size"
+                        android:layout_height="match_parent"
+                        />
+                    <TextView
+                        android:text="test"
+                        android:textSize="@dimen/text_size"
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent" />
+                    </LinearLayout>
+                </TableRow-->
+
             </TableLayout>
         </ScrollView>
     </LinearLayout>

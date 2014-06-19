@@ -46,6 +46,23 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         //Todo : Kondition einbauen fuer nicht-host-spieler
         engineModule = new GameEngineModule(this);
 
+
+        //mock-up
+        /*
+        MyMonsterCreator mCreator = new MyMonsterCreator();
+        Monster redM = mCreator.getMonsterDummy();
+        this.abilities = redM.getAbilitys();
+        runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+                              if (chooseDialog != null) {
+                                  chooseDialog.dismiss();
+                              }
+                              chooseDialog = new DialogBuilder(context, getString(R.string.chooseAbility), abilities, null, chooseAbilityListener, DialogAction.CHOOSE_ABILITY);
+                          }
+                      }
+        );
+        */
     }
 
 

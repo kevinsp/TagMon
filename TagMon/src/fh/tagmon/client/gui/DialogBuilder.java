@@ -8,6 +8,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -119,30 +120,49 @@ public class DialogBuilder extends Dialog {
         int counter = 0;
         for (Object item : items) {
             TableRow tr = new TableRow(context);
+            LinearLayout ll = new LinearLayout(context);
+            TableRow.LayoutParams tlp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+            tlp.setMargins(20,0,0,0);
+            ll.setOrientation(LinearLayout.HORIZONTAL);
+            ll.setGravity(Gravity.CENTER);
+            ll.setLayoutParams(tlp);
+
+
+
 
             List <Drawable> drawables = getDrawableForItem(item);
             if (!drawables.isEmpty()) {
+
                 for (Drawable drawable : drawables) {
                     ImageView iv = new ImageView(context);
                     iv.setImageDrawable(drawable);
-                    //TODO: set layout/size of the image
-                    tr.addView(iv);
+
+                    iv.setAdjustViewBounds(true);
+                    iv.setMaxWidth(85);
+                    LinearLayout.LayoutParams imagelp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    iv.setLayoutParams(imagelp);
+                    ll.addView(iv);
                 }
             }
+tr.addView(ll);
 
             TextView tv = new TextView(context);
             String itemName = getTextForItem(item);
             tv.setText(itemName);
-            tr.setOnClickListener(onClickListener); //TODO: set the listener to the tr (have to change the listener itself)
+
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.text_size));
-            tv.setLayoutParams(new TableRow.LayoutParams(1));
+            TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+           // lp.setMargins(10, 0, 0, 10);
+            tv.setLayoutParams(lp);
             tv.setGravity(Gravity.CENTER);
-
-            tv.setTag(counter);
-
-            counter++;
             tr.addView(tv);
+            //ll.addView(tv);
+
+            tr.setTag(counter);
+            tr.setOnClickListener(onClickListener);
+            //tr.addView(ll);
             table.addView(tr);
+            counter++;
         }
     }
 
@@ -180,7 +200,7 @@ public class DialogBuilder extends Dialog {
                         drawables.add(context.getResources().getDrawable(R.drawable.debuff));
                         break;
                     case SCHADENSABSORBATION:
-                        drawables.add(context.getResources().getDrawable(R.drawable.buff));
+                        drawables.add(context.getResources().getDrawable(R.drawable.block));
                         break;
 
                 }
