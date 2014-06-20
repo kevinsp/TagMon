@@ -7,21 +7,24 @@ import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 public class Ability implements Serializable {
+	private int id;
 	private static final long serialVersionUID = 1L;
 	private String abilityName;
-	private int energyCost;
 	private AbilityTargetRestriction targetRestriction;
+	private int energyCost;
 	
 	private LinkedList<IAbilityComponent> abilityComponents = new LinkedList<IAbilityComponent>();
 	
 	
-	public Ability(String abilityName, int energyCost, AbilityTargetRestriction targetRestriction){
+	public Ability(int id, String abilityName, int energyCost, AbilityTargetRestriction targetRestriction){
+		this.id = id;
 		this.targetRestriction = targetRestriction;
 		this.abilityName = abilityName;
 		this.energyCost = energyCost;	
 	}
 	
-	public Ability(String abilityName, int energyCost, AbilityTargetRestriction targetRestriction, LinkedList<IAbilityComponent> abilityComponents){
+	public Ability(int id, String abilityName, int energyCost, AbilityTargetRestriction targetRestriction, LinkedList<IAbilityComponent> abilityComponents){
+		this.id = id;
 		this.targetRestriction = targetRestriction;
 		this.abilityName = abilityName;
 		this.energyCost = energyCost;
@@ -30,6 +33,10 @@ public class Ability implements Serializable {
 	
 	public boolean addAbilityComponent(IAbilityComponent abilityComp){
 		return this.abilityComponents.add(abilityComp);
+	}
+	
+	public int getID(){
+		return this.id;
 	}
 	
 	@SuppressWarnings("unchecked")

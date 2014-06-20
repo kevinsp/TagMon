@@ -7,6 +7,7 @@ import java.util.Random;
 import android.content.Context;
 import android.database.SQLException;
 import fh.tagmon.database.dao.MonsterDAO;
+import fh.tagmon.database.dao.MonsterDAOLocal;
 import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
@@ -20,12 +21,12 @@ import fh.tagmon.model.KoerperteilArt;
 import fh.tagmon.model.Monster;
 import fh.tagmon.model.Stats;
 
-public class MonsterDAOImpl implements MonsterDAO {
+public class MonsterDAOImplLocal implements MonsterDAOLocal{
 
-	private DataBaseHelper dbHelper;
+	private DataBaseHelperLocal dbHelper;
 	
-	public MonsterDAOImpl(Context context) throws IOException, SQLException {
-		dbHelper = new DataBaseHelper(context);
+	public MonsterDAOImplLocal(Context context) throws IOException, SQLException {
+		dbHelper = new DataBaseHelperLocal(context);
 		
 		dbHelper.createDataBase();
 		dbHelper.openDataBase();
@@ -33,20 +34,8 @@ public class MonsterDAOImpl implements MonsterDAO {
 	}
 	
 	@Override
-	public Monster getMonster(String tagID) throws MonsterDAOException {
-		
-		Random randomGenerator = new Random();
-		
-		ArrayList<Integer> groupIDList = dbHelper.getMonsterGroupsByTagID(tagID);
-		
-		// choose a random monstergroup for example fire-monster, ice-monster ... and return the id list of the specific group
-		// LATER you can maybe add some LOGIC not random like (Monster is fire - get a ice monsterList as an enemyGroup...)
-		ArrayList<Integer> monsterIDList = dbHelper.getMonsterByGroupID(groupIDList.get(randomGenerator.nextInt(groupIDList.size())));
-		
-		// return random monster from the monsterID list maybe later also with logic like lvl 10 monster gets lvl 8-11 enemy monster ...
-		Monster monster = dbHelper.getMonsterByID(monsterIDList.get(randomGenerator.nextInt(monsterIDList.size())));
-		
-		return monster;
+	public Monster getMonster(int monsterID) throws MonsterDAOException {
+		return dbHelper.getMonsterByID(monsterID);
 	}
 	
 	@Override
@@ -73,6 +62,15 @@ public class MonsterDAOImpl implements MonsterDAO {
 		Monster dummyMonster = new Monster(0, "MonsterName", attribut, koerperteilList, stats);
 		
 		return dummyMonster;
+	}
+
+
+	public void deleteMonster(Monster monster) throws MonsterDAOException {
+		
+	}
+
+	public void updateMonster(Monster monster) throws MonsterDAOException {
+		
 	}
 	
 	

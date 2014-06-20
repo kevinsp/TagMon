@@ -52,21 +52,21 @@ public class MyMonsterCreator {
 	
 	
 	private Ability getBeiﬂAttacke(){
-		Ability ability = new Ability("Beiﬂattacke", 20, AbilityTargetRestriction.ENEMY);
+		Ability ability = new Ability(1, "Beiﬂattacke", 20, AbilityTargetRestriction.ENEMY);
 		IAbilityComponent component = new Damage(10, AbilityTargetRestriction.ENEMY);
 		ability.addAbilityComponent(component);
 		return ability;
 	}
 	
 	private Ability getBlockAbility(){
-		Ability blockAbility = new Ability("BLOCKABILITY", 11, AbilityTargetRestriction.SELF);
-		IAbilityComponent buff = new Buff(2,0,5,0,null);
+		Ability blockAbility = new Ability(2, "BLOCKABILITY", 11, AbilityTargetRestriction.SELF);
+		IAbilityComponent buff = new Buff(1,2,null,3,2,3);
 		blockAbility.addAbilityComponent(buff);
 		return blockAbility;
 	}
 	
 	private Ability getAbsorbAbility(){
-		Ability absorbAbility = new Ability("Absorber", 10, AbilityTargetRestriction.SELF);
+		Ability absorbAbility = new Ability(3, "Absorber", 10, AbilityTargetRestriction.SELF);
 		IAbilityComponent schadensAbsorb = new Schadensabsorbation(3, 25, null);
 		absorbAbility.addAbilityComponent(schadensAbsorb);
 		return absorbAbility;

@@ -5,7 +5,7 @@ public class Stats {
 	private int id;
 	private int maxHP;
 	private int curHP;
-	private int mapEP;
+	private int maxEP;
 	private int curEP;
 	private int regEP;
 	private int lvl;
@@ -13,11 +13,11 @@ public class Stats {
 	private int defense;
 
 	
-	public Stats(int id, int maxHP, int curHP, int mapEP, int curEP, int regEP, int lvl, int curEXP, int defense) {
+	public Stats(int id, int maxHP, int curHP, int maxEP, int curEP, int regEP, int lvl, int curEXP, int defense) {
 		this.id = id;
 		this.maxHP = maxHP;
 		this.curHP = curHP;
-		this.mapEP = mapEP;
+		this.maxEP = maxEP;
 		this.curEP = curEP;
 		this.regEP = regEP;
 		this.lvl = lvl;
@@ -38,11 +38,11 @@ public class Stats {
 	public void setCurHP(int curHP) {
 		this.curHP = curHP;
 	}
-	public int getMapEP() {
-		return mapEP;
+	public int getMaxEP() {
+		return maxEP;
 	}
-	public void setMapEP(int mapEP) {
-		this.mapEP = mapEP;
+	public void setMaxEP(int maxEP) {
+		this.maxEP = maxEP;
 	}
 	public int getCurEP() {
 		return curEP;

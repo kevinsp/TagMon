@@ -41,6 +41,11 @@ public class Monster {
     public int getMaxLifePoints(){
         return stats.getMaxHP();
     }
+    
+    // USE this to update Database use getCurrentLifepoints etc to get Lifepoints 'INGAME'
+    public Stats getStats(){
+    	return this.stats;
+    }
 	
 	public LinkedList<Ability> getAbilitys(){
 		LinkedList<Ability> abilities = new LinkedList<Ability>();
@@ -53,7 +58,14 @@ public class Monster {
 		return abilities;
 	}
 	
+	public ArrayList<Koerperteil> getKoerperteileList(){
+		return this.koerperteile;
+	}
 	
+	// USE this to update attributes of monster in db -> INGAME use getStrength()...
+	public Attribut getAttributes(){
+		return this.attribut;
+	}
 	
 	public int getStrength(){
 		int koerperteilStrength = 0;
@@ -72,6 +84,7 @@ public class Monster {
 		return 1;
 	}
 	
+
 	public int getIntelligence(){
 		int koerperteilIntelligence = 0;
 		for (Koerperteil koerperteil : koerperteile) {
@@ -79,6 +92,7 @@ public class Monster {
 		}
 		return (attribut.getIntelligenz() + additionalIntelligence + koerperteilIntelligence);
 	}
+	
 	
 	public int getConstitution(){
 		int koerperteilConstitution = 0;
