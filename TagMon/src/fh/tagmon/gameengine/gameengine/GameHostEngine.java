@@ -69,31 +69,24 @@ public class GameHostEngine {
 
 
     private void sendAbilityComponentToPlayer(ActionObject action) {
-    	/* TODO was ich mir hier vorstelle:
-    	 * Hier sollte die Ability zerpflückt werden soweit klar
-    	 * dann sollten die verschiedenen AbilityComponents gesammelt werden und zwar nach targets getrennt
-    	 * dafür hab ich die AbilityComponentList gebaut, die kannst dafür dann verwendet.
-    	 * dann geht für jeden Spieler genau eine Message raus, die alle AbilityComponents enthält, die ihn betreffen.
-    	 */
     	
-    	
-    	
-        
         List<AbilityComponentList> affectedPlayers = new ArrayList<AbilityComponentList>();
+        for(PlayerListNode player : playerList.getPlayList())
+        	affectedPlayers.add(new AbilityComponentList(player.getOwnTargetId()));
         
+        //Get Ability-components
         for(IAbilityComponent component : action.getAbility().getAbilityComponents()){
+        	//Get the targetIDs of the specific component
         	for(Integer clientID : component.getComponentTargetRestriction().getTargetList()){
-        		AbilityComponentList curList = null;
-        		for(AbilityComponentList affectedPlayer : affectedPlayers)
-        			if(affectedPlayer.target == clientID){
-        				curList = affectedPlayer;
+        		//compare the targetID to the id of the component-lists
+        		for(int i = 0; i < affectedPlayers.size(); i++){
+        			if(affectedPlayers.get(i).target == clientID){
+        				affectedPlayers.get(i).addAbilityCommponent(component);
         				break;
+        			}else{
+        				Log.i(logTag, "Client ID " + clientID + "is not available!");
         			}
-        		if(curList == null){
-        			curList = new AbilityComponentList(clientID);
-        			affectedPlayers.add(curList);
         		}
-        		curList.addAbilityCommponent(component);
         	}
         }
         
@@ -152,8 +145,10 @@ public class GameHostEngine {
     private String sendComponentListsToPlayersAndReceiveTheirAnswers(List<AbilityComponentList> affectedPlayers){
     	StringBuilder summary = new StringBuilder();
         for(AbilityComponentList al : affectedPlayers){
-        	AnswerObject answer = sendComponentListToPlayer(al);
-        	summary.append(answer.getMsg());
+        	if(al.getAbilityList().size() > 0){
+        		AnswerObject answer = sendComponentListToPlayer(al);
+        		summary.append(answer.getMsg());
+        	}
         }
         return summary.toString();
     }
