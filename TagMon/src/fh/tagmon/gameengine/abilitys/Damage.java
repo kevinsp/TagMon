@@ -34,9 +34,6 @@ public class Damage extends AbilityComponent implements IAbilityComponent {
 		this.monsterStrength = monsterStrength;
 	}
 
-
-
-
 	@Override
 	public AbilityComponentTypes getComponentType() {
 		return this.componentType;

@@ -2,6 +2,7 @@ package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
 import java.util.HashMap;
 
+import android.util.Log;
 import fh.tagmon.client.Helper_PlayerSettings;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;

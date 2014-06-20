@@ -32,9 +32,9 @@ public class Ability implements Serializable {
 		return this.abilityComponents.add(abilityComp);
 	}
 	
-	@SuppressWarnings("unchecked")
+
 	public LinkedList<IAbilityComponent> getAbilityComponents(){
-		return (LinkedList<IAbilityComponent>) this.abilityComponents.clone();
+		return this.abilityComponents;
 	}
 	
 	public String getAbilityName(){

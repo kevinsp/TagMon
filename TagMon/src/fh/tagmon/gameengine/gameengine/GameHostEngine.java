@@ -2,6 +2,8 @@ package fh.tagmon.gameengine.gameengine;
 
 import android.util.Log;
 
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map.Entry;
@@ -9,6 +11,7 @@ import java.util.Map.Entry;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
+import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
 public class GameHostEngine {
 
@@ -74,90 +77,74 @@ public class GameHostEngine {
         for(PlayerListNode player : playerList.getPlayList())
         	affectedPlayers.add(new AbilityComponentList(player.getOwnTargetId()));
         
+        HashMap<Integer,AbilityComponentList> idToAbilityCompListMap = new HashMap<Integer, AbilityComponentList>();
+        
         //Get Ability-components
         for(IAbilityComponent component : action.getAbility().getAbilityComponents()){
         	//Get the targetIDs of the specific component
-        	for(Integer clientID : component.getComponentTargetRestriction().getTargetList()){
-        		//compare the targetID to the id of the component-lists
-        		for(int i = 0; i < affectedPlayers.size(); i++){
-        			if(affectedPlayers.get(i).target == clientID){
-        				affectedPlayers.get(i).addAbilityCommponent(component);
-        				break;
-        			}else{
-        				Log.i(logTag, "Client ID " + clientID + "is not available!");
-        			}
-        		}
-        	}
-        }
-        
-        String summary = sendComponentListsToPlayersAndReceiveTheirAnswers(affectedPlayers);
-        broadcastSummary(summary);
-        
-        /*
-        Ability ability = action.getAbility();
-        for (IAbilityComponent aComponent : ability.getAbilityComponents()) {
-            LinkedList<Integer> targetList = null;
-
-            switch (aComponent.getComponentTargetRestriction()) {
-                case DEFAULT:
-                    AbilityTargetRestriction abiTarRes = action.getTargetRestriction();
-                    targetList = abiTarRes.getTargetList();
-                    break;
-                case ENEMY:
-                case SELF:
-                    targetList = aComponent.getComponentTargetRestriction().getTargetList();
-                    break;
+        	LinkedList<Integer> targetList = null;
+        	switch (component.getComponentTargetRestriction()) {
+	            case DEFAULT:
+	                 AbilityTargetRestriction abiTarRes = action.getTargetRestriction();
+	                 targetList = abiTarRes.getTargetList();
+	                 break;
+	            case ENEMY:
+	            case SELF:
 				case ENEMYGROUP:
 				case OWNGROUP:
 				case OWNGROUPANDENEMY:
 				case SELFANDENEMY:
 				case SELFANDENEMYGROUP:
-	            default:
-	                    break;
-            }
-
-            this.sendToList(aComponent, targetList);
+					  targetList = component.getComponentTargetRestriction().getTargetList();
+				default:
+				        break;
+        	}
+        		
+        	
+        	for(Integer clientID : targetList){
+        		if(idToAbilityCompListMap.containsKey(clientID)){
+        			AbilityComponentList abComList = idToAbilityCompListMap.get(clientID);
+        			abComList.addAbilityCommponent(component);
+        		}
+        		else{
+        			AbilityComponentList abComList = new AbilityComponentList(clientID);
+        			abComList.addAbilityCommponent(component);
+        			idToAbilityCompListMap.put(clientID, abComList);
+        		}
+        	}
         }
-		//*/
+        
+        String summary = sendComponentListsToPlayersAndReceiveTheirAnswers(idToAbilityCompListMap);
+        broadcastSummary(summary);
+        
+      
     }
-    /* Auskommentiert von Chris
-    private void sendToList(IAbilityComponent aComponent, LinkedList<Integer> targetList) {
-        for (Integer targetId : targetList) {
-            final IHostPlayer player = this.playerList.getPlayerByTargetId(targetId);
-            
-            AnswerObject answer = player.dealWithAbilityComponent(aComponent);
 
-            myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(targetId).getPlayerName() + " ====");
-            myLogger(answer.getMsg());
-            myLogger("====");
-            /////////////////////////////////////////// TESTHALBER
-            if (answer.isMonsterDead()) {
-                this.gameOver();
-            }
-            //////////////////////////////
-        }
-    }
-    */
     private void broadcastSummary(String summary){
     	for(PlayerListNode player : playerList.getPlayList())
         	player.getPlayer().printSummary(summary);
     }
-    private String sendComponentListsToPlayersAndReceiveTheirAnswers(List<AbilityComponentList> affectedPlayers){
+    
+    private String sendComponentListsToPlayersAndReceiveTheirAnswers(HashMap<Integer,AbilityComponentList> affectedPlayers){
     	StringBuilder summary = new StringBuilder();
-        for(AbilityComponentList al : affectedPlayers){
-        	if(al.getAbilityList().size() > 0){
-        		AnswerObject answer = sendComponentListToPlayer(al);
-        		summary.append(answer.getMsg());
-        	}
+        for(Integer targetId : affectedPlayers.keySet()){
+    		AnswerObject answer = sendComponentListToPlayer(affectedPlayers.get(targetId));
+    		summary.append(answer.getMsg());
         }
         return summary.toString();
     }
+    
     private AnswerObject sendComponentListToPlayer(AbilityComponentList al){
     	final IHostPlayer player = this.playerList.getPlayerByTargetId(al.target);
     	AnswerObject answer  = player.dealWithAbilityComponents(al);
     	myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(al.target).getPlayerName() + " ====");
         myLogger(answer.getMsg());
         myLogger("====");
+		/////////////////////////////////////////// TESTHALBER
+		if (answer.isMonsterDead()) {
+		this.gameOver();
+		}
+		//////////////////////////////
         return answer;
     }
     

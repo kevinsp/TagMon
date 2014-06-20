@@ -60,7 +60,7 @@ public class MyMonsterCreator {
 	
 	private Ability getBlockAbility(){
 		Ability blockAbility = new Ability("BLOCKABILITY", 11, AbilityTargetRestriction.SELF);
-		IAbilityComponent buff = new Buff(2,0,5,0,null);
+		IAbilityComponent buff = new Buff(1,0,5,0,null);
 		blockAbility.addAbilityComponent(buff);
 		return blockAbility;
 	}
