@@ -197,8 +197,8 @@ tr.addView(ll);
                         drawables.add(context.getResources().getDrawable(R.drawable.heal));
                         break;
                     case STUN:
-                        drawables.add(context.getResources().getDrawable(R.drawable.debuff));
-                        break;
+                       drawables.add(context.getResources().getDrawable(R.drawable.debuff));
+						break;
                     case SCHADENSABSORBATION:
                         drawables.add(context.getResources().getDrawable(R.drawable.block));
                         break;

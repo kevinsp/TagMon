@@ -48,7 +48,6 @@ public class BuffHandler{
 		for(Buff buff: activBuffList){
 			Buff theBuff = buff;
 			strengthBuff += theBuff.getStrengthBuff();
-			armorValueBuff += theBuff.getArmorValueBuff();
 			constitutionBuff += theBuff.getConstitutionBuff();
 		}
 		
@@ -92,10 +91,9 @@ public class BuffHandler{
 			if(abilityComponent.getComponentType() == AbilityComponentTypes.BUFF){
 				Buff theBuff = (Buff) abilityComponent;
 				int strengthBuff = theBuff.getStrengthBuff();
-				int armorValueBuff = theBuff.getArmorValueBuff();
 				int constitutionBuff = theBuff.getConstitutionBuff();
 
-				if( strengthBuff > 0 || armorValueBuff > 0 || constitutionBuff > 0 ){
+				if( strengthBuff > 0 || constitutionBuff > 0 ){
 					activBuffList.add(theBuff);
 				}
 			}
