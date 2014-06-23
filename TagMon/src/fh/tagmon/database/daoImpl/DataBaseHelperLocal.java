@@ -48,8 +48,8 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	 * */
 	public void createDataBase() throws IOException {
 
-//		boolean dbExist = checkDataBase();
-		boolean dbExist = false;
+		boolean dbExist = checkDataBase();
+//		boolean dbExist = false;
 
 		if (dbExist) {
 			// do nothing - database already exist
@@ -59,7 +59,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 			// the default system path
 			// of your application so we are gonna be able to overwrite that
 			// database with our database.
-			this.getReadableDatabase();
+			this.getWritableDatabase();
 
 			try {
 				copyDataBase();
@@ -82,7 +82,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		try {
 			String myPath = DB_PATH + DB_NAME;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
-					SQLiteDatabase.OPEN_READONLY);
+					SQLiteDatabase.OPEN_READWRITE);
 		} catch (SQLiteException e) {
 			// database does't exist yet.
 		}
@@ -128,7 +128,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		// Open the database
 		String myPath = DB_PATH + DB_NAME;
 		myDataBase = SQLiteDatabase.openDatabase(myPath, null,
-				SQLiteDatabase.OPEN_READONLY);
+				SQLiteDatabase.OPEN_READWRITE);
 	}
 
 	@Override
@@ -426,7 +426,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	
 	
 	// UPDATE METHODS
-	public void updateMonsterByID(Monster monster) throws MonsterDAOException{
+	public void updateMonster(Monster monster) throws MonsterDAOException{
 		updateAttribute(monster);
 		
 		for (Koerperteil koerperteil : monster.getKoerperteileList()) {
@@ -441,7 +441,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		
 		String sqlQuery = 	   " UPDATE tagdb_attribute " +
 					 		   " SET staerke = "+ attr.getStaerke() +", intelligenz= "+ attr.getIntelligenz() +", konstitution= " + attr.getKonstitution() +
-				 			   " WHERE tMonster.id = " + monster.id;
+				 			   " WHERE tagdb_attribute.monster_id = " + monster.id;
 
 		 myDataBase.execSQL(sqlQuery);
 	}
@@ -532,11 +532,13 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 					Heal healObj = (Heal)abilityComponent;
 					heilungsziel = getZielFromTargetRestriction(healObj.getComponentTargetRestriction());
 					heilungswert = healObj.getHealAmount();
+					break;
 				case SCHADENSABSORBATION:
 					Schadensabsorbation absObj = (Schadensabsorbation) abilityComponent;
 					absorbationziel = getZielFromTargetRestriction(absObj.getComponentTargetRestriction());
 					absorbationsdauer = absObj.getDuration();
 					schadensabsorbation = absObj.getAbsorbationAmount();
+					break;
 				case STUN:
 					Stun stunObj = (Stun) abilityComponent;
 					stunziel = getZielFromTargetRestriction(stunObj.getComponentTargetRestriction());

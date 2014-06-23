@@ -61,5 +61,5 @@ public class Ability implements Serializable {
 	public int getEnergyCosts(){
 		return energyCost;
 	}
-
+	
 }
