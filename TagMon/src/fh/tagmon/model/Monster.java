@@ -140,7 +140,6 @@ public class Monster {
 		return this.durationAbilityListHandler;
 	}
 
-	public int get
 	
 	
 }
