@@ -1,6 +1,7 @@
 package fh.tagmon.client.clientEngine;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ import fh.tagmon.network.message.MessageObject;
 
 ;
 
-public class GameClientEngine implements Observer, ISetAbility{
+public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Observer, ISetAbility{
 	
 	private Context context;
     private final Object waitForPlayer;
@@ -40,25 +41,35 @@ public class GameClientEngine implements Observer, ISetAbility{
 	
 	//NETWORK
 	private ANetworkConnection connection;
+    private ConnectionType type;
 	
 	public GameClientEngine(Context context, MonsterPlayModule mPM, ConnectionType type){
 		this.context = context;
 		this.monster = mPM;
+        this.type = type;
         waitForPlayer = new Object();
-        connectToNetwork(type);
 	}
-	
-	private void connectToNetwork(ConnectionType type){
+
+    @Override
+    protected Void doInBackground(Void... params) {
+        connectToNetwork(type);
+
+        return null;
+    }
+
+
+
+    private void connectToNetwork(ConnectionType type){
 		switch(type){
 		case BLUETOOTH:
 			break;
 		case LCL_SOCKET:
 			try {
 				connection = new NetworkSocketConnection("localhost");
-			} catch (IOException e) {
-				Log.e("Client localhost connection", "Connection failed!");
-				connection = null;
-			}
+        } catch (IOException e) {
+            Log.e("Client localhost connection", e.getMessage());
+            connection = null;
+        }
 			break;
 		case TCP_SOCKET:
 			break;
@@ -67,9 +78,12 @@ public class GameClientEngine implements Observer, ISetAbility{
 		}
 		if(connection != null) {
             connection.addObserver(this);
+
         }
-	}
-	
+
+
+    }
+
 	private void stop(){
 		connection.deleteObservers();
 		connection.closeConnection();
@@ -78,6 +92,7 @@ public class GameClientEngine implements Observer, ISetAbility{
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable observable, Object hostMsg) {
+
 		MessageObject<?> msg = (MessageObject<?>) hostMsg;
         List<PlayerInfo> players;
         switch(msg.messageType){
@@ -96,7 +111,6 @@ public class GameClientEngine implements Observer, ISetAbility{
 			break;
 		case YOUR_TURN:
 			 players = (List <PlayerInfo>) msg.getContent();
-			
             //TODO nicht jedes mal die gui initialisieren -> UPDATEN
             //TODO:  LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate
             ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
@@ -105,6 +119,8 @@ public class GameClientEngine implements Observer, ISetAbility{
 			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 			break;
         case GAME_START:
+            this.connection.sendToHost(MessageFactory.createClientMessage_GameStart("hans", 0));
+
             players = (List <PlayerInfo>) msg.getContent();
 
             List<Ability> abilitylist = monster.getMonster().getAbilitys();
@@ -175,4 +191,6 @@ public class GameClientEngine implements Observer, ISetAbility{
         choosenAbility = actionObject;
         onResume();
     }
+
+
 }

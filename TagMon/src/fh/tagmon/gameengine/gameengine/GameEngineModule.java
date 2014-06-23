@@ -1,13 +1,14 @@
 package fh.tagmon.gameengine.gameengine;
 
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Context;
 import android.database.SQLException;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import java.io.IOException;
+
 import fh.tagmon.client.clientEngine.GameClientEngine;
 import fh.tagmon.database.dao.MonsterDAO;
 import fh.tagmon.database.daoImpl.MonsterDAOImpl;
@@ -17,7 +18,6 @@ import fh.tagmon.model.Monster;
 import fh.tagmon.network.ConnectionType;
 import fh.tagmon.rollestestecke.AsynkTaskHostDummy;
 import fh.tagmon.rollestestecke.AsynkTaskKiDummy;
-
 import fh.tagmon.rollestestecke.MyMonsterCreator;
 
 public class GameEngineModule {
@@ -26,48 +26,80 @@ public class GameEngineModule {
     
     private GameHostEngine hostEngine;
     private GameClientEngine clientEngine;
+    private Monster enemy;
+    private Monster ownMonster;
+    private Context context;
     
 
-    public GameEngineModule(Activity context) {
+    public GameEngineModule(Activity context, Monster monster) {
+        this.context = context;
+        enemy = monster;
 
-//        PlayerList playerList = preparePlayerList();
-//        initializeHost(playerList);
-//        initializeClient(context);
-    	
-    	this.testWithLocalSocket();
-    	
+    }
+    public void dosomething() {
+
+        //  PlayerList playerList = preparePlayerList();
+        initializeHost();
+
+        MyMonsterCreator mCreator = new MyMonsterCreator();
+        ownMonster = mCreator.getMonsterDummy();
+        initializeClient(context, ownMonster);
+        startEngines();
+        //RollesTestKi rtk = new RollesTestKi("sponge", enemy);
+
+        AsynkTaskKiDummy kiRed = new AsynkTaskKiDummy(enemy, "RED");
+
+        kiRed.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
+
+
+//    	this.testWithLocalSocket();
     }
 
 
-	private void initializeClient(Context context) {
-		//TODO Zentraler Speicherplatz für MonsterPlayModule
-		MonsterPlayModule module = null;
+
+    private void initializeClient(Context context, Monster monster) {
+		//TODO Zentraler Speicherplatz fr MonsterPlayModule
+		MonsterPlayModule module = new MonsterPlayModule(monster);
 		ConnectionType connectionType = ConnectionType.LCL_SOCKET;
-		clientEngine = new GameClientEngine(context, module, connectionType);
+
+        clientEngine = new GameClientEngine(context, module, connectionType);
+
 	}
 
 
 	private PlayerList preparePlayerList(){
-		
-		
-//		
+
 //		IPlayer redKi = MyPlayerCreator.getPlayer("Red", "RedMonster", 0, true);
 //        IPlayer blueKi = MyPlayerCreator.getPlayer("Blue", "BlueMonster", 1, true);
         PlayerList playerList = new PlayerList();
-//        playerList.addPlayer(redKi);
-//        playerList.addPlayer(blueKi);
+
+        //playerList.addPlayer();
+        //playerList.addPlayer(ownMonster);
         return playerList;
-	}
+    }
 	
-	private void initializeHost(PlayerList playerList) {
-		hostEngine = new GameHostEngine(playerList);
+	private void initializeHost() {
+        AsynkTaskHostDummy host = new AsynkTaskHostDummy();
+        host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenlufig
+
+/*
+        NetworkServerSocketConnection server = null;
+        try {
+            server = new NetworkServerSocketConnection(2);
+            PlayerList playerList = server.getPlayers();
+            hostEngine = new GameHostEngine(playerList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
 	}
 	
 	private void startEngines(){
-		if(hostEngine != null)
-			hostEngine.go();
-		//if(clientEngine != null) auskommentiert Rolle
-			//clientEngine.run();	auskommentiert Rolle
+	/*	if(hostEngine != null)
+			hostEngine.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);*/
+		if(clientEngine != null)
+			clientEngine.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);
+
 	}
 	
 	private Monster getMonsterFromTobi(Context context){
@@ -138,7 +170,7 @@ public class GameEngineModule {
 //    	AsynkTaskDummy blue = new AsynkTaskDummy(null, blueKi);
 //    	
 //    	// starte Spiel
-//    	host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenläufig
+//    	host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenlufig
 //    	red.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
 //    	blue.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
 	}
@@ -153,10 +185,11 @@ public class GameEngineModule {
 		
 		AsynkTaskHostDummy host = new AsynkTaskHostDummy();
 		
-		host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenläufig
+		host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenlufig
 		kiRed.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
 		kiBlue.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
 		
 		
 	}
+
 }

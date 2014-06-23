@@ -1,5 +1,6 @@
 package fh.tagmon.gameengine.gameengine;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -13,7 +14,7 @@ import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
-public class GameHostEngine {
+public class GameHostEngine extends AsyncTask{
 
     private PlayerList playerList;
     private IHostPlayer currentPlayer;
@@ -25,12 +26,21 @@ public class GameHostEngine {
     public GameHostEngine(PlayerList newPList) {
         this.playerList = newPList;
     }
-    
+
+    @Override
+    protected Object doInBackground(Object[] params) {
+        go();
+        return null;
+    }
+
     private void initGameStart(){
     	for(Entry<Integer, IHostPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
     		PlayerInfo playerInfo = entry.getValue().gameStarts(entry.getKey());
     		this.playerList.addPlayerInfo(entry.getKey(), playerInfo);
+
     	}
+
+
     }
     
     private void gameOver(){

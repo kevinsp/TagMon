@@ -1,9 +1,19 @@
 package fh.tagmon;
 
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.nfc.NfcAdapter;
+import android.nfc.Tag;
+import android.nfc.tech.MifareUltralight;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+
+import java.io.IOException;
+
 import fh.tagmon.client.gui.Fight;
 
 /*GameEngineModule gEM = new GameEngineModule();
@@ -13,8 +23,14 @@ import fh.tagmon.client.gui.Fight;
 public class MainActivity extends Activity {
 
     private final String TAG = "main";
-    
-   // private SharedPreferences sharedPref;
+    private NfcAdapter mAdapter;
+    private PendingIntent mPendingIntent;
+    private IntentFilter[] mFilters;
+    private TextView mText;
+    private int mCount = 0;
+
+
+    // private SharedPreferences sharedPref;
     
     
     /////testvariables
@@ -54,7 +70,33 @@ public class MainActivity extends Activity {
 //        Log.d("tagmonDB", "CURR LIFE POINTS " + monster.getCurrentLifePoints());
         
         // END of MonsterDAO test
-        
+
+        //NFC
+        mAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        // Create a generic PendingIntent that will be deliver to this activity. The NFC stack
+        // will fill in the intent with the details of the discovered tag before delivering to
+        // this activity.
+        mPendingIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
+        // Setup intent filters for all types of NFC dispatches to intercept all discovered tags
+        IntentFilter ndef = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+        try {
+            ndef.addDataType("*/*");
+        } catch (IntentFilter.MalformedMimeTypeException e) {
+            throw new RuntimeException("fail", e);
+        }
+        IntentFilter tech = new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED);
+        tech.addDataScheme("vnd.android.nfc");
+        mFilters = new IntentFilter[] {
+                ndef,
+                tech,
+                new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED),
+        };
+
+
+
     }
 
     public void switchToStatsActivity(View view) {
@@ -90,6 +132,51 @@ public class MainActivity extends Activity {
         } else if (v.getId() == R.id.switch_to_gen_lab_activity) {
           //  switchToGenLabActivity(v);
         }
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.enableForegroundDispatch(this, mPendingIntent, mFilters, null);
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+        Log.i("Foreground dispatch", "Discovered tag with intent: " + intent);
+        mText.setText("Discovered tag " + ++mCount + " with intent: " + intent);
+
+        MifareUltralight leTag = MifareUltralight.get(tagFromIntent);
+
+        try {
+            leTag.connect();
+            byte[] payload = leTag.readPages(0);
+
+            String printi = "";
+            for( int i = 0 ; i < 8 ; i++){
+                printi += String.format("%02x", payload[i] & 0xFF);
+            }
+
+            Log.i("TEST", printi);
+
+            Intent myIntent = new Intent(this, Fight.class);
+            String monsterId = printi;
+            myIntent.putExtra("monsterId", monsterId);
+            startActivity(myIntent);
+
+
+            leTag.close();
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mAdapter.disableForegroundDispatch(this);
     }
 }
 
