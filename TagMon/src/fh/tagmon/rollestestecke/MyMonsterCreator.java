@@ -53,7 +53,7 @@ public class MyMonsterCreator {
 	
 	private Ability getBeiﬂAttacke(){
 		Ability ability = new Ability(1, "Beiﬂattacke", 20, AbilityTargetRestriction.ENEMY);
-		IAbilityComponent component = new Damage(10, AbilityTargetRestriction.ENEMY);
+		IAbilityComponent component = new Damage(32, AbilityTargetRestriction.ENEMY);
 		ability.addAbilityComponent(component);
 		return ability;
 	}

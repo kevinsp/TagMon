@@ -27,7 +27,7 @@ public class GameEngineModule {
     private GameHostEngine hostEngine;
     private GameClientEngine clientEngine;
     
-
+    SCHWUL
     public GameEngineModule(Activity context) {
 
 //        PlayerList playerList = preparePlayerList();
@@ -92,56 +92,6 @@ public class GameEngineModule {
 	}
 	
 	
-	private void testWithFakeSocket(){
-//    	/*      Rolles Tests          */
-//    	
-//    	//RedKi
-//    	//Monster emulator
-//    	MyMonsterCreator myMonsterCreator = new MyMonsterCreator();
-//    	
-//    	//network Emulator
-//    	FakeSocket contBetweenHostAndRed = new FakeSocket();
-//    	//verbinde Host mit RedKi
-//    	NetworkPlayer conToRed = new NetworkPlayer(contBetweenHostAndRed);
-//    	//verbinde RedKi mit Host
-//    	Rolles_ClientMsgPreparer conRedToHost = new Rolles_ClientMsgPreparer(contBetweenHostAndRed);
-//    	//erstelle RedKi
-//    	//Monster redMonster = myMonsterCreator.getMonsterDummy();
-//    	Monster redMonster = getMonsterFromTobi(context);
-//    	RollesTestKi redKi = new RollesTestKi("RedKi", redMonster, conRedToHost);
-//     
-//    	//BlueKi
-//    	
-//    	//network Emulator
-//    	FakeSocket contBetweenHostAndBlue = new FakeSocket();
-//    	//verbinde Host mit BlueKi
-//    	NetworkPlayer conToBlue = new NetworkPlayer(contBetweenHostAndBlue);
-//    	//verbinde BlueKi mit Host
-//    	Rolles_ClientMsgPreparer conBlueToHost = new Rolles_ClientMsgPreparer(contBetweenHostAndBlue);
-//    	//erstelle BlueKi
-//    	//Monster blueMonster = myMonsterCreator.getMonsterDummy();
-//    	Monster blueMonster = getMonsterFromTobi(context);
-//    	
-//    	RollesTestKi blueKi = new RollesTestKi("BlueKi", blueMonster, conBlueToHost);
-//    	
-//    	//erstelle PlayList
-//		PlayerList playerList = new PlayerList();
-//		playerList.addPlayer(conToBlue);
-//		playerList.addPlayer(conToRed);
-//    	 
-//    	//erstelle hostengine
-//    	GameHostEngine gameHost = new GameHostEngine(playerList);
-//
-//    	// bereite Spiel Start vor
-//    	AsynkTaskDummy host = new AsynkTaskDummy(gameHost, null);
-//    	AsynkTaskDummy red = new AsynkTaskDummy(null, redKi);
-//    	AsynkTaskDummy blue = new AsynkTaskDummy(null, blueKi);
-//    	
-//    	// starte Spiel
-//    	host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenläufig
-//    	red.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
-//    	blue.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
-	}
 	
 	private void testWithLocalSocket(){
 		MyMonsterCreator mCreator = new MyMonsterCreator();

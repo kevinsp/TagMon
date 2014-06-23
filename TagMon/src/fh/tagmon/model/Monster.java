@@ -76,12 +76,8 @@ public class Monster {
 	}
 	
 	public int getArmorValue(){
-//		int koerperteilArmor = 0;
-//		for (Koerperteil koerperteil : koerperteile) {
-//			koerperteilArmor += koerperteil.getAttributModifikator().getVerteidigung();
-//		}
-//		return (attribut.getVerteidigung() + additionalArmorValue + koerperteilArmor);
-		return 1;
+		int amorValue = 2* getConstitution() + getStrength();
+		return amorValue;
 	}
 	
 
@@ -144,6 +140,7 @@ public class Monster {
 		return this.durationAbilityListHandler;
 	}
 
+	public int get
 	
 	
 }

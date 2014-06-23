@@ -37,7 +37,7 @@ public class NetworkServerTCPConnection implements IHostConnection{
 
 	@Override
 	public MessageObject<?> reciveMsgFromClient() {
-		Log.i(TAG, "SOCKET OPEN " + connection.isClosed());
+
 		try {
 			return (MessageObject<?>) in.readObject();
 		} catch (IOException e) {
