@@ -3,6 +3,7 @@ package fh.tagmon.client.gui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,6 +22,8 @@ import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.player.IPlayer;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
+import fh.tagmon.model.Monster;
+import fh.tagmon.rollestestecke.MyMonsterCreator;
 
 
 public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
@@ -42,9 +45,44 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fight);
 
+        Intent intent = getIntent();
+        String monsterId = intent.getStringExtra("monsterId");
+
         //init game engine
         //Todo : Kondition einbauen fuer nicht-host-spieler
-        engineModule = new GameEngineModule(this);
+
+
+/*
+        Monster monster = null;
+        MonsterDAOLocal monsterDAO = null;
+
+        try {
+            monsterDAO = new MonsterDAOImplLocal(this);
+        } catch (SQLException e1) {
+            Log.d("tagmonDB", "SQLEX");
+        } catch (IOException e1) {
+            Log.d("tagmonDB", "IOEX");
+        }
+
+        try {
+            monster = monsterDAO.getMonster(Integer.parseInt(monsterId,10));
+
+        } catch (MonsterDAOException e){
+            Log.d("tagmonDB", "MonsterDAO");
+            e.printStackTrace();
+        } catch (Exception e) {
+            Log.d("tagmonDB", "FAIIIIIIIIIIIIIIL");
+            e.printStackTrace();
+        }*/
+        MyMonsterCreator mCreator = new MyMonsterCreator();
+
+        Monster blueM = mCreator.getMonsterDummy();
+
+        engineModule = new GameEngineModule(this, blueM);
+        engineModule.dosomething();
+
+
+
 
 
         //mock-up
@@ -121,7 +159,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     public void initEnemyGui(String name) {
 
         //set the image for the enemy
-        ImageView image = (ImageView) findViewById(R.id.enemyImage);
+        //ImageView image = (ImageView) findViewById(R.id.enemyImage);
        /* String enemyDrawable = tagMon.getDrawable();
         int resID = getResources().getIdentifier(enemyDrawable, "drawable", getPackageName());
         image.setImageResource(resID);

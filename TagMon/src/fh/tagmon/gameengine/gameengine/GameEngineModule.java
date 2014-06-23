@@ -26,24 +26,58 @@ public class GameEngineModule {
     
     private GameHostEngine hostEngine;
     private GameClientEngine clientEngine;
+    private Monster enemy;
+    private Monster ownMonster;
+    private Context context;
     
-    SCHWUL
-    public GameEngineModule(Activity context) {
+ 
+ public GameEngineModule(Activity context, Monster monster) {
+        this.context = context;
+        enemy = monster;
 
-//        PlayerList playerList = preparePlayerList();
-//        initializeHost(playerList);
-//        initializeClient(context);
-    	
-    	this.testWithLocalSocket();
-    	
+    }
+    public void dosomething() {
+
+        //  PlayerList playerList = preparePlayerList();
+        initializeHost();
+
+        MyMonsterCreator mCreator = new MyMonsterCreator();
+        ownMonster = mCreator.getMonsterDummy();
+        initializeClient(context, ownMonster);
+        startEngines();
+        //RollesTestKi rtk = new RollesTestKi("sponge", enemy);
+
+        AsynkTaskKiDummy kiRed = new AsynkTaskKiDummy(enemy, "RED");
+
+        kiRed.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
+
+
+//    	this.testWithLocalSocket();
     }
 
+private void initializeHost() {
+        AsynkTaskHostDummy host = new AsynkTaskHostDummy();
+        host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenlufig
 
-	private void initializeClient(Context context) {
-		//TODO Zentraler Speicherplatz für MonsterPlayModule
-		MonsterPlayModule module = null;
+/*
+        NetworkServerSocketConnection server = null;
+        try {
+            server = new NetworkServerSocketConnection(2);
+            PlayerList playerList = server.getPlayers();
+            hostEngine = new GameHostEngine(playerList);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+*/
+	}
+
+    private void initializeClient(Context context, Monster monster) {
+		//TODO Zentraler Speicherplatz fr MonsterPlayModule
+		MonsterPlayModule module = new MonsterPlayModule(monster);
 		ConnectionType connectionType = ConnectionType.LCL_SOCKET;
-		clientEngine = new GameClientEngine(context, module, connectionType);
+
+        clientEngine = new GameClientEngine(context, module, connectionType);
+
 	}
 
 
@@ -64,10 +98,11 @@ public class GameEngineModule {
 	}
 	
 	private void startEngines(){
-		if(hostEngine != null)
-			hostEngine.go();
-		//if(clientEngine != null) auskommentiert Rolle
-			//clientEngine.run();	auskommentiert Rolle
+	/*	if(hostEngine != null)
+			hostEngine.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);*/
+		if(clientEngine != null)
+			clientEngine.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);
+
 	}
 	
 	private Monster getMonsterFromTobi(Context context){
