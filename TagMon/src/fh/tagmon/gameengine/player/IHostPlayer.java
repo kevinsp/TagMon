@@ -1,8 +1,9 @@
-package fh.tagmon.gameengine.gameengine;
+package fh.tagmon.gameengine.player;
 
 import java.util.HashMap;
 
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.helperobjects.*;
 
 public interface IHostPlayer {
