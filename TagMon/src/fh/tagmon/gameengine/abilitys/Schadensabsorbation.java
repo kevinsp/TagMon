@@ -4,7 +4,8 @@ import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 public class Schadensabsorbation extends AbilityComponent implements IAbilityComponent,IDurationAbilityComponent {
-	private static final long serialVersionUID = 1L;
+	
+	
 	int duration;
 	int absorbationsAmount;
 	

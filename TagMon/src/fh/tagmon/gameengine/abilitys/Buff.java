@@ -6,7 +6,11 @@ import fh.tagmon.model.Monster;
 
 
 public class Buff extends AbilityComponent implements IAbilityComponent,IDurationAbilityComponent {
-	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2850820672053585639L;
 	private int id;
 	private int duration;
 	private int strengthBuff = 0;

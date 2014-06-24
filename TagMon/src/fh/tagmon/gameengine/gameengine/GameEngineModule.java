@@ -38,21 +38,21 @@ public class GameEngineModule {
     }
     public void dosomething() {
 
-        //  PlayerList playerList = preparePlayerList();
-        initializeHost();
+//        //  PlayerList playerList = preparePlayerList();
+//        initializeHost();
+//
+//        MyMonsterCreator mCreator = new MyMonsterCreator();
+//        ownMonster = mCreator.getMonsterDummy();
+//        initializeClient(context, ownMonster);
+//        startEngines();
+//        //RollesTestKi rtk = new RollesTestKi("sponge", enemy);
+//
+//        AsynkTaskKiDummy kiRed = new AsynkTaskKiDummy(enemy, "RED");
+//
+//        kiRed.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
 
-        MyMonsterCreator mCreator = new MyMonsterCreator();
-        ownMonster = mCreator.getMonsterDummy();
-        initializeClient(context, ownMonster);
-        startEngines();
-        //RollesTestKi rtk = new RollesTestKi("sponge", enemy);
 
-        AsynkTaskKiDummy kiRed = new AsynkTaskKiDummy(enemy, "RED");
-
-        kiRed.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
-
-
-//    	this.testWithLocalSocket();
+    	this.testWithLocalSocket();
     }
 
 private void initializeHost() {
