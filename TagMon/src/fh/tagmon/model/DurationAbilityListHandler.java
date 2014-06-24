@@ -43,7 +43,7 @@ public class DurationAbilityListHandler {
 		// clone deswegen da ich local ohne netzwerk teste und es sonst zu problemen kommt
 		// da das buff object ja nur einmal exestiert. Sobald ich was daran endere ist es immer geändert. Daher lieber mit dem Clone arbbeiten
 		// so funktoniert auch der dmgAbsorbHandler
-		this.durationAbilityList.add(new DurationAbilityListElement(abilityComponent.getDuration(),this.idCounter,abilityComponent)); 
+		this.durationAbilityList.add(new DurationAbilityListElement(abilityComponent.getDuration(),this.idCounter,abilityComponent.cloneMe())); 
 		this.idCounter++;
 	}
 	

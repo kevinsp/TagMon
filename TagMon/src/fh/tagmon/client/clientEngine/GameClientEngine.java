@@ -81,7 +81,7 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 	public void update(Observable observable, Object hostMsg) {
 
 		MessageObject<?> msg = (MessageObject<?>) hostMsg;
-        List<PlayerInfo> players;
+        List<PlayerInfo> players = null;
         switch(msg.messageType){
 		case ABILITY_COMPONENT:
 			AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();

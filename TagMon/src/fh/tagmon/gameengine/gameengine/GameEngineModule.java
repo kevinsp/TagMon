@@ -26,49 +26,54 @@ public class GameEngineModule {
     
     private GameHostEngine hostEngine;
     private GameClientEngine clientEngine;
-    private Monster enemy;
+
     private Monster ownMonster;
     private Context context;
     
  
- public GameEngineModule(Activity context, Monster monster) {
+    public GameEngineModule(Activity context, Monster monster) {
         this.context = context;
-        enemy = monster;
-
     }
-    public void dosomething() {
+ 
+    public void startGamePlayerVSTag(String tagSerNr) {
 
-//        //  PlayerList playerList = preparePlayerList();
-//        initializeHost();
-//
-//        MyMonsterCreator mCreator = new MyMonsterCreator();
-//        ownMonster = mCreator.getMonsterDummy();
-//        initializeClient(context, ownMonster);
-//        startEngines();
-//        //RollesTestKi rtk = new RollesTestKi("sponge", enemy);
-//
-//        AsynkTaskKiDummy kiRed = new AsynkTaskKiDummy(enemy, "RED");
-//
-//        kiRed.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
+    	/*
+    	//Starte den Host
+    	int gamePlayerSize = 2; // Player vs Tag
+    	startHostAsynkTask(gamePlayerSize);
+    	
+    	//dem Spieler sein Monster Holen
+    	MyMonsterCreator mCreator = new MyMonsterCreator(); // eig aus der Db holen
+    	Monster monsterFromPlayer = mCreator.getMonsterDummy();
+    	
+    	//Spieler bekommt sein Monster und verbindet sich mit dem Server
+    	initializeClient(this.context, monsterFromPlayer);
+    	this.clientEngine.execute();
+    	
+    	//der Ki ihr Monster holen
+    	MyMonsterCreator mCreator = new MyMonsterCreator(); // eig aus der Db holen mit tagSerNr
+    	Monster kiMonster = mCreator.getMonsterDummy();
+    	
+    	//Die Ki bekommt ihr Monster und verbindet sich mit dem Server
+    	startKiAsynkTask("RED", kiMonster);
+    	*/
 
 
     	this.testWithLocalSocket();
     }
 
-private void initializeHost() {
-        AsynkTaskHostDummy host = new AsynkTaskHostDummy();
-        host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenlufig
+    
 
-/*
-        NetworkServerSocketConnection server = null;
-        try {
-            server = new NetworkServerSocketConnection(2);
-            PlayerList playerList = server.getPlayers();
-            hostEngine = new GameHostEngine(playerList);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-*/
+    
+    private void startHostAsynkTask(int gamePlayerSize) {
+		/*
+		 * Startet einen Task der folgedes macht.
+		 * 1. Wartet bis alle SpielTeilnehmer connectet sind.
+		 * 2. Erstellt daraus eine Spieler liste und inizalisiert die HostGameEngine
+		 * 3. Startet die Engine und das spiel läuft ab
+		 */
+        AsynkTaskHostDummy host = new AsynkTaskHostDummy(gamePlayerSize);
+        host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenlufig
 	}
 
     private void initializeClient(Context context, Monster monster) {
@@ -81,29 +86,6 @@ private void initializeHost() {
 	}
 
 
-	private PlayerList preparePlayerList(){
-		
-		
-//		
-//		IPlayer redKi = MyPlayerCreator.getPlayer("Red", "RedMonster", 0, true);
-//        IPlayer blueKi = MyPlayerCreator.getPlayer("Blue", "BlueMonster", 1, true);
-        PlayerList playerList = new PlayerList();
-//        playerList.addPlayer(redKi);
-//        playerList.addPlayer(blueKi);
-        return playerList;
-	}
-	
-	private void initializeHost(PlayerList playerList) {
-		hostEngine = new GameHostEngine(playerList);
-	}
-	
-	private void startEngines(){
-	/*	if(hostEngine != null)
-			hostEngine.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);*/
-		if(clientEngine != null)
-			clientEngine.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[]) null);
-
-	}
 	
 	private Monster getMonsterFromTobi(Context context){
 		try {
@@ -126,22 +108,24 @@ private void initializeHost() {
 	  return null;
 	}
 	
-	
+	private void startKiAsynkTask(String kiName, Monster kiMonster){
+		/*
+		 * Startet einen Task der folgedes macht.
+		 * 1. Verbindet sich mit dem Server über ein Local-Socket. ACHTUNG SERVER MUSS SCHON LAUFEN!!
+		 * 2. Spielt das Spiel
+		 */
+		AsynkTaskKiDummy newKi = new AsynkTaskKiDummy(kiMonster, kiName);
+		newKi.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
+	}
 	
 	private void testWithLocalSocket(){
+		startHostAsynkTask(2);
+		
 		MyMonsterCreator mCreator = new MyMonsterCreator();
 		Monster redM = mCreator.getMonsterDummy();
 		Monster blueM = mCreator.getMonsterDummy();
 		
-		AsynkTaskKiDummy kiRed = new AsynkTaskKiDummy(redM, "RED");
-		AsynkTaskKiDummy kiBlue = new AsynkTaskKiDummy(blueM, "BLUE");
-		
-		AsynkTaskHostDummy host = new AsynkTaskHostDummy();
-		
-		host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenläufig
-		kiRed.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
-		kiBlue.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
-		
-		
+		startKiAsynkTask("RED", redM);
+		startKiAsynkTask("BLUE", blueM);	
 	}
 }
