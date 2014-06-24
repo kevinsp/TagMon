@@ -9,19 +9,18 @@ public class AnswerObject implements Serializable{
 	private StringBuilder msg = new StringBuilder();
 	private PlayerInfo playerInfo;
 	private boolean monsterIsDead = false;;
-	private final String ical String STOP = "\n";
+	private final String STOP = "\n";
 	
 	public AnswerObject(){}
 	public AnswerObject(String msg){
-		appTOP);Msg(msg + STOP);
+		appendMsg(msg + STOP);
 	}
-	public AnswerObject(String msg, boolean mosterI
+	public AnswerObject(String msg, boolean monsterIsDead){
 		appendMsg(msg + STOP);
 		this.monsterIsDead = monsterIsDead;
 	}
 	
 	public void setMonsterIsDead(boolean dead){
-		monsterIsoolean dead){
 		monsterIsDead = dead;
 		if(dead)
 			msg.append("Das Monster ist besiegt worden!" + STOP);
