@@ -4,7 +4,11 @@ import java.io.Serializable;
 
 
 public final class MessageObject <T extends Object> implements Serializable {
-	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6815233209174409685L;
 	public final MessageType messageType;
 	public final int senderID;
 	private final T content;

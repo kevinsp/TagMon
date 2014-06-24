@@ -7,8 +7,13 @@ import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 
 public class Ability implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1873594577447779429L;
+
 	private int id;
-	private static final long serialVersionUID = 1L;
+	
 	private String abilityName;
 	private AbilityTargetRestriction targetRestriction;
 	private int energyCost;

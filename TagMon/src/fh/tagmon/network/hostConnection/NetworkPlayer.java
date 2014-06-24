@@ -45,6 +45,7 @@ public class NetworkPlayer implements IHostPlayer{
 		MessageObject<?> answerMsg = sendMsgAndReceiveAnswer(MessageFactory.createHostMessage_AbilityComponentList(acl));
 		return (AnswerObject) answerMsg.getContent();
 	}
+	
 	@Override
 	public AnswerObject dealWithAbilityComponent(IAbilityComponent iac) {
 		//TODO playerID
