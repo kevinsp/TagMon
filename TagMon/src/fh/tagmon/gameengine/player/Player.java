@@ -68,7 +68,8 @@ public class Player implements IPlayer {
     @Override
     public AnswerObject workWithAbilityComponents(
             AbilityComponentList abilityComponents) {
-        this.playModule.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
+    	PlayerInfo info = new PlayerInfo(playerName, id);
+        this.playModule.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents, info);
 
         boolean isMonsterDead = false;
         if (this.myMonster.getCurrentLifePoints() <= 0){

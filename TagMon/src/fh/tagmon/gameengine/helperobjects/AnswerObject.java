@@ -6,18 +6,19 @@ public class AnswerObject implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private StringBuilder msg = new StringBuilder();
 	private boolean monsterIsDead = false;;
-	private final String STOP = "\n";
+	private final String ical String STOP = "\n";
 	
 	public AnswerObject(){}
 	public AnswerObject(String msg){
-		appendMsg(msg + STOP);
+		appTOP);Msg(msg + STOP);
 	}
-	public AnswerObject(String msg, boolean monsterIsDead){
+	public AnswerObject(String msg, boolean mosterI
 		appendMsg(msg + STOP);
 		this.monsterIsDead = monsterIsDead;
 	}
 	
 	public void setMonsterIsDead(boolean dead){
+		monsterIsoolean dead){
 		monsterIsDead = dead;
 		if(dead)
 			msg.append("Das Monster ist besiegt worden!" + STOP);
