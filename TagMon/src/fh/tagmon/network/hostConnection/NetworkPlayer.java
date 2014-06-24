@@ -14,6 +14,8 @@ import fh.tagmon.network.message.MessageObject;
 public class NetworkPlayer implements IHostPlayer{
 
 	private IHostConnection connector;
+	//TODO hier noch festlegen, wer npcs IDs zuteilt
+	private final int ID = -1;
 
 
 	public NetworkPlayer(IHostConnection connector) {
@@ -25,7 +27,7 @@ public class NetworkPlayer implements IHostPlayer{
 	@Override
 	public PlayerInfo gameStarts(int playersId) {
 		MessageObject<?> gameStart = sendMsgAndReceiveAnswer(MessageFactory.createHostMessage_GameStart(playersId));
-		return new PlayerInfo((String) gameStart.getContent());
+		return new PlayerInfo((String) gameStart.getContent(), ID);
 	}
 	
 

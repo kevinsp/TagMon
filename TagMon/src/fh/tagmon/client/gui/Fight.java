@@ -123,9 +123,9 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             this.userId = userId;
             this.abilities = abilities;
             for (PlayerInfo player : players) {
-                String playerName = player.getPlayerName();
+                String playerName = player.NAME;
 
-                if (player.getId() == this.userId) {
+                if (player.ID == this.userId) {
                     initUserGui(playerName);
                 } else {
                     initEnemyGui(playerName);
@@ -345,7 +345,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                         for (PlayerInfo playerInfo : players) {
                             int maxLife = playerInfo.getMaxLife();
                             int currentLife = playerInfo.getCurrentLife();
-                            if (playerInfo.getId() == userId) {
+                            if (playerInfo.ID == userId) {
                                 refreshUserLife(maxLife, currentLife);
                             } else {
                                 refreshEnemyLife(maxLife, currentLife);

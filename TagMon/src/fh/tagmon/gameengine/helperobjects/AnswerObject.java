@@ -2,9 +2,12 @@ package fh.tagmon.gameengine.helperobjects;
 
 import java.io.Serializable;
 
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
+
 public class AnswerObject implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private StringBuilder msg = new StringBuilder();
+	private PlayerInfo playerInfo;
 	private boolean monsterIsDead = false;;
 	private final String STOP = "\n";
 	
@@ -31,5 +34,11 @@ public class AnswerObject implements Serializable{
 	}
 	public String getMsg(){
 		return this.msg.toString();
+	}
+	public void setPlayerInfo(PlayerInfo pi){
+		playerInfo = pi;
+	}
+	public PlayerInfo getPlayerInfo(){
+		return playerInfo;
 	}
 }

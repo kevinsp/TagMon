@@ -108,7 +108,8 @@ public class RollesTestKi {
     private void doDealWith(MessageObject<?> dealWithMsg){
     	AbilityComponentList abilityCompToDealWith = (AbilityComponentList)dealWithMsg.getContent();
     	
-    	this.playModule.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityCompToDealWith);
+    	PlayerInfo info = new PlayerInfo(kiName, id);
+    	this.playModule.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityCompToDealWith, info);
     	
     	String retMsg = this.playModule.getLatestLogEntry();
     	boolean isMyMonsterDead = false;

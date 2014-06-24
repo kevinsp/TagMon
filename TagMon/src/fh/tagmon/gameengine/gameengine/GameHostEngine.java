@@ -12,9 +12,10 @@ import java.util.Map.Entry;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
+import fh.tagmon.gameengine.helperobjects.SummaryObject;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
-public class GameHostEngine extends AsyncTask{
+public class GameHostEngine extends AsyncTask<Void, Void, Void>{
 
     private PlayerList playerList;
     private IHostPlayer currentPlayer;
@@ -27,20 +28,17 @@ public class GameHostEngine extends AsyncTask{
         this.playerList = newPList;
     }
 
-    @Override
-    protected Object doInBackground(Object[] params) {
-        go();
-        return null;
-    }
+	@Override
+	protected Void doInBackground(Void... params) {
+		go();
+		return null;
+	}
 
     private void initGameStart(){
     	for(Entry<Integer, IHostPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
     		PlayerInfo playerInfo = entry.getValue().gameStarts(entry.getKey());
     		this.playerList.addPlayerInfo(entry.getKey(), playerInfo);
-
     	}
-
-
     }
     
     private void gameOver(){
@@ -65,9 +63,9 @@ public class GameHostEngine extends AsyncTask{
 
             myLogger("##################### ROUND: " + String.valueOf(this.roundCounter));
            
-            myLogger("CurrentPlayer: " + this.playerList.getPlayerInfo(this.playerList.getCurrentPlayerTargetId()).getPlayerName());
+            myLogger("CurrentPlayer: " + this.playerList.getPlayerInfo(this.playerList.getCurrentPlayerTargetId()).NAME);
            
-            String targetName = this.playerList.getPlayerInfo(action.getTargetRestriction().getTargetList().getFirst()).getPlayerName();
+            String targetName = this.playerList.getPlayerInfo(action.getTargetRestriction().getTargetList().getFirst()).NAME;
             myLogger("Chosen Ability: |" + action.getAbility().getAbilityName() + "| on Target: " + targetName);
 
             // 3phase Ability Zerlegen und Komponenten an den Richtigen Schicken
@@ -136,10 +134,10 @@ public class GameHostEngine extends AsyncTask{
     }
     
     private String sendComponentListsToPlayersAndReceiveTheirAnswers(HashMap<Integer,AbilityComponentList> affectedPlayers){
-    	StringBuilder summary = new StringBuilder();
+    	SummaryObject summary = SummaryObject.getInstance();
         for(Integer targetId : affectedPlayers.keySet()){
     		AnswerObject answer = sendComponentListToPlayer(affectedPlayers.get(targetId));
-    		summary.append(answer.getMsg());
+    		summary.add(answer);
         }
         return summary.toString();
     }
@@ -147,7 +145,7 @@ public class GameHostEngine extends AsyncTask{
     private AnswerObject sendComponentListToPlayer(AbilityComponentList al){
     	final IHostPlayer player = this.playerList.getPlayerByTargetId(al.target);
     	AnswerObject answer  = player.dealWithAbilityComponents(al);
-    	myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(al.target).getPlayerName() + " ====");
+    	myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(al.target).NAME + " ====");
         myLogger(answer.getMsg());
         myLogger("====");
 		/////////////////////////////////////////// TESTHALBER

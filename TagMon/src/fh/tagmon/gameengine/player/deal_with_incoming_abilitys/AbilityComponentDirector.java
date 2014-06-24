@@ -2,7 +2,6 @@ package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
 import java.util.HashMap;
 
-import android.util.Log;
 import fh.tagmon.client.Helper_PlayerSettings;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
@@ -17,7 +16,7 @@ import fh.tagmon.model.Monster;
 public class AbilityComponentDirector implements IListener{
 
 	
-	//private Monster monster;
+	private Monster monster;
 	private BuffHandler BuffHandler;
 	private DamageHandler dmgHandler;
 	private DamageAbsorbationHandler dmgAbsHandler;
@@ -25,14 +24,14 @@ public class AbilityComponentDirector implements IListener{
 	
 	
 	public AbilityComponentDirector(Monster monster){
-		//this.monster = monster;
+		this.monster = monster;
 		this.BuffHandler = new BuffHandler(monster,compLogger);
 		this.dmgHandler = new DamageHandler(monster,compLogger);
 		this.dmgAbsHandler = new DamageAbsorbationHandler(monster, compLogger);
 	}
 	
 	
-	public AnswerObject handleAbilityComponents(AbilityComponentList abilityComponents){
+	public AnswerObject handleAbilityComponents(AbilityComponentList abilityComponents, PlayerInfo info){
 		boolean first = true;
 		AnswerObject answer = new AnswerObject();
 		for(IAbilityComponent ac : abilityComponents.getAbilityList()){
@@ -40,6 +39,8 @@ public class AbilityComponentDirector implements IListener{
 			first = false;
 		}
 		answer.setMonsterIsDead(Helper_PlayerSettings.monsterIsDead);
+		info.setCurrentLife(monster.getCurrentLifePoints());
+		info.setMaxLife(monster.getMaxLifePoints());
 		return answer;
 	}
 	
