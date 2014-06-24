@@ -122,24 +122,24 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         	}
         }
         
-        String summary = sendComponentListsToPlayersAndReceiveTheirAnswers(idToAbilityCompListMap);
+        SummaryObject summary = sendComponentListsToPlayersAndReceiveTheirAnswers(idToAbilityCompListMap);
         broadcastSummary(summary);
         
       
     }
 
-    private void broadcastSummary(String summary){
+    private void broadcastSummary(SummaryObject summary){
     	for(PlayerListNode player : playerList.getPlayList())
         	player.getPlayer().printSummary(summary);
     }
     
-    private String sendComponentListsToPlayersAndReceiveTheirAnswers(HashMap<Integer,AbilityComponentList> affectedPlayers){
+    private SummaryObject sendComponentListsToPlayersAndReceiveTheirAnswers(HashMap<Integer,AbilityComponentList> affectedPlayers){
     	SummaryObject summary = SummaryObject.getInstance();
         for(Integer targetId : affectedPlayers.keySet()){
     		AnswerObject answer = sendComponentListToPlayer(affectedPlayers.get(targetId));
     		summary.add(answer);
         }
-        return summary.toString();
+        return summary;
     }
     
     private AnswerObject sendComponentListToPlayer(AbilityComponentList al){

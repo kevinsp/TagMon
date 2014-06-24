@@ -8,6 +8,7 @@ import fh.tagmon.gameengine.gameengine.IHostPlayer;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
+import fh.tagmon.gameengine.helperobjects.SummaryObject;
 import fh.tagmon.network.message.MessageFactory;
 import fh.tagmon.network.message.MessageObject;
 
@@ -67,7 +68,7 @@ public class NetworkPlayer implements IHostPlayer{
 
 
 	@Override
-	public void printSummary(String msg) {
+	public void printSummary(SummaryObject msg) {
 		this.connector.sendMsgToClient(MessageFactory.createHostMessage_Summary(msg));
 	}
 

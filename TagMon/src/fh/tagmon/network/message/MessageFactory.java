@@ -6,6 +6,7 @@ import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
+import fh.tagmon.gameengine.helperobjects.SummaryObject;
 
 public class MessageFactory {
 	//Host-Message-Builder
@@ -20,9 +21,9 @@ public class MessageFactory {
 		return new MessageObject<String>(MessageType.GAME_OVER, msg, -1);
 	}
 	
-	public static MessageObject<String> 
-			createHostMessage_Summary(String msg){
-		return new MessageObject<String>(MessageType.SUMMARY, msg, -1);
+	public static MessageObject<SummaryObject> 
+			createHostMessage_Summary(SummaryObject msg){
+		return new MessageObject<SummaryObject>(MessageType.SUMMARY, msg, -1);
 	}
 	
 	public static MessageObject<HashMap<Integer, PlayerInfo>> 

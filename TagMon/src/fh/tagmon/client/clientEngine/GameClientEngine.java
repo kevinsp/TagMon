@@ -79,7 +79,8 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable observable, Object hostMsg) {
-
+		boolean firstTurn = true;
+		
 		MessageObject<?> msg = (MessageObject<?>) hostMsg;
         List<PlayerInfo> players = null;
         switch(msg.messageType){
@@ -102,23 +103,17 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 			break;
 		case YOUR_TURN:
 			 players = (List <PlayerInfo>) msg.getContent();
-            //TODO nicht jedes mal die gui initialisieren -> UPDATEN
-            //TODO:  LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate
+			if(firstTurn){
+				List<Ability> abilitylist = monster.getMonster().getAbilitys();
+				((Fight) context).initBattleGUI(players, ID, abilitylist);
+			}
             ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
-
 			ActionObject actionObject = waitForAction();
 			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 			break;
         case GAME_START:
             this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(Helper_PlayerSettings.playerName, 0));
             this.ID = (Integer) msg.getContent();
-            /*
-            players = (List <PlayerInfo>) msg.getContent();
-            */
-
-            List<Ability> abilitylist = monster.getMonster().getAbilitys();
-            ((Fight) context).initBattleGUI(players, ID, abilitylist);
-            ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
             break;
 		default:
 			((Fight)context).showTemporaryDialog("Ungültige Host-Message");
