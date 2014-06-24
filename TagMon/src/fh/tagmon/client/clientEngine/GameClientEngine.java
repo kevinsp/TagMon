@@ -9,22 +9,16 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
-import fh.tagmon.client.gui.Fight;
-import fh.tagmon.client.gui.GuiPartsToUpdate;
-import fh.tagmon.client.gui.ISetAbility;
+import fh.tagmon.client.Helper_PlayerSettings;
+import fh.tagmon.client.gui.*;
 import fh.tagmon.gameengine.abilitys.Ability;
-import fh.tagmon.gameengine.gameengine.AbilityComponentList;
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
-import fh.tagmon.gameengine.helperobjects.ActionObject;
-import fh.tagmon.gameengine.helperobjects.AnswerObject;
+import fh.tagmon.gameengine.gameengine.*;
+import fh.tagmon.gameengine.helperobjects.*;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
+import fh.tagmon.gameengine.player.deal_with_incoming_abilitys.AbilityComponentDirector;
 import fh.tagmon.network.ConnectionType;
-import fh.tagmon.network.clientConnections.ANetworkConnection;
-import fh.tagmon.network.clientConnections.NetworkSocketConnection;
-import fh.tagmon.network.message.MessageFactory;
-import fh.tagmon.network.message.MessageObject;
-
-;
+import fh.tagmon.network.clientConnections.*;
+import fh.tagmon.network.message.*;
 
 public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Observer, ISetAbility{
 	
@@ -34,7 +28,7 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
     private ActionObject choosenAbility;
     
     //TODO durch zentralgespeicherte eigene player-ID ersetzen
-    private final int ID = 0;
+    private int ID = 0;
 	
 	//GAMEPLAY
 	private MonsterPlayModule monster;
@@ -53,11 +47,8 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
     @Override
     protected Void doInBackground(Void... params) {
         connectToNetwork(type);
-
-        return null;
+		return null;
     }
-
-
 
     private void connectToNetwork(ConnectionType type){
 		switch(type){
@@ -66,22 +57,18 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 		case LCL_SOCKET:
 			try {
 				connection = new NetworkSocketConnection("localhost");
-        } catch (IOException e) {
-            Log.e("Client localhost connection", e.getMessage());
-            connection = null;
-        }
+	        } catch (IOException e) {
+	            Log.e("Client localhost connection", e.getMessage());
+	            connection = null;
+	        }
 			break;
 		case TCP_SOCKET:
 			break;
 		default:
 			break;
 		}
-		if(connection != null) {
+		if(connection != null)
             connection.addObserver(this);
-
-        }
-
-
     }
 
 	private void stop(){
@@ -98,11 +85,15 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
         switch(msg.messageType){
 		case ABILITY_COMPONENT:
 			AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
-			AnswerObject answerObject = monster.getMonstersAbilityComponentDirector().handleAbilityComponents(abilityComponents);
+			PlayerInfo info = new PlayerInfo(Helper_PlayerSettings.playerName, ID);
+			AbilityComponentDirector director = monster.getMonstersAbilityComponentDirector();
+			AnswerObject answerObject = director.handleAbilityComponents(abilityComponents, info);
 			connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, ID));
 			break;
 		case SUMMARY:
-			((Fight)context).showTemporaryDialog((String) msg.getContent());
+			SummaryObject summary = (SummaryObject)msg.getContent();
+			((Fight)context).showTemporaryDialog(summary.getSummary());
+            ((Fight)context).refreshGUI(summary.getPlayerInfos(), GuiPartsToUpdate.HEALTH);
 			break;
 		case GAME_OVER:
 			stop(); 
@@ -119,49 +110,33 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 			break;
         case GAME_START:
-            this.connection.sendToHost(MessageFactory.createClientMessage_GameStart("hans", 0));
-
+            this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(Helper_PlayerSettings.playerName, 0));
+            this.ID = (Integer) msg.getContent();
+            /*
             players = (List <PlayerInfo>) msg.getContent();
+            */
 
             List<Ability> abilitylist = monster.getMonster().getAbilitys();
             ((Fight) context).initBattleGUI(players, ID, abilitylist);
-            //TODO: LinkedList<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate
             ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
             break;
 		default:
-			//TODO evtl Meldung auf Screen ausgeben
+			((Fight)context).showTemporaryDialog("Ungültige Host-Message");
 			break;
 		}
 	}
 	
 	private ActionObject waitForAction() {
         ActionObject action = null;
-
-
-      //  if (currentPlayer.getId() == 0) {
-            onPause();
-
-
-
-
-            ((Fight) context).chooseAbility(this);
-
-            //currentPlayer.sendNewRoundEvent(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
-
-            synchronized (waitForPlayer) {
-                while (wait) {
-                    try {
-                        waitForPlayer.wait();
-                    } catch (InterruptedException e) {
-                    	//TODO Fehlermeldung als Toast ausgeben
-                    }
-                }
-            }
-            action = choosenAbility;
-
-        /*} else {
-            action = currentPlayer.yourTurn(this.playerList.getPlayerTargetList(), this.playerList.getCurrentPlayerTargetId());
-        }*/
+        ((Fight) context).chooseAbility(this);
+        synchronized (waitForPlayer) {
+        	while (wait) {
+        		try {
+        			waitForPlayer.wait();
+        		} catch (InterruptedException e) { }
+        	}
+        }
+        action = choosenAbility;
         return action;
     }
 
@@ -170,9 +145,7 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
      * Call this on pause.
      */
     public void onPause() {
-        synchronized (waitForPlayer) {
-            wait = true;
-        }
+        synchronized (waitForPlayer){ wait = true; }
     }
 
     /**
@@ -185,12 +158,9 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
         }
     }
 
-
     @Override
     public void setAbility(ActionObject actionObject) {
         choosenAbility = actionObject;
         onResume();
     }
-
-
 }
