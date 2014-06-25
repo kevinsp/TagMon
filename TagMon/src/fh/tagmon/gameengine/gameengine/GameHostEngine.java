@@ -49,7 +49,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
     	this.runGame = false;
     }
     
-    //function for testing for rolle
+
     public void go() {
     	initGameStart();
        
