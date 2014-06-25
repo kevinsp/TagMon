@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,6 +40,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     private IPlayer player;
 
 
+    private Ability lastChoosenAbility = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +80,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         Monster blueM = mCreator.getMonsterDummy();
 
         engineModule = new GameEngineModule(this, blueM);
-        engineModule.startGamePlayerVSTag("408bcf6gff"); // die eig SerienNr vom gescanten Tag übergeben
+        engineModule.startGamePlayerVSTag("408bcf6gff"); // die eig SerienNr vom gescanten Tag ï¿½bergeben
 
 
 
@@ -99,8 +100,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                               chooseDialog = new DialogBuilder(context, getString(R.string.chooseAbility), abilities, null, chooseAbilityListener, DialogAction.CHOOSE_ABILITY);
                           }
                       }
-        );
-        */
+        );*/
     }
 
 
@@ -243,10 +243,10 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 */
                 int item = Integer.parseInt(v.getTag().toString());
 
-                final Ability choosenAbility = player.getMonster().getAbilitys().get(item);
+                lastChoosenAbility = abilities.get(item);
                 // ist keine liste mehr
                 //final LinkedList<AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
-                final AbilityTargetRestriction atr = player.getAbilityTargetRestriction(choosenAbility);
+                final AbilityTargetRestriction atr = lastChoosenAbility.getTargetRestriction();
 
                 final List<String> targetNames = new ArrayList<String>();
                 //for (Enum target : atr) {
@@ -262,7 +262,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                                       if (chooseDialog != null) {
                                           chooseDialog.dismiss();
                                       }
-                                      chooseDialog = new DialogBuilder(context, getString(R.string.chooseTarget), targetNames, choosenAbility, chooseTargetRestrictionListener, DialogAction.CHOOSE_TARGET_RESTRICTION);
+                                      chooseDialog = new DialogBuilder(context, getString(R.string.chooseTarget), targetNames, lastChoosenAbility, chooseTargetRestrictionListener, DialogAction.CHOOSE_TARGET_RESTRICTION);
                                   }
                               }
                 );
@@ -282,12 +282,23 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             //Log.d(TAG, v.getTag().toString());
             try {
                 //int item = Integer.parseInt(v.getTag().toString());
-                TableLayout table = (TableLayout) v.getParent().getParent();
-                if (table != null) {
-                    final Ability choosenAbility = (Ability) table.getTag();
+                TableRow tableRow = (TableRow) v;
+                if (tableRow != null) {
+                    int targetRestrictionChoosen = (Integer) tableRow.getTag();
+
+                    //final Ability choosenAbility = (Ability) abilities.get(targetRestrictionChoosen);
                     //ist keine liste mehr
                     //LinkedList<AbilityTargetRestriction> atr = player.getAbilityTargetRestriction(choosenAbility);
-                    AbilityTargetRestriction atr = player.getAbilityTargetRestriction(choosenAbility);
+
+                    AbilityTargetRestriction atr = lastChoosenAbility.getTargetRestriction();
+
+                    /*
+                    * for the mockup mockup
+                    *
+
+                    atr.addTarget(0);
+                    atr.addTarget(1);
+*/
                     LinkedList<Integer> targetList = atr.getTargetList();
 
                     final List<String> targetNames = new ArrayList<String>();
@@ -303,7 +314,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                                           if (chooseDialog != null) {
                                               chooseDialog.dismiss();
                                           }
-                                          chooseDialog = new DialogBuilder(context, getString(R.string.chooseTarget), targetNames, choosenAbility, sendActionToGamePlayEngineListener, DialogAction.CHOOSE_TARGET);
+                                          chooseDialog = new DialogBuilder(context, getString(R.string.chooseTarget), targetNames, lastChoosenAbility, sendActionToGamePlayEngineListener, DialogAction.CHOOSE_TARGET);
                                       }
                                   }
                     );
@@ -320,10 +331,13 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         public void onClick(View v) {
             try {
                 // int item = Integer.parseInt(v.getTag().toString());
-                TableLayout table = (TableLayout) v.getParent().getParent();
-                if (table != null) {
-                    Ability choosenAbility = (Ability) table.getTag();
-                    iSetAbility.setAbility(new ActionObject(choosenAbility, choosenAbility.getTargetRestriction()));
+                TableRow tableRow = (TableRow) v;
+                if (tableRow != null) {
+                    int choosenEnemyId = (Integer) tableRow.getTag();
+                    AbilityTargetRestriction atr = lastChoosenAbility.getTargetRestriction();
+                    atr.cleanTargetList();
+                    atr.addTarget(choosenEnemyId);
+                    iSetAbility.setAbility(new ActionObject(lastChoosenAbility, atr));
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
