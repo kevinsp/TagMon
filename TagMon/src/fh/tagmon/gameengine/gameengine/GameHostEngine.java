@@ -127,11 +127,6 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         
       
     }
-
-    private void broadcastSummary(SummaryObject summary){
-    	for(PlayerListNode player : playerList.getPlayList())
-        	player.getPlayer().printSummary(summary);
-    }
     
     private SummaryObject sendComponentListsToPlayersAndReceiveTheirAnswers(HashMap<Integer,AbilityComponentList> affectedPlayers){
     	SummaryObject summary = SummaryObject.getInstance();
@@ -149,11 +144,15 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         myLogger(answer.getMsg());
         myLogger("====");
 		/////////////////////////////////////////// TESTHALBER
-		if (answer.isMonsterDead()) {
-		this.gameOver();
-		}
+		if (answer.isMonsterDead()) 
+			this.gameOver();
 		//////////////////////////////
         return answer;
+    }
+
+    private void broadcastSummary(SummaryObject summary){
+    	for(PlayerListNode player : playerList.getPlayList())
+        	player.getPlayer().printSummary(summary);
     }
     
 }
