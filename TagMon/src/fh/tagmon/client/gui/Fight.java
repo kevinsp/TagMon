@@ -80,7 +80,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         Monster blueM = mCreator.getMonsterDummy();
 
         engineModule = new GameEngineModule(this, blueM);
-        engineModule.startGamePlayerVSTag("408bcf6gff"); // die eig SerienNr vom gescanten Tag �bergeben
+        engineModule.startGamePlayerVSTag("408bcf6gff"); // die eig SerienNr vom gescanten Tag übergeben
 
 
 
