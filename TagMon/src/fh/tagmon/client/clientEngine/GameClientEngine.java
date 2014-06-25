@@ -51,12 +51,14 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
     }
 
     private void connectToNetwork(ConnectionType type){
+    	Thread t = null;
 		switch(type){
 		case BLUETOOTH:
 			break;
 		case LCL_SOCKET:
 			try {
 				connection = new NetworkSocketConnection("localhost");
+				t = new Thread(connection);
 	        } catch (IOException e) {
 	            Log.e("Client localhost connection", e.getMessage());
 	            connection = null;
@@ -67,8 +69,10 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 		default:
 			break;
 		}
-		if(connection != null)
+		if(connection != null){
             connection.addObserver(this);
+            t.start();
+		}
     }
 
 	private void stop(){

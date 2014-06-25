@@ -8,7 +8,7 @@ import java.net.Socket;
 import android.util.Log;
 import fh.tagmon.network.message.MessageObject;
 
-public class NetworkSocketConnection extends ANetworkConnection implements Runnable{
+public class NetworkSocketConnection extends ANetworkConnection{
 	private Socket connection;
 	private ObjectInputStream in;
 	private ObjectOutputStream out;
