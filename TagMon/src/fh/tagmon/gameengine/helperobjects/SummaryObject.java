@@ -1,11 +1,13 @@
 package fh.tagmon.gameengine.helperobjects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 
-public class SummaryObject {
+public class SummaryObject implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private final StringBuilder summary = new StringBuilder();
 	private final List<PlayerInfo> infos = new ArrayList<PlayerInfo>();
 	
