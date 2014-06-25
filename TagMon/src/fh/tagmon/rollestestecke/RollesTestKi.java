@@ -6,6 +6,9 @@ import java.util.Random;
 
 import android.util.Log;
 import fh.tagmon.gameengine.abilitys.Ability;
+import fh.tagmon.gameengine.abilitys.AbilityComponentTypes;
+import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
@@ -101,6 +104,14 @@ public class RollesTestKi {
     	AbilityTargetRestriction targetRes = this.choseRandomTarget(chosenAbility);
     	
     	ActionObject myAction = new ActionObject(chosenAbility,targetRes);
+    	
+    	////TEST
+    	IAbilityComponent comp = chosenAbility.getAbilityComponents().getFirst();
+    	if(comp.getComponentType() == AbilityComponentTypes.SCHADENSABSORBATION){
+    		Schadensabsorbation sch = (Schadensabsorbation) comp;
+    		Log.i("GameEngine", "KI sending ... abs:" + String.valueOf(sch.getAbsorbationAmount()));
+    	}
+    	//// End
     	this.connection.sendToHost(MessageFactory.createClientMessage_Action(myAction, id));
     	
     }

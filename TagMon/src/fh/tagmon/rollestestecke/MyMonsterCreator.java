@@ -49,6 +49,57 @@ public class MyMonsterCreator {
 	}
 	
 	
+	public Monster getAbsorberMonster(){
+		//stats
+		Stats stats = new Stats(0,30,30,30,111,100,10,123,11);
+		
+		//Attribute
+		Attribut attribut = new Attribut(0, 10, 11, 12);
+		
+		//Abilitys		
+		Ability absorb = getAbsorbAbility();
+		
+		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
+		abilityList.add(absorb);
+		
+		//Körperteile
+		Koerperteil arm = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
+		
+		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
+		koerperteilList.add(arm);
+		
+		//setze Monster zusammen
+		Monster dummyMonster = new Monster(0, "MonsterName", attribut, koerperteilList, stats);
+		
+		return dummyMonster;
+	}
+	
+	public Monster getAttackMonster(){
+		//stats
+		Stats stats = new Stats(0,30,30,30,111,100,10,123,11);
+		
+		//Attribute
+		Attribut attribut = new Attribut(0, 10, 11, 12);
+		
+		//Abilitys		
+		Ability beißAttacke =  getBeißAttacke();
+		
+		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
+		abilityList.add(beißAttacke);
+		
+		//Körperteile
+		Koerperteil arm = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
+		
+		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
+		koerperteilList.add(arm);
+		
+		//setze Monster zusammen
+		Monster dummyMonster = new Monster(0, "MonsterName", attribut, koerperteilList, stats);
+		
+		return dummyMonster;
+	}
+	
+	
 	
 	
 	private Ability getBeißAttacke(){

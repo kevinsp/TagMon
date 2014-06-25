@@ -37,7 +37,7 @@ public class GameEngineModule {
  
     public void startGamePlayerVSTag(String tagSerNr) {
 
-    	
+    	/*
     	//Starte den Host
     	int gamePlayerSize = 2; // Player vs Tag
     	startHostAsynkTask(gamePlayerSize);
@@ -55,10 +55,10 @@ public class GameEngineModule {
     	
     	//Die Ki bekommt ihr Monster und verbindet sich mit dem Server
     	startKiAsynkTask("RED", kiMonster);
-    	
+    	*/
 
 
-    	//this.testWithLocalSocket();
+    	this.testAbsorber();
     }
 
     
@@ -117,7 +117,7 @@ public class GameEngineModule {
 		newKi.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null);
 	}
 	
-	private void testWithLocalSocket(){
+	private void testKiVSKi(){
 		startHostAsynkTask(2);
 		
 		MyMonsterCreator mCreator = new MyMonsterCreator();
@@ -126,5 +126,16 @@ public class GameEngineModule {
 		
 		startKiAsynkTask("RED", redM);
 		startKiAsynkTask("BLUE", blueM);	
+	}
+	
+	private void testAbsorber(){
+		startHostAsynkTask(2);
+		
+		MyMonsterCreator mCreator = new MyMonsterCreator();
+		Monster redM = mCreator.getAttackMonster();
+		Monster blueM = mCreator.getAbsorberMonster();
+		
+		startKiAsynkTask("RED", redM);
+		startKiAsynkTask("BLUE", blueM);
 	}
 }

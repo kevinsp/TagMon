@@ -2,6 +2,7 @@ package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
 import java.util.HashMap;
 
+import android.util.Log;
 import fh.tagmon.client.Helper_PlayerSettings;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
@@ -61,6 +62,9 @@ public class AbilityComponentDirector implements IListener{
 			break;
 		case SCHADENSABSORBATION:
 			Schadensabsorbation schadenAbs = (Schadensabsorbation) abilityComponent;
+			///TEST
+				Log.i("GameEngine", "KI resv ... abs:" + String.valueOf(schadenAbs.getAbsorbationAmount()));
+			///
 			this.dmgAbsHandler.handleDamageAbsorbation(schadenAbs);
 			event += "sicht mit einem natürlichen Schild gewappnet!";
 		case STUN:

@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 
+import fh.tagmon.gameengine.abilitys.AbilityComponentTypes;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.helperobjects.SummaryObject;
@@ -55,13 +57,15 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
        
     	while (runGame) {
             this.roundCounter++;
+            myLogger("##################### ROUND: " + String.valueOf(this.roundCounter));
+            
             // 1Phase Neuer Spieler
             currentPlayer = this.playerList.getNextPlayer();
 
             // 2Phase
             ActionObject action = currentPlayer.yourTurn(this.playerList.getPlayerInfoMap(), this.playerList.getCurrentPlayerTargetId());
 
-            myLogger("##################### ROUND: " + String.valueOf(this.roundCounter));
+            
            
             myLogger("CurrentPlayer: " + this.playerList.getPlayerInfo(this.playerList.getCurrentPlayerTargetId()).NAME);
            
@@ -78,9 +82,17 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         Log.i(this.logTag, toLog);
     }
 
+    private void testFunc(IAbilityComponent comp){
+    	////TEST
+    	if(comp.getComponentType() == AbilityComponentTypes.SCHADENSABSORBATION){
+    		Schadensabsorbation sch = (Schadensabsorbation) comp;
+    		Log.i("GameEngine", "Host Resv ... abs:" + String.valueOf(sch.getAbsorbationAmount()));
+    	}
+    	//// End
+    }
 
     private void sendAbilityComponentToPlayer(ActionObject action) {
-    	
+
         List<AbilityComponentList> affectedPlayers = new ArrayList<AbilityComponentList>();
         for(PlayerListNode player : playerList.getPlayList())
         	affectedPlayers.add(new AbilityComponentList(player.getOwnTargetId()));
@@ -90,6 +102,9 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         //Get Ability-components
         for(IAbilityComponent component : action.getAbility().getAbilityComponents()){
         	//Get the targetIDs of the specific component
+        	///TEST
+        		testFunc(component);
+        	/////
         	LinkedList<Integer> targetList = null;
         	switch (component.getComponentTargetRestriction()) {
 	            case DEFAULT:
