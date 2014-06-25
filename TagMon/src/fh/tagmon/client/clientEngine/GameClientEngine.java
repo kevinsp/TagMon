@@ -84,7 +84,7 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 	@Override
 	public void update(Observable observable, Object hostMsg) {
 		boolean firstTurn = true;
-		
+		Log.i("TEST", "testi");
 		MessageObject<?> msg = (MessageObject<?>) hostMsg;
         List<PlayerInfo> players = null;
         switch(msg.messageType){

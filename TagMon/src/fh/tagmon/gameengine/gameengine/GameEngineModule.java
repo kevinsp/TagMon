@@ -37,7 +37,7 @@ public class GameEngineModule {
  
     public void startGamePlayerVSTag(String tagSerNr) {
 
-    	/*
+    	
     	//Starte den Host
     	int gamePlayerSize = 2; // Player vs Tag
     	startHostAsynkTask(gamePlayerSize);
@@ -51,15 +51,14 @@ public class GameEngineModule {
     	this.clientEngine.execute();
     	
     	//der Ki ihr Monster holen
-    	MyMonsterCreator mCreator = new MyMonsterCreator(); // eig aus der Db holen mit tagSerNr
-    	Monster kiMonster = mCreator.getMonsterDummy();
+    	Monster kiMonster = mCreator.getMonsterDummy(); // eig aus der Db holen mit tagSerNr
     	
     	//Die Ki bekommt ihr Monster und verbindet sich mit dem Server
     	startKiAsynkTask("RED", kiMonster);
-    	*/
+    	
 
 
-    	this.testWithLocalSocket();
+    	//this.testWithLocalSocket();
     }
 
     
