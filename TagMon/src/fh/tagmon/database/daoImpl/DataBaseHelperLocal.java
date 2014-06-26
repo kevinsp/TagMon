@@ -1,8 +1,10 @@
 package fh.tagmon.database.daoImpl;
 
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,6 +27,8 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	private static String DB_PATH = "/data/data/fh.tagmon/databases/";
 
 	private static String DB_NAME = "localDB.sqlite3";
+	
+	private static String BUILD_SCRIPT = "dbLocalEmptyBuildScript.sql";
 
 	private SQLiteDatabase myDataBase;
 
@@ -128,7 +132,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		// Open the database
 		String myPath = DB_PATH + DB_NAME;
 		myDataBase = SQLiteDatabase.openDatabase(myPath, null,
-				SQLiteDatabase.OPEN_READWRITE);
+				SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READWRITE );
 	}
 
 	@Override
@@ -438,7 +442,6 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		}
 		
 	}
-	
 	private void updateAttribute(Monster monster) throws MonsterDAOException{
 		Attribut attr = monster.getAttributes();
 		
@@ -447,6 +450,22 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 				 			   " WHERE tagdb_attribute.monster_id = " + monster.id;
 
 		 myDataBase.execSQL(sqlQuery);
+	}
+	public void createDbStructureFromFile() throws IOException {
+	    
+		
+	    // Open the resource
+	    InputStream insertsStream = myContext.getAssets().open(BUILD_SCRIPT);
+	    BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertsStream));
+
+	    // Iterate through lines (assuming each insert has its own line and theres no other stuff)
+	    String statement = "";
+	    while (insertReader.ready()) {
+	        statement = insertReader.readLine();
+	    }
+	    insertReader.close();
+	    
+	    myDataBase.execSQL(statement);
 	}
 	
 	
