@@ -27,16 +27,16 @@ public class MyMonsterCreator {
 		Attribut attribut = new Attribut(0, 10, 11, 12);
 		
 		//Abilitys
-		Ability beiﬂAttacke =  getBeiﬂAttacke();
+		Ability beiAttacke =  getBeiAttacke();
 		Ability block = getBlockAbility();
 		Ability absorb = getAbsorbAbility();
 		
 		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
-		abilityList.add(beiﬂAttacke);
+		abilityList.add(beiAttacke);
 		abilityList.add(block);
 		abilityList.add(absorb);
 		
-		//Kˆrperteile
+		//Krperteile
 		Koerperteil arm = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
 		
 		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
@@ -62,7 +62,7 @@ public class MyMonsterCreator {
 		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
 		abilityList.add(absorb);
 		
-		//Kˆrperteile
+		//Krperteile
 		Koerperteil arm = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
 		
 		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
@@ -82,12 +82,12 @@ public class MyMonsterCreator {
 		Attribut attribut = new Attribut(0, 10, 11, 12);
 		
 		//Abilitys		
-		Ability beiﬂAttacke =  getBeiﬂAttacke();
+		Ability beiAttacke =  getBeiAttacke();
 		
 		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
-		abilityList.add(beiﬂAttacke);
+		abilityList.add(beiAttacke);
 		
-		//Kˆrperteile
+		//Krperteile
 		Koerperteil arm = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
 		
 		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
@@ -102,8 +102,8 @@ public class MyMonsterCreator {
 	
 	
 	
-	private Ability getBeiﬂAttacke(){
-		Ability ability = new Ability(1, "Beiﬂattacke", 20, AbilityTargetRestriction.ENEMY);
+	private Ability getBeiAttacke(){
+		Ability ability = new Ability(1, "Beiattacke", 20, AbilityTargetRestriction.ENEMY);
 		IAbilityComponent component = new Damage(32, AbilityTargetRestriction.ENEMY);
 		ability.addAbilityComponent(component);
 		return ability;

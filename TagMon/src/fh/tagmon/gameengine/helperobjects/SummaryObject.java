@@ -15,7 +15,7 @@ public class SummaryObject implements Serializable{
 	 */
 	private static final long serialVersionUID = 7922514636100421879L;
 	private final StringBuilder summary = new StringBuilder();
-	private final List<PlayerInfo> infos = new ArrayList<PlayerInfo>();
+	private List<PlayerInfo> infos = new ArrayList<PlayerInfo>();
 	
 	public static SummaryObject getInstance() {
 		return new SummaryObject();
@@ -36,7 +36,10 @@ public class SummaryObject implements Serializable{
 	public List<PlayerInfo> getPlayerInfos(){
 		return infos;
 	}
-	
+
+    public void addPlayerInfoList(List<PlayerInfo> list){
+        infos = list;
+    }
 	public void add(AnswerObject answer){
 		summary.append(answer.getMsg());
 		infos.add(answer.getPlayerInfo());

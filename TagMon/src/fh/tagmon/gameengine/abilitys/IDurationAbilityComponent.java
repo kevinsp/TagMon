@@ -4,6 +4,6 @@ public interface IDurationAbilityComponent {
 
 	public int getDuration();
 	
-	//wird nur gebraucht sofern objecte nicht über netzwerk geschickt werden
+	//wird nur gebraucht sofern objecte nicht ber netzwerk geschickt werden
 	public IDurationAbilityComponent cloneMe();
 }

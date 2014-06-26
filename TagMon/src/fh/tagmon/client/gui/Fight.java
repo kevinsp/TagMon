@@ -153,7 +153,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
         //name
         TextView ownNameView = (TextView) findViewById(R.id.ownName);
-        ownNameView.setText(name);
+//        ownNameView.setText(name);
 
     }
     public void initEnemyGui(String name) {
@@ -172,7 +172,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
         //name
         TextView enemyNameView = (TextView) findViewById(R.id.enemyName);
-        enemyNameView.setText(name);
+       // enemyNameView.setText(name);
     }
 
     public boolean setEnemyHead(String imgName) {
@@ -403,13 +403,14 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 public void run() {
                     if (partToUpdate == GuiPartsToUpdate.HEALTH) {
                         for (PlayerInfo playerInfo : players) {
+                            /*
                             int maxLife = playerInfo.getMaxLife();
                             int currentLife = playerInfo.getCurrentLife();
                             if (playerInfo.ID == userId) {
                                 refreshUserLife(maxLife, currentLife);
                             } else {
                                 refreshEnemyLife(maxLife, currentLife);
-                            }
+                            }*/
                         }
                     }
                 }

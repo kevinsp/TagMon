@@ -1,18 +1,18 @@
 package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
-import java.util.HashMap;
+import android.util.Log;
+
 import java.util.List;
 
-import android.util.Log;
 import fh.tagmon.client.Helper_PlayerSettings;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
-import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.IListener;
+import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.model.Monster;
 
 public class AbilityComponentDirector implements IListener{
@@ -47,7 +47,7 @@ public class AbilityComponentDirector implements IListener{
 	}
 	
 	private String handleAbilityComponent(IAbilityComponent abilityComponent, boolean first){
-		String event = first ? "Das Monster von " + Helper_PlayerSettings.playerName + " hat " : "Außerdem hat es ";
+		String event = first ? "Das Monster von " + Helper_PlayerSettings.playerName + " hat " : "Auerdem hat es ";
 		switch(abilityComponent.getComponentType()){
 		case BUFF:
 			Buff buff_debuff = (Buff) abilityComponent;
@@ -67,9 +67,9 @@ public class AbilityComponentDirector implements IListener{
 			testiVonRolle(schadenAbs);
 			
 			this.dmgAbsHandler.handleDamageAbsorbation(schadenAbs);
-			event += "sicht mit einem natürlichen Schild gewappnet!";
+			event += "sicht mit einem natrlichen Schild gewappnet!";
 		case STUN:
-			event += "die Kontrolle über seinen Körper verloren!";
+			event += "die Kontrolle ber seinen Krper verloren!";
 			break;
 		default:
 			break;

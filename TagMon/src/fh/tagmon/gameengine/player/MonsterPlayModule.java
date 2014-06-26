@@ -25,7 +25,7 @@ public class MonsterPlayModule {
 		this.myMonstersAbilityComponentDirector = new AbilityComponentDirector(myNewMonster);
 		this.abilityChooser = new AbilityChooser(myNewMonster);
 		this.gamePlayAbilityUpdater = new AbilityUpdater(myNewMonster);
-		// Klassen die wissen müssen ob eine neue Runde beginnt
+		// Klassen die wissen mssen ob eine neue Runde beginnt
 		this.addNewRoundListeners();
 	}
 	

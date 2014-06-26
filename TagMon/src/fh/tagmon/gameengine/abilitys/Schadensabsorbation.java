@@ -15,7 +15,7 @@ public class Schadensabsorbation extends AbilityComponent implements IAbilityCom
 		this.duration = duration;
 	}
 
-	//brauch man nicht mehr sobalt über netzwerk die objecte transportiert werden
+	//brauch man nicht mehr sobalt ber netzwerk die objecte transportiert werden
 	@Override
 	public Schadensabsorbation cloneMe(){
 		return new Schadensabsorbation(this.duration, this.absorbationsAmount, this.componentTargetRestr);
@@ -32,7 +32,7 @@ public class Schadensabsorbation extends AbilityComponent implements IAbilityCom
 
 	@Override
 	public void setReqStats(Monster monster) {
-		//TODO evtl abhänging von stats machen
+		//TODO evtl abhnging von stats machen
 	}
 
 	@Override

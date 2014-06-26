@@ -1,13 +1,12 @@
 package fh.tagmon.network.message;
 
-import java.util.HashMap;
 import java.util.List;
 
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
-import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.helperobjects.SummaryObject;
+import fh.tagmon.gameengine.player.PlayerInfo;
 
 public class MessageFactory {
 	//Host-Message-Builder
@@ -46,9 +45,9 @@ public class MessageFactory {
 			createClientMessage_Answer(AnswerObject ans, final int playerID){
 		return new MessageObject<AnswerObject>(MessageType.ANSWER, ans, playerID);
 	}
-	public static MessageObject<String> 
-			createClientMessage_GameStart(String playerName, final int playerID){
-		return new MessageObject<String>(MessageType.GAME_START, playerName, playerID);
+	public static MessageObject<PlayerInfo>
+			createClientMessage_GameStart(PlayerInfo info, final int playerID){
+		return new MessageObject<PlayerInfo>(MessageType.GAME_START, info, playerID);
 	}
 	
 	

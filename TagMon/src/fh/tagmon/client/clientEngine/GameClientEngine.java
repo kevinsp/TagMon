@@ -31,13 +31,14 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 	
 	private Context context;
     private final Object waitForPlayer;
-    private boolean wait;
+    private boolean wait = true;
     private ActionObject choosenAbility;
     
     //TODO durch zentralgespeicherte eigene player-ID ersetzen
     private int ID = 0;
-	
-	//GAMEPLAY
+    private List<PlayerInfo> players = null;
+
+    //GAMEPLAY
 	private MonsterPlayModule monster;
 	
 	//NETWORK
@@ -97,13 +98,12 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
         }
     }
 
+    private boolean firstTurn = true;
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable observable, Object hostMsg) {
-		boolean firstTurn = true;
 		Log.i("TEST", "testi");
 		MessageObject<?> msg = (MessageObject<?>) hostMsg;
-        List<PlayerInfo> players = null;
         switch(msg.messageType){
 		case ABILITY_COMPONENT:
 			AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
@@ -113,6 +113,8 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 			connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, ID));
 			break;
 		case SUMMARY:
+            if(this.players == null)
+                this.players = (List <PlayerInfo>) ((SummaryObject)msg.getContent()).getPlayerInfos();
 			SummaryObject summary = (SummaryObject)msg.getContent();
 			((Fight)context).showTemporaryDialog(summary.getSummary());
             ((Fight)context).refreshGUI(summary.getPlayerInfos(), GuiPartsToUpdate.HEALTH);
@@ -123,18 +125,23 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 			//Optional: hchster Damage, gespielte Runden bla bla mitloggen..
 			break;
 		case YOUR_TURN:
-			 players = (List <PlayerInfo>) msg.getContent();
+            this.monster.newRound(players, ID);
 			if(firstTurn){
 				List<Ability> abilitylist = monster.getMonster().getAbilitys();
 				((Fight) context).initBattleGUI(players, ID, abilitylist);
+                firstTurn = false;
 			}
-            ((Fight) context).refreshGUI(players, GuiPartsToUpdate.HEALTH);
+            onPause();
 			ActionObject actionObject = waitForAction();
+
 			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 			break;
         case GAME_START:
-            this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(Helper_PlayerSettings.playerName, 0));
             this.ID = (Integer) msg.getContent();
+            PlayerInfo startInfo = new PlayerInfo(Helper_PlayerSettings.playerName, ID);
+            startInfo.setCurrentLife(monster.getMonster().getCurrentLifePoints());
+            startInfo.setMaxLife(monster.getMonster().getMaxLifePoints());
+            this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(startInfo, 0));
             break;
 		default:
 			((Fight)context).showTemporaryDialog("Ungltige Host-Message");

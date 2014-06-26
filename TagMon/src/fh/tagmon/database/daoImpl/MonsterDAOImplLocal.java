@@ -41,7 +41,7 @@ public class MonsterDAOImplLocal implements MonsterDAOLocal{
 	@Override
 	public Monster getDummyMonster() throws MonsterDAOException {
 		Attribut attribut = new Attribut(0, 10, 11, 12);
-		Ability ability = new Ability(1, "Beiﬂattacke", 20, AbilityTargetRestriction.ENEMY);
+		Ability ability = new Ability(1, "Beiattacke", 20, AbilityTargetRestriction.ENEMY);
 		
 		IAbilityComponent component = new Damage(7, AbilityTargetRestriction.ENEMY);
 		ability.addAbilityComponent(component);

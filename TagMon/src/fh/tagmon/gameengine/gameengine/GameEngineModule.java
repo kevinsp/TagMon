@@ -1,13 +1,14 @@
 package fh.tagmon.gameengine.gameengine;
 
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Context;
 import android.database.SQLException;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import java.io.IOException;
+
 import fh.tagmon.client.clientEngine.GameClientEngine;
 import fh.tagmon.database.dao.MonsterDAO;
 import fh.tagmon.database.daoImpl.MonsterDAOImpl;
@@ -17,7 +18,6 @@ import fh.tagmon.model.Monster;
 import fh.tagmon.network.ConnectionType;
 import fh.tagmon.rollestestecke.AsynkTaskHostDummy;
 import fh.tagmon.rollestestecke.AsynkTaskKiDummy;
-
 import fh.tagmon.rollestestecke.MyMonsterCreator;
 
 public class GameEngineModule {
@@ -37,7 +37,7 @@ public class GameEngineModule {
  
     public void startGamePlayerVSTag(String tagSerNr) {
 
-    	/*
+
     	//Starte den Host
     	int gamePlayerSize = 2; // Player vs Tag
     	startHostAsynkTask(gamePlayerSize);
@@ -55,11 +55,11 @@ public class GameEngineModule {
     	
     	//Die Ki bekommt ihr Monster und verbindet sich mit dem Server
     	startKiAsynkTask("RED", kiMonster);
-    	*/
+
 
 
     	//this.testAbsorber();
-    	testKiVSKi();
+    	//testKiVSKi();
     }
 
     
@@ -70,7 +70,7 @@ public class GameEngineModule {
 		 * Startet einen Task der folgedes macht.
 		 * 1. Wartet bis alle SpielTeilnehmer connectet sind.
 		 * 2. Erstellt daraus eine Spieler liste und inizalisiert die HostGameEngine
-		 * 3. Startet die Engine und das spiel läuft ab
+		 * 3. Startet die Engine und das spiel luft ab
 		 */
         AsynkTaskHostDummy host = new AsynkTaskHostDummy(gamePlayerSize);
         host.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, (Void[])null); // damit wirklich nebenlufig
@@ -111,7 +111,7 @@ public class GameEngineModule {
 	private void startKiAsynkTask(String kiName, Monster kiMonster){
 		/*
 		 * Startet einen Task der folgedes macht.
-		 * 1. Verbindet sich mit dem Server über ein Local-Socket. ACHTUNG SERVER MUSS SCHON LAUFEN!!
+		 * 1. Verbindet sich mit dem Server ber ein Local-Socket. ACHTUNG SERVER MUSS SCHON LAUFEN!!
 		 * 2. Spielt das Spiel
 		 */
 		AsynkTaskKiDummy newKi = new AsynkTaskKiDummy(kiMonster, kiName);

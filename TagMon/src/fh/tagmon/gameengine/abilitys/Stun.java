@@ -23,7 +23,7 @@ public class Stun extends AbilityComponent implements IAbilityComponent{
 
 	@Override
 	public void setReqStats(Monster monster) {
-		//TODO evtl abhänging von stats machen
+		//TODO evtl abhnging von stats machen
 	}
 
 	@Override

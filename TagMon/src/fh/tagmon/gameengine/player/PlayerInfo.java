@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class PlayerInfo implements Serializable{
 	private static final long serialVersionUID = 1L;
-	public final String NAME;
+	public  String NAME;
     public int ID;
     private int currentLife;
     private int maxLife;

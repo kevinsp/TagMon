@@ -42,6 +42,10 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
     		PlayerInfo playerInfo = entry.getValue().gameStarts(entry.getKey());
     		this.playerList.addPlayerInfo(playerInfo);
     	}
+
+        SummaryObject summary = SummaryObject.getInstance();
+        summary.addPlayerInfoList(this.playerList.getPlayerInfoList());
+        broadcastSummary(summary);
     }
     
     private void gameOver(){
@@ -69,8 +73,8 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
             
            
             myLogger("CurrentPlayer: " + this.playerList.getPlayerInfo(this.playerList.getCurrentPlayerTargetId()).NAME);
-           
-            String targetName = this.playerList.getPlayerInfo(action.getTargetRestriction().getTargetList().getFirst()).NAME;
+           int test = action.getTargetRestriction().getTargetList().getFirst();
+            String targetName = this.playerList.getPlayerInfo(test).NAME;
             myLogger("Chosen Ability: |" + action.getAbility().getAbilityName() + "| on Target: " + targetName);
 
             // 3phase Ability Zerlegen und Komponenten an den Richtigen Schicken
@@ -143,7 +147,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         
       
     }
-    
+
     private SummaryObject sendComponentListsToPlayersAndReceiveTheirAnswers(HashMap<Integer,AbilityComponentList> affectedPlayers){
     	SummaryObject summary = SummaryObject.getInstance();
         for(Integer targetId : affectedPlayers.keySet()){

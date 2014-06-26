@@ -1,26 +1,25 @@
 package fh.tagmon.rollestestecke;
 
+import android.util.Log;
+
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import android.util.Log;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.AbilityComponentTypes;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
-import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
+import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 import fh.tagmon.network.clientConnections.NetworkSocketConnection;
 import fh.tagmon.network.message.MessageFactory;
 import fh.tagmon.network.message.MessageObject;
-import fh.tagmon.network.message.MessageType;
 
 public class RollesTestKi {
 
@@ -48,7 +47,7 @@ public class RollesTestKi {
     
     
     private Ability choseRandomAbility() {
-        int maxAbil = playModule.getAbilityChooser().getAllAbilitys().keySet().size() - 1; //da von 0 an gezählt
+        int maxAbil = playModule.getAbilityChooser().getAllAbilitys().keySet().size() - 1; //da von 0 an gezhlt
     	int random = this.myRandomWithHigh(0, maxAbil);
         
     	return this.playModule.getAbilityChooser().getAbility(random);
@@ -81,7 +80,10 @@ public class RollesTestKi {
 				break;
 			case GAME_START:
 				this.id = (Integer)msgFromHost.getContent();
-				this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(kiName, id));
+                PlayerInfo info = new PlayerInfo(kiName, id);
+                info.setCurrentLife(playModule.getMonster().getCurrentLifePoints());
+                info.setMaxLife(playModule.getMonster().getMaxLifePoints());
+				this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(info, id));
 				break;
 			case YOUR_TURN:
 				doMyTurn((MessageObject<List<PlayerInfo>>)msgFromHost);

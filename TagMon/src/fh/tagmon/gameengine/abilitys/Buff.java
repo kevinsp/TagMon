@@ -29,7 +29,7 @@ public class Buff extends AbilityComponent implements IAbilityComponent,IDuratio
 	}
 
 	
-	//brauch man nicht mehr sobalt über netzwerk die objecte transportiert werden
+	//brauch man nicht mehr sobalt ber netzwerk die objecte transportiert werden
 	@Override
 	public Buff cloneMe(){
 		return new Buff(this.id, this.duration, this.componentTargetRestr, this.strengthBuff, this.constitutionBuff, this.intelligenceBuff );
