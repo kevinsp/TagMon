@@ -5,7 +5,11 @@ import java.io.Serializable;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 
 public class AnswerObject implements Serializable{
-	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1661241189250692821L;
 	private StringBuilder msg = new StringBuilder();
 	private PlayerInfo playerInfo;
 	private boolean monsterIsDead = false;;
