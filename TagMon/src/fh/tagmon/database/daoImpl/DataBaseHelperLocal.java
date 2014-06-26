@@ -128,7 +128,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		// Open the database
 		String myPath = DB_PATH + DB_NAME;
 		myDataBase = SQLiteDatabase.openDatabase(myPath, null,
-				SQLiteDatabase.OPEN_READWRITE);
+				SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READWRITE );
 	}
 
 	@Override
