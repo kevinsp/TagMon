@@ -254,7 +254,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		
 		 String sqlQuery = 	"SELECT tFaehigkeit.id, tFaehigkeit.name, tFaehigkeit.ziel, tFaehigkeit.energiekosten, tFaehigkeit.angriffsziel, tFaehigkeit.angriffswert, " +
 				 					"tFaehigkeit.heilungsziel, tFaehigkeit.heilungswert, tFaehigkeit.stunziel, tFaehigkeit.stundauer, " +
-				 					"tFaehigkeit.absorbationsziel, tFaehigkeit.absorbationsdauer, tFaehigkeit.schadensabsorbation " +
+				 					"tFaehigkeit.absorbationsziel, tFaehigkeit.absorbationsdauer, tFaehigkeit.schadensabsorbation, tFaehigkeit.cooldown " +
 				 			"FROM tagdb_faehigkeit tFaehigkeit " + 
 				 			"INNER JOIN tagdb_faehigkeit_koerperteile tFK " +
 				 				"ON tFaehigkeit.id = tFK.faehigkeit_id " +
@@ -281,6 +281,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		int absorbationziel;
 		int absorbationsdauer;
 		int schadensabsorbation;
+		int cooldown;
 		
 		while(cursor.moveToNext()){
 			
@@ -299,6 +300,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 			absorbationziel = cursor.getInt(10);
 			absorbationsdauer = cursor.getInt(11);
 			schadensabsorbation = cursor.getInt(12);
+			cooldown = cursor.getInt(13);
 						
 			
 			if(angriffswert!=0){
@@ -325,7 +327,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 				abilityComponents.add(buff);
 			}
 			
-			abilityList.add(new Ability(id, name, energiekosten, getAbilityTargetRestriction(ziel), abilityComponents));
+			abilityList.add(new Ability(id, name, energiekosten, cooldown, getAbilityTargetRestriction(ziel), abilityComponents));
 			
 			if(abilityList.isEmpty())
 				throw new MonsterDAOException("Empty ability list");
@@ -398,7 +400,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	
 	
 	public Monster getMonsterByID(int monsterID) throws MonsterDAOException{
-				
+		
 		Attribut attribut = getAttribute(monsterID);
 		
 		ArrayList<Koerperteil> koerperteile = null;
@@ -410,7 +412,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 				
 		Stats stats = getStats(monsterID);
 		
-		String sqlQuery = 	"SELECT name " +
+		String sqlQuery = 	"SELECT name, beschreibung " +
 							"FROM tagdb_monster " + 
 							"WHERE id = " + monsterID;
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
@@ -419,8 +421,9 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 			throw new MonsterDAOException("Monster has no name");
 
 		String monsterName = cursor.getString(0);
+		String monsterBeschreibung = cursor.getString(1);
 		
-		Monster monster = new Monster(monsterID, monsterName, attribut, koerperteile, stats);
+		Monster monster = new Monster(monsterID, monsterName, monsterBeschreibung, attribut, koerperteile, stats);
 		return monster;
 	}
 	
