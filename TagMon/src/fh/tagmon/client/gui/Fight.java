@@ -392,7 +392,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     };
 
     public void showTemporaryDialog(String content) {
-        DialogBuilder db = new DialogBuilder(this, "Zusammenfassung", content, -1);
+//        DialogBuilder db = new DialogBuilder(this, "Zusammenfassung", content, -1);
     }
 
     @Override

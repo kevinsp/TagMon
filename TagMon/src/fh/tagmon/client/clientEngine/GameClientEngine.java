@@ -10,15 +10,22 @@ import java.util.Observable;
 import java.util.Observer;
 
 import fh.tagmon.client.Helper_PlayerSettings;
-import fh.tagmon.client.gui.*;
+import fh.tagmon.client.gui.Fight;
+import fh.tagmon.client.gui.GuiPartsToUpdate;
+import fh.tagmon.client.gui.ISetAbility;
 import fh.tagmon.gameengine.abilitys.Ability;
-import fh.tagmon.gameengine.gameengine.*;
-import fh.tagmon.gameengine.helperobjects.*;
+import fh.tagmon.gameengine.gameengine.AbilityComponentList;
+import fh.tagmon.gameengine.gameengine.PlayerInfo;
+import fh.tagmon.gameengine.helperobjects.ActionObject;
+import fh.tagmon.gameengine.helperobjects.AnswerObject;
+import fh.tagmon.gameengine.helperobjects.SummaryObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
 import fh.tagmon.gameengine.player.deal_with_incoming_abilitys.AbilityComponentDirector;
 import fh.tagmon.network.ConnectionType;
-import fh.tagmon.network.clientConnections.*;
-import fh.tagmon.network.message.*;
+import fh.tagmon.network.clientConnections.ANetworkConnection;
+import fh.tagmon.network.clientConnections.NetworkSocketConnection;
+import fh.tagmon.network.message.MessageFactory;
+import fh.tagmon.network.message.MessageObject;
 
 public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Observer, ISetAbility{
 	
@@ -58,7 +65,8 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 		case LCL_SOCKET:
 			try {
 				connection = new NetworkSocketConnection("localhost");
-				t = new Thread(connection);
+
+			//	t = new Thread(connection);
 	        } catch (IOException e) {
 	            Log.e("Client localhost connection", e.getMessage());
 	            connection = null;
@@ -70,8 +78,9 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 			break;
 		}
 		if(connection != null){
-            connection.addObserver(this);
-            t.start();
+		    testCon();
+          //  connection.addObserver(this);
+           // t.start();
 		}
     }
 
@@ -79,6 +88,14 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 		connection.deleteObservers();
 		connection.closeConnection();
 	}
+
+    private void testCon(){
+        boolean running = true;
+        while(running) {
+            MessageObject<?> obj= connection.listenToBroadcast();
+            update(null, obj);
+        }
+    }
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -120,7 +137,7 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
             this.ID = (Integer) msg.getContent();
             break;
 		default:
-			((Fight)context).showTemporaryDialog("Ungültige Host-Message");
+			((Fight)context).showTemporaryDialog("Ungltige Host-Message");
 			break;
 		}
 	}
