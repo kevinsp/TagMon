@@ -2,7 +2,9 @@ package fh.tagmon.gameengine.helperobjects;
 
 import java.io.Serializable;
 
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+import fh.tagmon.gameengine.player.PlayerInfo;
+
+
 
 public class AnswerObject implements Serializable{
 	

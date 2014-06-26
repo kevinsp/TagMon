@@ -1,6 +1,7 @@
 package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
 import java.util.HashMap;
+import java.util.List;
 
 import android.util.Log;
 import fh.tagmon.client.Helper_PlayerSettings;
@@ -9,7 +10,7 @@ import fh.tagmon.gameengine.abilitys.Damage;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.IListener;
 import fh.tagmon.model.Monster;
@@ -62,7 +63,9 @@ public class AbilityComponentDirector implements IListener{
 			break;
 		case SCHADENSABSORBATION:
 			Schadensabsorbation schadenAbs = (Schadensabsorbation) abilityComponent;
+			
 			testiVonRolle(schadenAbs);
+			
 			this.dmgAbsHandler.handleDamageAbsorbation(schadenAbs);
 			event += "sicht mit einem natürlichen Schild gewappnet!";
 		case STUN:
@@ -80,7 +83,7 @@ public class AbilityComponentDirector implements IListener{
 	}
 
 	@Override
-	public void newRound(HashMap<Integer, PlayerInfo> targetList, int yourTargetId) {
+	public void newRound(List<PlayerInfo> targetList, int yourTargetId) {
 
 		this.compLogger.newRound();
 		this.BuffHandler.newRound();

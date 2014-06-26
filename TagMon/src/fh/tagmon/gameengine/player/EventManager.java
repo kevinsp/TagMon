@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+
 
 public class EventManager {
 
@@ -14,7 +14,7 @@ public class EventManager {
 		this.listener.add(lis);
 	}
 	
-	public void sendNewRoundEvent(HashMap<Integer, PlayerInfo> targetList, int yourTargetId){
+	public void sendNewRoundEvent(List<PlayerInfo> targetList, int yourTargetId){
 		for(IListener ls: this.listener){
 			ls.newRound(targetList, yourTargetId);
 		}

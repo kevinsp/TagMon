@@ -18,9 +18,9 @@ import java.util.List;
 import fh.tagmon.R;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.GameEngineModule;
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
-import fh.tagmon.gameengine.player.IPlayer;
+
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 import fh.tagmon.rollestestecke.MyMonsterCreator;
@@ -37,7 +37,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     private ISetAbility iSetAbility;
     private List<Ability> abilities;
 
-    private IPlayer player;
+
 
 
     private Ability lastChoosenAbility = null;
@@ -173,6 +173,52 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         //name
         TextView enemyNameView = (TextView) findViewById(R.id.enemyName);
         enemyNameView.setText(name);
+    }
+
+    public boolean setEnemyHead(String imgName) {
+        try {
+            ImageView imgView = (ImageView) findViewById(R.id.enemyHead);
+            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+            imgView.setImageResource(resID);
+        }catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean setEnemyBody(String imgName) {
+        try{
+            ImageView imgView = (ImageView) findViewById(R.id.enemyBody);
+            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+            imgView.setImageResource(resID);
+        }catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+    public boolean setEnemyLeftLeg(String imgName) {
+        try {
+            ImageView imgView = (ImageView) findViewById(R.id.enemyLeftLegBack);
+            ImageView imgView2 = (ImageView) findViewById(R.id.enemyLeftLegFront);
+            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+            imgView.setImageResource(resID);
+            imgView2.setImageResource(resID);
+        }catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+    public boolean setEnemyRightLeg(String imgName) {
+        try {
+            ImageView imgView = (ImageView) findViewById(R.id.enemyRightLegBack);
+            ImageView imgView2 = (ImageView) findViewById(R.id.enemyRightLegFront);
+            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+            imgView.setImageResource(resID);
+            imgView2.setImageResource(resID);
+        }catch (Exception ex) {
+            return false;
+        }
+        return true;
     }
 
     public void refreshUserLife(int maxLife, int currentLife) {
@@ -346,7 +392,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     };
 
     public void showTemporaryDialog(String content) {
-        DialogBuilder db = new DialogBuilder(this, "Zusammenfassung", content, -1);
+//        DialogBuilder db = new DialogBuilder(this, "Zusammenfassung", content, -1);
     }
 
     @Override

@@ -1,16 +1,20 @@
 package fh.tagmon.gameengine.gameengine;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+
+import fh.tagmon.gameengine.player.PlayerInfo;
 
 
 public class PlayerList {
 
     private LinkedList<PlayerListNode> playList = new LinkedList<PlayerListNode>();
     private HashMap<Integer, IHostPlayer> playerTargetList = new HashMap<Integer, IHostPlayer>();
-    private HashMap<Integer, PlayerInfo> playerInfoList = new HashMap<Integer, PlayerInfo>();
+    private List<PlayerInfo> playerInfoList = new ArrayList<PlayerInfo>();
 
-    public HashMap<Integer, PlayerInfo> getPlayerInfoList() {
+    public List<PlayerInfo> getPlayerInfoList() {
 		return playerInfoList;
 	}
 
@@ -52,17 +56,14 @@ public class PlayerList {
 		return playList;
 	}
 	
-	public void addPlayerInfo(int id, PlayerInfo playerInfoObj){
-		this.playerInfoList.put(id, playerInfoObj);
+	public void addPlayerInfo(PlayerInfo playerInfoObj){
+		this.playerInfoList.add(playerInfoObj);
 	}
 	
 	public PlayerInfo getPlayerInfo(int id){
 		return this.playerInfoList.get(id);
 	}
 	
-	public HashMap<Integer, PlayerInfo> getPlayerInfoMap(){
-		return this.playerInfoList;
-	}
 
     
 }

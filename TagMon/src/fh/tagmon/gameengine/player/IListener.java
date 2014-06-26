@@ -1,10 +1,11 @@
 package fh.tagmon.gameengine.player;
 
 import java.util.HashMap;
+import java.util.List;
 
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+
 
 public interface IListener {
 
-	public void newRound(HashMap<Integer, PlayerInfo> targetList, int yourTargetId);
+	public void newRound(List<PlayerInfo> targetList, int yourTargetId);
 }

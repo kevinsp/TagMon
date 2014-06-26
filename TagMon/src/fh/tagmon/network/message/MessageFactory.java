@@ -1,9 +1,10 @@
 package fh.tagmon.network.message;
 
 import java.util.HashMap;
+import java.util.List;
 
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.helperobjects.SummaryObject;
@@ -26,9 +27,9 @@ public class MessageFactory {
 		return new MessageObject<SummaryObject>(MessageType.SUMMARY, msg, -1);
 	}
 	
-	public static MessageObject<HashMap<Integer, PlayerInfo>> 
-			createHostMessage_YourTurn(HashMap<Integer, PlayerInfo> playerList){
-		return new MessageObject<HashMap<Integer, PlayerInfo>>(MessageType.YOUR_TURN, playerList, -1);
+	public static MessageObject<List<PlayerInfo>> 
+			createHostMessage_YourTurn(List<PlayerInfo> playerList){
+		return new MessageObject<List<PlayerInfo>>(MessageType.YOUR_TURN, playerList, -1);
 	}
 	
 	public static MessageObject<Integer> 
