@@ -1,8 +1,10 @@
 package fh.tagmon.database.daoImpl;
 
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,6 +27,8 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	private static String DB_PATH = "/data/data/fh.tagmon/databases/";
 
 	private static String DB_NAME = "localDB.sqlite3";
+	
+	private static String BUILD_SCRIPT = "dbLocalEmptyBuildScript.sql";
 
 	private SQLiteDatabase myDataBase;
 
@@ -128,7 +132,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		// Open the database
 		String myPath = DB_PATH + DB_NAME;
 		myDataBase = SQLiteDatabase.openDatabase(myPath, null,
-				SQLiteDatabase.OPEN_READWRITE);
+				SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READWRITE );
 	}
 
 	@Override
@@ -254,7 +258,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		
 		 String sqlQuery = 	"SELECT tFaehigkeit.id, tFaehigkeit.name, tFaehigkeit.ziel, tFaehigkeit.energiekosten, tFaehigkeit.angriffsziel, tFaehigkeit.angriffswert, " +
 				 					"tFaehigkeit.heilungsziel, tFaehigkeit.heilungswert, tFaehigkeit.stunziel, tFaehigkeit.stundauer, " +
-				 					"tFaehigkeit.absorbationsziel, tFaehigkeit.absorbationsdauer, tFaehigkeit.schadensabsorbation " +
+				 					"tFaehigkeit.absorbationsziel, tFaehigkeit.absorbationsdauer, tFaehigkeit.schadensabsorbation, tFaehigkeit.cooldown " +
 				 			"FROM tagdb_faehigkeit tFaehigkeit " + 
 				 			"INNER JOIN tagdb_faehigkeit_koerperteile tFK " +
 				 				"ON tFaehigkeit.id = tFK.faehigkeit_id " +
@@ -281,6 +285,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		int absorbationziel;
 		int absorbationsdauer;
 		int schadensabsorbation;
+		int cooldown;
 		
 		while(cursor.moveToNext()){
 			
@@ -299,6 +304,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 			absorbationziel = cursor.getInt(10);
 			absorbationsdauer = cursor.getInt(11);
 			schadensabsorbation = cursor.getInt(12);
+			cooldown = cursor.getInt(13);
 						
 			
 			if(angriffswert!=0){
@@ -325,7 +331,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 				abilityComponents.add(buff);
 			}
 			
-			abilityList.add(new Ability(id, name, energiekosten, getAbilityTargetRestriction(ziel), abilityComponents));
+			abilityList.add(new Ability(id, name, energiekosten, cooldown, getAbilityTargetRestriction(ziel), abilityComponents));
 			
 			if(abilityList.isEmpty())
 				throw new MonsterDAOException("Empty ability list");
@@ -398,7 +404,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	
 	
 	public Monster getMonsterByID(int monsterID) throws MonsterDAOException{
-				
+		
 		Attribut attribut = getAttribute(monsterID);
 		
 		ArrayList<Koerperteil> koerperteile = null;
@@ -410,7 +416,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 				
 		Stats stats = getStats(monsterID);
 		
-		String sqlQuery = 	"SELECT name " +
+		String sqlQuery = 	"SELECT name, beschreibung " +
 							"FROM tagdb_monster " + 
 							"WHERE id = " + monsterID;
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
@@ -419,8 +425,9 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 			throw new MonsterDAOException("Monster has no name");
 
 		String monsterName = cursor.getString(0);
+		String monsterBeschreibung = cursor.getString(1);
 		
-		Monster monster = new Monster(monsterID, monsterName, attribut, koerperteile, stats);
+		Monster monster = new Monster(monsterID, monsterName, monsterBeschreibung, attribut, koerperteile, stats);
 		return monster;
 	}
 	
@@ -435,7 +442,6 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		}
 		
 	}
-	
 	private void updateAttribute(Monster monster) throws MonsterDAOException{
 		Attribut attr = monster.getAttributes();
 		
@@ -444,6 +450,22 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 				 			   " WHERE tagdb_attribute.monster_id = " + monster.id;
 
 		 myDataBase.execSQL(sqlQuery);
+	}
+	public void createDbStructureFromFile() throws IOException {
+	    
+		
+	    // Open the resource
+	    InputStream insertsStream = myContext.getAssets().open(BUILD_SCRIPT);
+	    BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertsStream));
+
+	    // Iterate through lines (assuming each insert has its own line and theres no other stuff)
+	    String statement = "";
+	    while (insertReader.ready()) {
+	        statement = insertReader.readLine();
+	    }
+	    insertReader.close();
+	    
+	    myDataBase.execSQL(statement);
 	}
 	
 	

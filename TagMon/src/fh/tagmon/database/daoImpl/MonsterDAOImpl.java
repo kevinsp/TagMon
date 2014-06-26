@@ -1,12 +1,11 @@
 package fh.tagmon.database.daoImpl;
 
-import android.content.Context;
-import android.database.SQLException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import android.content.Context;
+import android.database.SQLException;
 import fh.tagmon.database.dao.MonsterDAO;
 import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.gameengine.abilitys.Ability;
@@ -53,14 +52,14 @@ public class MonsterDAOImpl implements MonsterDAO {
 	@Override
 	public Monster getDummyMonster() throws MonsterDAOException {
 		Attribut attribut = new Attribut(0, 10, 11, 12);
-		Ability ability = new Ability(1, "Beiattacke", 20, AbilityTargetRestriction.ENEMY);
+		Ability ability = new Ability(1, "Beiﬂattacke", 20,2, AbilityTargetRestriction.ENEMY);
 		
 		IAbilityComponent component = new Damage(7, AbilityTargetRestriction.ENEMY);
 		ability.addAbilityComponent(component);
 		
 		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
 		
-		Ability blockAbility = new Ability(2, "BLOCKABILITY", 11, AbilityTargetRestriction.SELF);
+		Ability blockAbility = new Ability(2, "BLOCKABILITY", 11,2, AbilityTargetRestriction.SELF);
 		blockAbility.addAbilityComponent(new Buff(2,2,null,3,5,3));
 		abilityList.add(blockAbility);
 		
@@ -71,7 +70,7 @@ public class MonsterDAOImpl implements MonsterDAO {
 		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
 		koerperteilList.add(koerperteil);
 		Stats stats = new Stats(0,100,100,30,111,100,10,123,13);
-		Monster dummyMonster = new Monster(0, "MonsterName", attribut, koerperteilList, stats);
+		Monster dummyMonster = new Monster(0, "MonsterName","Beschr", attribut, koerperteilList, stats);
 		
 		return dummyMonster;
 	}
