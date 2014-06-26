@@ -43,7 +43,7 @@ public class MyMonsterCreator {
 		koerperteilList.add(arm);
 		
 		//setze Monster zusammen
-		Monster dummyMonster = new Monster(0, "MonsterName", attribut, koerperteilList, stats);
+		Monster dummyMonster = new Monster(0, "MonsterName","beschr", attribut, koerperteilList, stats);
 		
 		return dummyMonster;
 	}
@@ -69,7 +69,7 @@ public class MyMonsterCreator {
 		koerperteilList.add(arm);
 		
 		//setze Monster zusammen
-		Monster dummyMonster = new Monster(0, "MonsterName", attribut, koerperteilList, stats);
+		Monster dummyMonster = new Monster(0, "MonsterName","beschr", attribut, koerperteilList, stats);
 		
 		return dummyMonster;
 	}
@@ -94,7 +94,7 @@ public class MyMonsterCreator {
 		koerperteilList.add(arm);
 		
 		//setze Monster zusammen
-		Monster dummyMonster = new Monster(0, "MonsterName", attribut, koerperteilList, stats);
+		Monster dummyMonster = new Monster(0, "MonsterName","beschr", attribut, koerperteilList, stats);
 		
 		return dummyMonster;
 	}
@@ -103,21 +103,21 @@ public class MyMonsterCreator {
 	
 	
 	private Ability getBeiﬂAttacke(){
-		Ability ability = new Ability(1, "Beiﬂattacke", 20, AbilityTargetRestriction.ENEMY);
+		Ability ability = new Ability(1, "Beiﬂattacke", 20,30, AbilityTargetRestriction.ENEMY);
 		IAbilityComponent component = new Damage(32, AbilityTargetRestriction.ENEMY);
 		ability.addAbilityComponent(component);
 		return ability;
 	}
 	
 	private Ability getBlockAbility(){
-		Ability blockAbility = new Ability(2, "BLOCKABILITY", 11, AbilityTargetRestriction.SELF);
+		Ability blockAbility = new Ability(2, "BLOCKABILITY", 11,20, AbilityTargetRestriction.SELF);
 		IAbilityComponent buff = new Buff(1,2,null,3,2,3);
 		blockAbility.addAbilityComponent(buff);
 		return blockAbility;
 	}
 	
 	private Ability getAbsorbAbility(){
-		Ability absorbAbility = new Ability(3, "Absorber", 10, AbilityTargetRestriction.SELF);
+		Ability absorbAbility = new Ability(3, "Absorber", 10,20, AbilityTargetRestriction.SELF);
 		IAbilityComponent schadensAbsorb = new Schadensabsorbation(3, 25, null);
 		absorbAbility.addAbilityComponent(schadensAbsorb);
 		return absorbAbility;
