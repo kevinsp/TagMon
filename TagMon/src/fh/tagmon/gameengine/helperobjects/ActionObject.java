@@ -7,13 +7,17 @@ import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
 
 public class ActionObject implements Serializable {
-	private static final long serialVersionUID = 1L;
-	private final Ability abilityComp;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8210956891399262445L;
+	private final Ability ability;
 	private final AbilityTargetRestriction targetRes;
 	
 	public ActionObject (Ability ability, AbilityTargetRestriction targetRes){
 		
-		this.abilityComp = ability;
+		this.ability = ability;
 		this.targetRes = targetRes;
 
 	}
@@ -23,7 +27,7 @@ public class ActionObject implements Serializable {
 	}
 	
 	public Ability getAbility(){
-		return this.abilityComp;
+		return this.ability;
 	}
 
 	

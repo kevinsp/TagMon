@@ -62,9 +62,7 @@ public class AbilityComponentDirector implements IListener{
 			break;
 		case SCHADENSABSORBATION:
 			Schadensabsorbation schadenAbs = (Schadensabsorbation) abilityComponent;
-			///TEST
-				Log.i("GameEngine", "KI resv ... abs:" + String.valueOf(schadenAbs.getAbsorbationAmount()));
-			///
+			testiVonRolle(schadenAbs);
 			this.dmgAbsHandler.handleDamageAbsorbation(schadenAbs);
 			event += "sicht mit einem natürlichen Schild gewappnet!";
 		case STUN:
@@ -90,5 +88,9 @@ public class AbilityComponentDirector implements IListener{
 	}
 
 
-	
+	private void testiVonRolle(Schadensabsorbation schadenAbs){
+		///TEST
+		Log.i("GameEngine", "KI resv ... abs:" + String.valueOf(schadenAbs.getAbsorbationAmount()));
+		///
+	}
 }

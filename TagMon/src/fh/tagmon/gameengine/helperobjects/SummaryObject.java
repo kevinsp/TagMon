@@ -7,7 +7,11 @@ import java.util.List;
 import fh.tagmon.gameengine.gameengine.PlayerInfo;
 
 public class SummaryObject implements Serializable{
-	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7922514636100421879L;
 	private final StringBuilder summary = new StringBuilder();
 	private final List<PlayerInfo> infos = new ArrayList<PlayerInfo>();
 	
