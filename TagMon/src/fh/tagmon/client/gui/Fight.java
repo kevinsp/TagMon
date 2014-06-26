@@ -175,6 +175,52 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         enemyNameView.setText(name);
     }
 
+    public boolean setEnemyHead(String imgName) {
+        try {
+            ImageView imgView = (ImageView) findViewById(R.id.enemyHead);
+            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+            imgView.setImageResource(resID);
+        }catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean setEnemyBody(String imgName) {
+        try{
+            ImageView imgView = (ImageView) findViewById(R.id.enemyBody);
+            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+            imgView.setImageResource(resID);
+        }catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+    public boolean setEnemyLeftLeg(String imgName) {
+        try {
+            ImageView imgView = (ImageView) findViewById(R.id.enemyLeftLegBack);
+            ImageView imgView2 = (ImageView) findViewById(R.id.enemyLeftLegFront);
+            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+            imgView.setImageResource(resID);
+            imgView2.setImageResource(resID);
+        }catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+    public boolean setEnemyRightLeg(String imgName) {
+        try {
+            ImageView imgView = (ImageView) findViewById(R.id.enemyRightLegBack);
+            ImageView imgView2 = (ImageView) findViewById(R.id.enemyRightLegFront);
+            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+            imgView.setImageResource(resID);
+            imgView2.setImageResource(resID);
+        }catch (Exception ex) {
+            return false;
+        }
+        return true;
+    }
+
     public void refreshUserLife(int maxLife, int currentLife) {
         //health bar
         ProgressBar ownHealthBar = (ProgressBar) findViewById(R.id.ownHealthBar);
