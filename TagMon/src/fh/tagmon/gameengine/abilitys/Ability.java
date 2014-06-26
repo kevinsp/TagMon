@@ -17,22 +17,25 @@ public class Ability implements Serializable {
 	private String abilityName;
 	private AbilityTargetRestriction targetRestriction;
 	private int energyCost;
+	private int cooldown;
 	
 	private LinkedList<IAbilityComponent> abilityComponents = new LinkedList<IAbilityComponent>();
 	
 	
-	public Ability(int id, String abilityName, int energyCost, AbilityTargetRestriction targetRestriction){
+	public Ability(int id, String abilityName, int energyCost, int cooldown, AbilityTargetRestriction targetRestriction){
 		this.id = id;
 		this.targetRestriction = targetRestriction;
 		this.abilityName = abilityName;
+		this.cooldown = cooldown;
 		this.energyCost = energyCost;	
 	}
 	
-	public Ability(int id, String abilityName, int energyCost, AbilityTargetRestriction targetRestriction, LinkedList<IAbilityComponent> abilityComponents){
+	public Ability(int id, String abilityName, int energyCost,int cooldown, AbilityTargetRestriction targetRestriction, LinkedList<IAbilityComponent> abilityComponents){
 		this.id = id;
 		this.targetRestriction = targetRestriction;
 		this.abilityName = abilityName;
 		this.energyCost = energyCost;
+		this.cooldown = cooldown;
 		this.abilityComponents = abilityComponents;
 	}
 	
@@ -65,6 +68,15 @@ public class Ability implements Serializable {
 	
 	public int getEnergyCosts(){
 		return energyCost;
+	}
+	
+	
+	public int getCooldown(){
+		return cooldown;
+	}
+	
+	public void setCooldown(int cooldown){
+		this.cooldown = cooldown;
 	}
 	
 }

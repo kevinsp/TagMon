@@ -9,6 +9,7 @@ public class Monster {
 	
 	public final int id;
 	public final String name;
+	public final String beschreibung;
 	
 	private Attribut attribut;
 	
@@ -26,9 +27,10 @@ public class Monster {
 	private final DurationAbilityListHandler durationAbilityListHandler = new DurationAbilityListHandler();
 	private final DamageAbsorbationHelper dmgAbsHandler = new DamageAbsorbationHelper(this.durationAbilityListHandler);
 	
-	public Monster(int id, String name, Attribut attribut, ArrayList<Koerperteil> koerperteile, Stats stats){
+	public Monster(int id, String name, String beschreibung, Attribut attribut, ArrayList<Koerperteil> koerperteile, Stats stats){
 		this.id = id;
 		this.name = name;
+		this.beschreibung = beschreibung;
 		this.attribut = attribut;
 		this.koerperteile = koerperteile;
 		this.stats = stats;
