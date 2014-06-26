@@ -1,4 +1,6 @@
-BEGIN TRANSACTION;
+CREATE TABLE "tagdb_Player"(
+"name" varchar(50)
+);
 CREATE TABLE "tagdb_stats" (
     "id" integer NOT NULL PRIMARY KEY,
     "maxHP" integer NOT NULL,
@@ -69,7 +71,6 @@ CREATE TABLE "tagdb_attribute" (
     "konstitution" integer NOT NULL,
     "monster_id" integer NOT NULL UNIQUE REFERENCES "tagdb_monster" ("id")
 );
-INSERT INTO `tagdb_attribute` VALUES(1,5,3,3,1);
 CREATE TABLE "tagdb_monster" (
     "id" integer NOT NULL PRIMARY KEY,
     "name" varchar(50) NOT NULL,
