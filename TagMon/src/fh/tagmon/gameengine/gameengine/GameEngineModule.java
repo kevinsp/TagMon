@@ -58,7 +58,8 @@ public class GameEngineModule {
     	*/
 
 
-    	this.testAbsorber();
+    	//this.testAbsorber();
+    	testKiVSKi();
     }
 
     

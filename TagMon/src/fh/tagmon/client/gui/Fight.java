@@ -18,9 +18,9 @@ import java.util.List;
 import fh.tagmon.R;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.GameEngineModule;
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
-import fh.tagmon.gameengine.player.IPlayer;
+
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 import fh.tagmon.rollestestecke.MyMonsterCreator;
@@ -37,7 +37,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     private ISetAbility iSetAbility;
     private List<Ability> abilities;
 
-    private IPlayer player;
+
 
 
     private Ability lastChoosenAbility = null;

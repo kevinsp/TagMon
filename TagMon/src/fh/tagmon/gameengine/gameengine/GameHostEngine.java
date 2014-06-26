@@ -15,6 +15,7 @@ import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.helperobjects.SummaryObject;
+import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
 public class GameHostEngine extends AsyncTask<Void, Void, Void>{
@@ -39,7 +40,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
     private void initGameStart(){
     	for(Entry<Integer, IHostPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
     		PlayerInfo playerInfo = entry.getValue().gameStarts(entry.getKey());
-    		this.playerList.addPlayerInfo(entry.getKey(), playerInfo);
+    		this.playerList.addPlayerInfo(playerInfo);
     	}
     }
     
@@ -63,7 +64,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
             currentPlayer = this.playerList.getNextPlayer();
 
             // 2Phase
-            ActionObject action = currentPlayer.yourTurn(this.playerList.getPlayerInfoMap(), this.playerList.getCurrentPlayerTargetId());
+            ActionObject action = currentPlayer.yourTurn(this.playerList.getPlayerInfoList(), this.playerList.getCurrentPlayerTargetId());
 
             
            

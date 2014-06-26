@@ -15,7 +15,7 @@ import fh.tagmon.client.gui.GuiPartsToUpdate;
 import fh.tagmon.client.gui.ISetAbility;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.helperobjects.SummaryObject;

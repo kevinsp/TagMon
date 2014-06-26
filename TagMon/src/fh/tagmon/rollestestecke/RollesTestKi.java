@@ -2,6 +2,7 @@ package fh.tagmon.rollestestecke;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import android.util.Log;
@@ -10,7 +11,7 @@ import fh.tagmon.gameengine.abilitys.AbilityComponentTypes;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
 import fh.tagmon.gameengine.helperobjects.AnswerObject;
 import fh.tagmon.gameengine.player.MonsterPlayModule;
@@ -83,7 +84,7 @@ public class RollesTestKi {
 				this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(kiName, id));
 				break;
 			case YOUR_TURN:
-				doMyTurn((MessageObject<HashMap<Integer, PlayerInfo>>)msgFromHost);
+				doMyTurn((MessageObject<List<PlayerInfo>>)msgFromHost);
 				break;
 			default:
 				break;
@@ -95,10 +96,10 @@ public class RollesTestKi {
     		
     }
     
-    private void doMyTurn(MessageObject<HashMap<Integer, PlayerInfo>> yourTurnMsg){
-    	//ULTRA WICHTIG muss jedes mal befor ich drann bin ausgeführt werden
-    	if(yourTurnMsg.messageType == MessageType.YOUR_TURN)
-    	this.playModule.newRound((HashMap<Integer, PlayerInfo>)yourTurnMsg.getContent(), this.id); 
+    private void doMyTurn(MessageObject<List<PlayerInfo>> yourTurnMsg){
+    	List<PlayerInfo> li = (List<PlayerInfo>) yourTurnMsg.getContent();
+    	
+    	this.playModule.newRound( (List<PlayerInfo>) yourTurnMsg.getContent(), this.id); 
     	
     	Ability chosenAbility = choseRandomAbility();
     	AbilityTargetRestriction targetRes = this.choseRandomTarget(chosenAbility);

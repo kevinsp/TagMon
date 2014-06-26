@@ -2,8 +2,9 @@ package fh.tagmon.gameengine.player;
 
 
 import java.util.HashMap;
+import java.util.List;
 
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+
 import fh.tagmon.gameengine.player.choseability.AbilityChooser;
 import fh.tagmon.gameengine.player.choseability.AbilityUpdater;
 import fh.tagmon.gameengine.player.deal_with_incoming_abilitys.AbilityComponentDirector;
@@ -38,7 +39,7 @@ public class MonsterPlayModule {
 		this.internalEventManager.addListener(myMonstersAbilityComponentDirector);
 	}
 	
-	public void newRound(HashMap<Integer, PlayerInfo> targetList, int yourTargetId){
+	public void newRound(List<PlayerInfo> targetList, int yourTargetId){
 		this.internalEventManager.sendNewRoundEvent(targetList, yourTargetId);
 	}
 	

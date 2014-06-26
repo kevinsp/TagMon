@@ -4,7 +4,7 @@ package fh.tagmon.client.gui;
 import java.util.List;
 
 import fh.tagmon.gameengine.abilitys.Ability;
-import fh.tagmon.gameengine.gameengine.PlayerInfo;
+import fh.tagmon.gameengine.player.PlayerInfo;
 
 public interface IBattleGUI {
 
