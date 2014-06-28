@@ -62,7 +62,6 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
     }
 
     private void connectToNetwork(ConnectionType type){
-    	Thread t = null;
 		switch(type){
 		case BLUETOOTH:
 			break;
@@ -82,18 +81,12 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 			break;
 		}
 		if(connection != null){
-		    testCon();
-          //  connection.addObserver(this);
-           // t.start();
+		    listenToBroadcast();
 		}
     }
 
-	private void stop(){
-		connection.deleteObservers();
-		connection.closeConnection();
-	}
 
-    private void testCon(){
+    private void listenToBroadcast(){
         boolean running = true;
         while(running) {
             MessageObject<?> obj= connection.listenToBroadcast();
@@ -101,70 +94,84 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
         }
     }
 
-    private boolean firstTurn = true;
-	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable observable, Object hostMsg) {
 		MessageObject<?> msg = (MessageObject<?>) hostMsg;
         switch(msg.messageType){
-		case ABILITY_COMPONENT:
-			AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
-			PlayerInfo info = new PlayerInfo(Helper_PlayerSettings.playerName, ID);
-			AbilityComponentDirector director = monster.getMonstersAbilityComponentDirector();
-			AnswerObject answerObject = director.handleAbilityComponents(abilityComponents, info);
-			connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, ID));
-			break;
+        case GAME_START:
+            proceedGameStart(msg);
+            break;
 		case SUMMARY:
-            if(this.players == null)
-                this.players = (List <PlayerInfo>) ((SummaryObject)msg.getContent()).getPlayerInfos();
-			SummaryObject summary = (SummaryObject)msg.getContent();
-            ((Fight)context).refreshGUI(summary.getPlayerInfos(), GuiPartsToUpdate.HEALTH);
-
-            Log.d("summary", "got summary");
-            synchronized (waitForOtherDialog) {
-                while (waitForDialog) {
-                    try {
-                        waitForOtherDialog.wait();
-                    } catch (InterruptedException e) { }
-                }
-            }
-            ((Fight)context).showTemporaryDialog(summary.getSummary(), this);
-
-            onPauseDialog();
-
-
+            proceedSummary(msg);
+			break;
+		case YOUR_TURN:
+            proceedYourTurn(msg);
+			break;
+		case ABILITY_COMPONENT:
+			proceedIncomingAbilityComponent(msg);
 			break;
 		case GAME_OVER:
 			stop(); 
-			//Statistik ausgeben und zum Hauptbildschirm zurck.
-			//Optional: hchster Damage, gespielte Runden bla bla mitloggen..
 			break;
-		case YOUR_TURN:
-            Log.d("your Turn", "player turn");
-            this.monster.newRound(players, ID);
-			if(firstTurn){
-				List<Ability> abilitylist = monster.getMonster().getAbilitys();
-				((Fight) context).initBattleGUI(players, ID, abilitylist);
-                firstTurn = false;
-			}
-            onPause();
-			ActionObject actionObject = waitForAction();
-
-			connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
-			break;
-        case GAME_START:
-            this.ID = (Integer) msg.getContent();
-            PlayerInfo startInfo = new PlayerInfo(Helper_PlayerSettings.playerName, ID);
-            startInfo.setCurrentLife(monster.getMonster().getCurrentLifePoints());
-            startInfo.setMaxLife(monster.getMonster().getMaxLifePoints());
-            this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(startInfo, 0));
-            break;
 		default:
 			((Fight)context).showTemporaryDialog("Ungltige Host-Message", this);
 			break;
 		}
 	}
 	
+	private void proceedGameStart(MessageObject<?> msg){
+		this.ID = (Integer) msg.getContent();
+        PlayerInfo startInfo = new PlayerInfo(Helper_PlayerSettings.playerName, ID);
+        startInfo.setCurrentLife(monster.getMonster().getCurrentLifePoints());
+        startInfo.setMaxLife(monster.getMonster().getMaxLifePoints());
+        this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(startInfo, 0));
+	}
+	
+	private void proceedSummary(MessageObject<?> msg){
+		if(this.players == null)
+			prepareFightGUI((List <PlayerInfo>) ((SummaryObject)msg.getContent()).getPlayerInfos());
+		
+		SummaryObject summary = (SummaryObject)msg.getContent();
+        ((Fight)context).refreshGUI(summary.getPlayerInfos(), GuiPartsToUpdate.HEALTH);
+
+        Log.d("summary", "got summary");
+        synchronized (waitForOtherDialog) {
+            while (waitForDialog) {
+                try {
+                    waitForOtherDialog.wait();
+                } catch (InterruptedException e) { }
+            }
+        }
+        ((Fight)context).showTemporaryDialog(summary.getSummary(), this);
+
+        onPauseDialog();
+	}
+	private void prepareFightGUI(List <PlayerInfo> players){
+		this.players = players;
+        List<Ability> abilitylist = monster.getMonster().getAbilitys();
+        ((Fight) context).initBattleGUI(players, ID, abilitylist);
+	}
+    /**
+     * Call this on pause.
+     */
+    public void onPauseDialog() {
+        synchronized (waitForOtherDialog){ waitForDialog = true; }
+    }
+	
+	private void proceedYourTurn(MessageObject<?> msg){
+		Log.d("your Turn", "player turn");
+        this.monster.newRound(players, ID);
+        onPause();
+		ActionObject actionObject = waitForAction();
+
+		connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
+	}
+    /**
+     * Call this on pause.
+     */
+    public void onPause() {
+        synchronized (waitForPlayer){ wait = true; }
+    }
 	private ActionObject waitForAction() {
         synchronized (waitForOtherDialog) {
             while (waitForDialog) {
@@ -185,15 +192,27 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
         action = choosenAbility;
         return action;
     }
+	
+	private void proceedIncomingAbilityComponent(MessageObject<?> msg){
+		AbilityComponentDirector director = monster.getMonstersAbilityComponentDirector();
+		AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
+		PlayerInfo info = new PlayerInfo(Helper_PlayerSettings.playerName, ID);
+		AnswerObject answerObject = director.handleAbilityComponents(abilityComponents, info);
+		connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, ID));
+	}
+	
+	private void stop(){
+		connection.deleteObservers();
+		connection.closeConnection();
+	}
+	
 
 
-    /**
-     * Call this on pause.
-     */
-    public void onPause() {
-        synchronized (waitForPlayer){ wait = true; }
+    @Override
+    public void setAbility(ActionObject actionObject) {
+        choosenAbility = actionObject;
+        onResume();
     }
-
     /**
      * Call this on resume.
      */
@@ -204,18 +223,6 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
         }
     }
 
-    @Override
-    public void setAbility(ActionObject actionObject) {
-        choosenAbility = actionObject;
-        onResume();
-    }
-
-    /**
-     * Call this on pause.
-     */
-    public void onPauseDialog() {
-        synchronized (waitForOtherDialog){ waitForDialog = true; }
-    }
 
     /**
      * Call this on resume.
