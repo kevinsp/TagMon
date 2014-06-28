@@ -3,6 +3,7 @@ package fh.tagmon.client.gui;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -18,9 +19,8 @@ import java.util.List;
 import fh.tagmon.R;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.gameengine.GameEngineModule;
-import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.helperobjects.ActionObject;
-
+import fh.tagmon.gameengine.player.PlayerInfo;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Monster;
 import fh.tagmon.rollestestecke.MyMonsterCreator;
@@ -34,8 +34,10 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     private Context context = this;
     private DialogBuilder chooseDialog;
     private GameEngineModule engineModule;
+
     private ISetAbility iSetAbility;
     private List<Ability> abilities;
+    private DialogBuilder summaryDialog;
 
 
 
@@ -137,138 +139,163 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         }
     }
 
-    public void initUserGui(String name) {
+    public void initUserGui(final String name) {
+        runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
 
-        //refreshUserLife(maxLife, currentLife);
 
-        //level
-        // TextView ownLevelView = (TextView) findViewById(R.id.ownLevel);
-        // ownLevelView.setText(String.valueOf(level));
 
-        ImageView image = (ImageView) findViewById(R.id.ownImage);
+                              //refreshUserLife(maxLife, currentLife);
+
+                              //level
+                              // TextView ownLevelView = (TextView) findViewById(R.id.ownLevel);
+                              // ownLevelView.setText(String.valueOf(level));
+
+        //                      ImageView image = (ImageView) findViewById(R.id.ownImage);
        /* String enemyDrawable = tagMon.getDrawable();
         int resID = getResources().getIdentifier(enemyDrawable, "drawable", getPackageName());
         image.setImageResource(resID);
         */
 
-        //name
-        TextView ownNameView = (TextView) findViewById(R.id.ownName);
-//        ownNameView.setText(name);
-
+                              //name
+                              TextView ownNameView = (TextView) findViewById(R.id.ownName);
+                              ownNameView.setText(name);
+                          }
+                      }
+        );
     }
-    public void initEnemyGui(String name) {
-
-        //set the image for the enemy
-        //ImageView image = (ImageView) findViewById(R.id.enemyImage);
+    public void initEnemyGui(final String name) {
+        runOnUiThread(new Runnable() {
+                          @Override
+                          public void run() {
+                              //set the image for the enemy
+                              //ImageView image = (ImageView) findViewById(R.id.enemyImage);
        /* String enemyDrawable = tagMon.getDrawable();
         int resID = getResources().getIdentifier(enemyDrawable, "drawable", getPackageName());
         image.setImageResource(resID);
         */
 
-        //  refreshEnemyLife(maxLife, currentLife);
-        //level
-        //   TextView enemyLevelView = (TextView) findViewById(R.id.enemyLevel);
-        // enemyLevelView.setText(String.valueOf(level));
+                              //  refreshEnemyLife(maxLife, currentLife);
+                              //level
+                              //   TextView enemyLevelView = (TextView) findViewById(R.id.enemyLevel);
+                              // enemyLevelView.setText(String.valueOf(level));
 
-        //name
-        TextView enemyNameView = (TextView) findViewById(R.id.enemyName);
-       // enemyNameView.setText(name);
+                              //name
+                              TextView enemyNameView = (TextView) findViewById(R.id.enemyName);
+                              enemyNameView.setText(name);
+                          }
+                      }
+        );
     }
 
-    public boolean setEnemyHead(String imgName) {
-        try {
-            ImageView imgView = (ImageView) findViewById(R.id.enemyHead);
-            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
-            imgView.setImageResource(resID);
-        }catch (Exception ex) {
-            return false;
-        }
-        return true;
+    public void setEnemyHead(final String imgName) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    ImageView imgView = (ImageView) findViewById(R.id.enemyHead);
+                    int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+                    imgView.setImageResource(resID);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }});
     }
 
-    public boolean setEnemyBody(String imgName) {
-        try{
-            ImageView imgView = (ImageView) findViewById(R.id.enemyBody);
-            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
-            imgView.setImageResource(resID);
-        }catch (Exception ex) {
-            return false;
-        }
-        return true;
+    public void setEnemyBody(final String imgName) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ImageView imgView = (ImageView) findViewById(R.id.enemyBody);
+                    int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+                    imgView.setImageResource(resID);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }});
     }
-    public boolean setEnemyLeftLeg(String imgName) {
-        try {
-            ImageView imgView = (ImageView) findViewById(R.id.enemyLeftLegBack);
-            ImageView imgView2 = (ImageView) findViewById(R.id.enemyLeftLegFront);
-            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
-            imgView.setImageResource(resID);
-            imgView2.setImageResource(resID);
-        }catch (Exception ex) {
-            return false;
-        }
-        return true;
-    }
-    public boolean setEnemyRightLeg(String imgName) {
-        try {
-            ImageView imgView = (ImageView) findViewById(R.id.enemyRightLegBack);
-            ImageView imgView2 = (ImageView) findViewById(R.id.enemyRightLegFront);
-            int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
-            imgView.setImageResource(resID);
-            imgView2.setImageResource(resID);
-        }catch (Exception ex) {
-            return false;
-        }
-        return true;
-    }
+    public void setEnemyLeftLeg(final String imgName) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ImageView imgView = (ImageView) findViewById(R.id.enemyLeftLegBack);
+                    ImageView imgView2 = (ImageView) findViewById(R.id.enemyLeftLegFront);
+                    int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+                    imgView.setImageResource(resID);
+                    imgView2.setImageResource(resID);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
 
-    public void refreshUserLife(int maxLife, int currentLife) {
-        //health bar
-        ProgressBar ownHealthBar = (ProgressBar) findViewById(R.id.ownHealthBar);
-        ownHealthBar.setMax(maxLife);
-        ownHealthBar.setProgress(currentLife);
-        TextView ownHealthBarNumberTextView = (TextView) findViewById(R.id.ownHealthBarNumber);
-        String ownLifeProgress = String.format("%d/%d", currentLife, maxLife);
-        ownHealthBarNumberTextView.setText(ownLifeProgress);
+            }});
     }
-
-
-    public void refreshEnemyLife(int maxLife, int currentLife) {
-        //health bar
-        ProgressBar enemyHealthBar = (ProgressBar) findViewById(R.id.enemyHealthBar);
-        enemyHealthBar.setMax(maxLife);
-        enemyHealthBar.setProgress(currentLife);
-        TextView enemyHealthBarNumberTextView = (TextView) findViewById(R.id.enemyHealthBarNumber);
-        String enemyLifeProgress = String.format("%d/%d", currentLife, maxLife);
-        enemyHealthBarNumberTextView.setText(enemyLifeProgress);
+    public void setEnemyRightLeg(final String imgName) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    ImageView imgView = (ImageView) findViewById(R.id.enemyRightLegBack);
+                    ImageView imgView2 = (ImageView) findViewById(R.id.enemyRightLegFront);
+                    int resID = getResources().getIdentifier(imgName, "drawable", getPackageName());
+                    imgView.setImageResource(resID);
+                    imgView2.setImageResource(resID);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }});
     }
 
-
-
-/*
-    //disable buttons
-    public void toggleButtons(boolean enable) {
-        findViewById(R.id.tryToEscape).setEnabled(enable);
-        findViewById(R.id.chooseAttack).setEnabled(enable);
-        findViewById(R.id.openInventory).setEnabled(enable);
+    public void refreshUserLife(final int maxLife, final int currentLife) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //health bar
+                ProgressBar ownHealthBar = (ProgressBar) findViewById(R.id.ownHealthBar);
+                ownHealthBar.setMax(maxLife);
+                ownHealthBar.setProgress(currentLife);
+                TextView ownHealthBarNumberTextView = (TextView) findViewById(R.id.ownHealthBarNumber);
+                String ownLifeProgress = String.format("%d/%d", currentLife, maxLife);
+                ownHealthBarNumberTextView.setText(ownLifeProgress);
+            }});
     }
-*/
+
+
+    public void refreshEnemyLife(final int maxLife,final int currentLife) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //health bar
+                ProgressBar enemyHealthBar = (ProgressBar) findViewById(R.id.enemyHealthBar);
+                enemyHealthBar.setMax(maxLife);
+                enemyHealthBar.setProgress(currentLife);
+                TextView enemyHealthBarNumberTextView = (TextView) findViewById(R.id.enemyHealthBarNumber);
+                String enemyLifeProgress = String.format("%d/%d", currentLife, maxLife);
+                enemyHealthBarNumberTextView.setText(enemyLifeProgress);
+            }});
+    }
+
+
     //try to escape from the fight
     public void tryToEscape() {
         finishActivity();
     }
-/*
-    //handling button clicks
-    public void onBtnClicked(View v) {
-        if (v.getId() == R.id.chooseAttack) {
-            // showAttackPossibilites(v);
-            // disableButtons();
-        } else if (v.getId() == R.id.openInventory) {
-            // openInventory();
-        } else if (v.getId() == R.id.tryToEscape) {
-            // tryToEscape();
+    /*
+        //handling button clicks
+        public void onBtnClicked(View v) {
+            if (v.getId() == R.id.chooseAttack) {
+                // showAttackPossibilites(v);
+                // disableButtons();
+            } else if (v.getId() == R.id.openInventory) {
+                // openInventory();
+            } else if (v.getId() == R.id.tryToEscape) {
+                // tryToEscape();
+            }
         }
-    }
-*/
+    */
     public void finishActivity() {
         battleGuiInit = false;
         finish();
@@ -300,7 +327,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 targetNames.add(targetName);
                 //}
 
-               // final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
+                // final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
 
                 runOnUiThread(new Runnable() {
                                   @Override
@@ -391,32 +418,45 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         }
     };
 
-    public void showTemporaryDialog(String content) {
-//        DialogBuilder db = new DialogBuilder(this, "Zusammenfassung", content, -1);
+    public void showTemporaryDialog(final String content, final ISetAbility onresumeDialog) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                summaryDialog = new DialogBuilder(context, "Zusammenfassung", content, -1);
+                summaryDialog.setOnDismissListener((new DialogInterface.OnDismissListener() {
+
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        onresumeDialog.onResumeDialog();
+                    }
+
+                }));
+            }});
     }
 
     @Override
     public void refreshGUI(final List<PlayerInfo> players, final Enum<GuiPartsToUpdate> partToUpdate) {
-        if (battleGuiInit) {
+        if (battleGuiInit && !players.isEmpty()) {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
                     if (partToUpdate == GuiPartsToUpdate.HEALTH) {
                         for (PlayerInfo playerInfo : players) {
-                            /*
-                            int maxLife = playerInfo.getMaxLife();
-                            int currentLife = playerInfo.getCurrentLife();
-                            if (playerInfo.ID == userId) {
-                                refreshUserLife(maxLife, currentLife);
-                            } else {
-                                refreshEnemyLife(maxLife, currentLife);
-                            }*/
+                            if (playerInfo != null) {
+                                int maxLife = playerInfo.getMaxLife();
+                                int currentLife = playerInfo.getCurrentLife();
+                                if (playerInfo.ID == userId) {
+                                    refreshUserLife(maxLife, currentLife);
+                                } else {
+                                    refreshEnemyLife(maxLife, currentLife);
+                                }
+                            }
                         }
                     }
-                }
+                    }
+
             });
-        } else {
-            //TODO: do something on error, throw exception for example
         }
     }
 
@@ -452,4 +492,5 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                       }
         );
     }
+
 }

@@ -32,6 +32,8 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 	private Context context;
     private final Object waitForPlayer;
     private boolean wait = true;
+    private final Object waitForOtherDialog;
+    private boolean waitForDialog = false;
     private ActionObject choosenAbility;
     
     //TODO durch zentralgespeicherte eigene player-ID ersetzen
@@ -50,6 +52,7 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 		this.monster = mPM;
         this.type = type;
         waitForPlayer = new Object();
+        waitForOtherDialog = new Object();
 	}
 
     @Override
@@ -102,7 +105,6 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update(Observable observable, Object hostMsg) {
-		Log.i("TEST", "testi");
 		MessageObject<?> msg = (MessageObject<?>) hostMsg;
         switch(msg.messageType){
 		case ABILITY_COMPONENT:
@@ -116,8 +118,21 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
             if(this.players == null)
                 this.players = (List <PlayerInfo>) ((SummaryObject)msg.getContent()).getPlayerInfos();
 			SummaryObject summary = (SummaryObject)msg.getContent();
-			((Fight)context).showTemporaryDialog(summary.getSummary());
             ((Fight)context).refreshGUI(summary.getPlayerInfos(), GuiPartsToUpdate.HEALTH);
+
+            Log.d("summary", "got summary");
+            synchronized (waitForOtherDialog) {
+                while (waitForDialog) {
+                    try {
+                        waitForOtherDialog.wait();
+                    } catch (InterruptedException e) { }
+                }
+            }
+            ((Fight)context).showTemporaryDialog(summary.getSummary(), this);
+
+            onPauseDialog();
+
+
 			break;
 		case GAME_OVER:
 			stop(); 
@@ -125,6 +140,7 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 			//Optional: hchster Damage, gespielte Runden bla bla mitloggen..
 			break;
 		case YOUR_TURN:
+            Log.d("your Turn", "player turn");
             this.monster.newRound(players, ID);
 			if(firstTurn){
 				List<Ability> abilitylist = monster.getMonster().getAbilitys();
@@ -144,12 +160,19 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
             this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(startInfo, 0));
             break;
 		default:
-			((Fight)context).showTemporaryDialog("Ungltige Host-Message");
+			((Fight)context).showTemporaryDialog("Ungltige Host-Message", this);
 			break;
 		}
 	}
 	
 	private ActionObject waitForAction() {
+        synchronized (waitForOtherDialog) {
+            while (waitForDialog) {
+                try {
+                    waitForOtherDialog.wait();
+                } catch (InterruptedException e) { }
+            }
+        }
         ActionObject action = null;
         ((Fight) context).chooseAbility(this);
         synchronized (waitForPlayer) {
@@ -185,5 +208,22 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
     public void setAbility(ActionObject actionObject) {
         choosenAbility = actionObject;
         onResume();
+    }
+
+    /**
+     * Call this on pause.
+     */
+    public void onPauseDialog() {
+        synchronized (waitForOtherDialog){ waitForDialog = true; }
+    }
+
+    /**
+     * Call this on resume.
+     */
+    public void onResumeDialog() {
+        synchronized (waitForOtherDialog) {
+            waitForDialog = false;
+            waitForOtherDialog.notifyAll();
+        }
     }
 }

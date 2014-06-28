@@ -57,6 +57,7 @@ public class DialogBuilder extends Dialog {
         initDialog();
     }
 
+    //summary dialog
     public DialogBuilder(Context context, String title, String text, int timeTilClose) {
         //timeTilClose = -1 -> isn't closed automatically
         super(context);
@@ -74,22 +75,24 @@ public class DialogBuilder extends Dialog {
 
     private void initDialog() {
 
-        setContentView(R.layout.custom_dialog);
-        setTitle(title);
-
         if (items != null && onClickListener != null) {
+            setContentView(R.layout.custom_dialog);
             setItemsInScrollList();
+            setTitle(title);
         } else if(timeTilClose != 0 && !text.equals("")) {
+            setContentView(R.layout.custom_dialog_summary);
+            setTitle(title);
             setText();
             closeAfterTime();
         }
-
-
         showDialog();
 
     }
 
     private void setText() {
+        TextView tv = (TextView) findViewById(R.id.summaryText);
+        tv.setText(text);
+        /*
         TableLayout table = (TableLayout) findViewById(R.id.custom_dialog_scroll_table);
         TableRow tr = new TableRow(context);
         TextView tv = new TextView(context);
@@ -98,7 +101,7 @@ public class DialogBuilder extends Dialog {
         tv.setLayoutParams(new TableRow.LayoutParams(1));
         tv.setGravity(Gravity.CENTER);
         tr.addView(tv);
-        table.addView(tr);
+        table.addView(tr);*/
     }
 
     private void closeAfterTime() {
@@ -144,7 +147,7 @@ public class DialogBuilder extends Dialog {
                     ll.addView(iv);
                 }
             }
-tr.addView(ll);
+            tr.addView(ll);
 
             TextView tv = new TextView(context);
             String itemName = getTextForItem(item);
@@ -223,4 +226,5 @@ tr.addView(ll);
 
         return name;
     }
+
 }
