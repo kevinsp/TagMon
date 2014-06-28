@@ -37,6 +37,7 @@ public class NetworkSocketConnection extends ANetworkConnection{
 		} catch (IOException e) {
 			Log.e(TAG, e.getMessage());
 		} catch (ClassNotFoundException e) {
+			Log.e(TAG, e.getMessage());
 			e.printStackTrace();
 		} return null;
 	}
