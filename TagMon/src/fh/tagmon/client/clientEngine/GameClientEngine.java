@@ -119,35 +119,14 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 		}
 	}
 	
-	private ActionObject waitForAction() {
-        synchronized (waitForOtherDialog) {
-            while (waitForDialog) {
-                try {
-                    waitForOtherDialog.wait();
-                } catch (InterruptedException e) { }
-            }
-        }
-        ActionObject action = null;
-        ((Fight) context).chooseAbility(this);
-        synchronized (waitForPlayer) {
-        	while (wait) {
-        		try {
-        			waitForPlayer.wait();
-        		} catch (InterruptedException e) { }
-        	}
-        }
-        action = choosenAbility;
-        return action;
-    }
-	
-	
-	private void proceedIncomingAbilityComponent(MessageObject<?> msg){
-		AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
-		PlayerInfo info = new PlayerInfo(Helper_PlayerSettings.playerName, ID);
-		AbilityComponentDirector director = monster.getMonstersAbilityComponentDirector();
-		AnswerObject answerObject = director.handleAbilityComponents(abilityComponents, info);
-		connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, ID));
+	private void proceedGameStart(MessageObject<?> msg){
+		this.ID = (Integer) msg.getContent();
+        PlayerInfo startInfo = new PlayerInfo(Helper_PlayerSettings.playerName, ID);
+        startInfo.setCurrentLife(monster.getMonster().getCurrentLifePoints());
+        startInfo.setMaxLife(monster.getMonster().getMaxLifePoints());
+        this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(startInfo, 0));
 	}
+	
 	private void proceedSummary(MessageObject<?> msg){
 		if(this.players == null)
 			prepareFightGUI((List <PlayerInfo>) ((SummaryObject)msg.getContent()).getPlayerInfos());
@@ -172,6 +151,13 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
         List<Ability> abilitylist = monster.getMonster().getAbilitys();
         ((Fight) context).initBattleGUI(players, ID, abilitylist);
 	}
+    /**
+     * Call this on pause.
+     */
+    public void onPauseDialog() {
+        synchronized (waitForOtherDialog){ waitForDialog = true; }
+    }
+	
 	private void proceedYourTurn(MessageObject<?> msg){
 		Log.d("your Turn", "player turn");
         this.monster.newRound(players, ID);
@@ -180,25 +166,53 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 
 		connection.sendToHost(MessageFactory.createClientMessage_Action(actionObject, ID));
 	}
-	private void proceedGameStart(MessageObject<?> msg){
-		this.ID = (Integer) msg.getContent();
-        PlayerInfo startInfo = new PlayerInfo(Helper_PlayerSettings.playerName, ID);
-        startInfo.setCurrentLife(monster.getMonster().getCurrentLifePoints());
-        startInfo.setMaxLife(monster.getMonster().getMaxLifePoints());
-        this.connection.sendToHost(MessageFactory.createClientMessage_GameStart(startInfo, 0));
-	}
-	private void stop(){
-		connection.deleteObservers();
-		connection.closeConnection();
-	}
-	
     /**
      * Call this on pause.
      */
     public void onPause() {
         synchronized (waitForPlayer){ wait = true; }
     }
+	private ActionObject waitForAction() {
+        synchronized (waitForOtherDialog) {
+            while (waitForDialog) {
+                try {
+                    waitForOtherDialog.wait();
+                } catch (InterruptedException e) { }
+            }
+        }
+        ActionObject action = null;
+        ((Fight) context).chooseAbility(this);
+        synchronized (waitForPlayer) {
+        	while (wait) {
+        		try {
+        			waitForPlayer.wait();
+        		} catch (InterruptedException e) { }
+        	}
+        }
+        action = choosenAbility;
+        return action;
+    }
+	
+	private void proceedIncomingAbilityComponent(MessageObject<?> msg){
+		AbilityComponentDirector director = monster.getMonstersAbilityComponentDirector();
+		AbilityComponentList abilityComponents = (AbilityComponentList) msg.getContent();
+		PlayerInfo info = new PlayerInfo(Helper_PlayerSettings.playerName, ID);
+		AnswerObject answerObject = director.handleAbilityComponents(abilityComponents, info);
+		connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, ID));
+	}
+	
+	private void stop(){
+		connection.deleteObservers();
+		connection.closeConnection();
+	}
+	
 
+
+    @Override
+    public void setAbility(ActionObject actionObject) {
+        choosenAbility = actionObject;
+        onResume();
+    }
     /**
      * Call this on resume.
      */
@@ -209,18 +223,6 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
         }
     }
 
-    @Override
-    public void setAbility(ActionObject actionObject) {
-        choosenAbility = actionObject;
-        onResume();
-    }
-
-    /**
-     * Call this on pause.
-     */
-    public void onPauseDialog() {
-        synchronized (waitForOtherDialog){ waitForDialog = true; }
-    }
 
     /**
      * Call this on resume.

@@ -43,6 +43,7 @@ public class AbilityComponentDirector implements IListener{
 		answer.setMonsterIsDead(Helper_PlayerSettings.monsterIsDead);
 		info.setCurrentLife(monster.getCurrentLifePoints());
 		info.setMaxLife(monster.getMaxLifePoints());
+		answer.setPlayerInfo(info);
 		return answer;
 	}
 	
