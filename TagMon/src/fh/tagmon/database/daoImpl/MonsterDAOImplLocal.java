@@ -1,12 +1,11 @@
 package fh.tagmon.database.daoImpl;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Random;
-
 import android.content.Context;
 import android.database.SQLException;
-import fh.tagmon.database.dao.MonsterDAO;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
 import fh.tagmon.database.dao.MonsterDAOLocal;
 import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.gameengine.abilitys.Ability;
@@ -41,7 +40,7 @@ public class MonsterDAOImplLocal implements MonsterDAOLocal{
 	@Override
 	public Monster getDummyMonster() throws MonsterDAOException {
 		Attribut attribut = new Attribut(0, 10, 11, 12);
-		Ability ability = new Ability(1, "Beiﬂattacke", 20,2, AbilityTargetRestriction.ENEMY);
+		Ability ability = new Ability(1, "Beiattacke", 20,2, AbilityTargetRestriction.ENEMY);
 		
 		IAbilityComponent component = new Damage(7, AbilityTargetRestriction.ENEMY);
 		ability.addAbilityComponent(component);
