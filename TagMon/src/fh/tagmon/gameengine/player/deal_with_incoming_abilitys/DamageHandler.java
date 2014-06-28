@@ -16,7 +16,7 @@ public class DamageHandler {
 		this.compLogger = compLogger;
 	}
 	
-	public void handleDamage(Damage dmgObj){
+	public int handleDamage(Damage dmgObj){
 		int dmg = dmgObj.getDamage();
 		int armorValue = this.monster.getArmorValue();
 		int dmgAfterAbsorb = this.dmgAbsHelper.doAbsorbation(dmg);
@@ -28,20 +28,22 @@ public class DamageHandler {
 			logMsg += "Some Dmg was Absorbed "+this.prepForLog(dmg)+" -> "+this.prepForLog(dmgAfterAbsorb)+" AbsorbAmount: "+ this.prepForLog(dmgDiff) +".";
 		}
 		
+		int effectiveDmg = 0;
 		if (dmgAfterAbsorb > 0 ){
-			int efectiveDmg = dmgAfterAbsorb - armorValue;
-			if(efectiveDmg < 0){
-				efectiveDmg = 0;
+			effectiveDmg = dmgAfterAbsorb - armorValue;
+			if(effectiveDmg < 0){
+				effectiveDmg = 0;
 			}
 			
-			logMsg += "Dmg reduction "+this.prepForLog(dmgAfterAbsorb)+" -> "+this.prepForLog(efectiveDmg)+". ARMOR: "+ this.prepForLog(armorValue)+"."; 
-			this.monster.decreaseLifePoints(efectiveDmg);
-			logMsg += "Dmg taken "+this.prepForLog(efectiveDmg)+"."; 
+			logMsg += "Dmg reduction "+this.prepForLog(dmgAfterAbsorb)+" -> "+this.prepForLog(effectiveDmg)+". ARMOR: "+ this.prepForLog(armorValue)+"."; 
+			this.monster.decreaseLifePoints(effectiveDmg);
+			logMsg += "Dmg taken "+this.prepForLog(effectiveDmg)+"."; 
 	
 	
 		}
 		logMsg += "Monster currentLife: " + this.prepForLog(this.monster.getCurrentLifePoints())+ ".";
 		this.logForMe(logMsg);
+		return effectiveDmg;
 	}
 	
 	private String prepForLog(int nr){

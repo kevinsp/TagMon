@@ -57,8 +57,8 @@ public class AbilityComponentDirector implements IListener{
 			break;
 		case DAMAGE:
 			Damage dmgObj = (Damage) abilityComponent;
-			this.dmgHandler.handleDamage(dmgObj);
-			event += "durch einen Angriff " + dmgObj.getDamage() + " schaden erlitten!";
+			int dmg = this.dmgHandler.handleDamage(dmgObj);
+			event += "durch einen Angriff " + dmg + " schaden erlitten!";
 			break;
 		case HEAL:
 			break;
