@@ -493,4 +493,22 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         );
     }
 
+    @Override
+    public void handleGameOver(final String gameOverMessage) {
+        final Activity a = this;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                summaryDialog = new DialogBuilder(context, "Zusammenfassung", gameOverMessage, -1);
+                summaryDialog.setOnDismissListener((new DialogInterface.OnDismissListener() {
+
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        a.finish();
+                    }
+
+                }));
+            }});
+    }
+
 }
