@@ -298,11 +298,11 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 ImageView healthBar = (ImageView) findViewById(R.id.ownHealthBar);
                 if (dpToLeft < 71-28) {
                     //dpToLeft = -(71-28-dpToLeft);
-                    dpToLeft = (int)-((71*density - 28 - dpToLeft*density));
+                    dpToLeft = (int)-((71*density - 28*density - dpToLeft*density));
 
                 } else {
                     //dpToLeft = 71-dpToLeft+28;
-                    dpToLeft = (int)((71-dpToLeft)*density + 28);
+                    dpToLeft = (int)((71-dpToLeft)*density + 28*density);
                 }
                 ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(healthBar.getLayoutParams());
 
@@ -510,8 +510,9 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 if (tableRow != null) {
                     chooseDialog.dismiss();
                     disableButtons();
-                    int choosenEnemyId = (Integer) tableRow.getTag();
+                    int choosenEnemyIdInList = (Integer) tableRow.getTag();
                     AbilityTargetRestriction atr = lastChoosenAbility.getTargetRestriction();
+                    int choosenEnemyId = atr.getTargetList().get(choosenEnemyIdInList);
                     atr.cleanTargetList();
                     atr.addTarget(choosenEnemyId);
                     iSetAbility.setAbility(new ActionObject(lastChoosenAbility, atr));
