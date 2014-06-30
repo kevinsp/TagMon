@@ -18,6 +18,7 @@ import java.io.IOException;
 import fh.tagmon.client.gui.Fight;
 import fh.tagmon.database.daoImpl.MonsterDAOImpl;
 import fh.tagmon.database.daoImpl.MonsterDAOImplLocal;
+import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.model.Monster;
 
 /*GameEngineModule gEM = new GameEngineModule();
@@ -59,6 +60,15 @@ public class MainActivity extends Activity {
 		} catch (IOException e1) {
 			Log.d("tagmonDB", "IOEX");
 		}
+		
+		monsterDAO.createPlayer("TestPlayer");
+		try {
+			monster = monsterDAO.getDummyMonster();
+			monsterDAO.updateMonster(monster);
+		} catch (MonsterDAOException e1) {
+		}
+		
+		
 //		
 //        try {
 //			monster = monsterDAO.getMonster("tag1");
