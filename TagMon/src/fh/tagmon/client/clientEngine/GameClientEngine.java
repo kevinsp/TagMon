@@ -234,14 +234,15 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements IS
 	 * Displays the "Game finished"-Screen
 	 */
 	private void stop(){
-        ((Fight) context).handleGameOver("Game finished", this);
+        listeningToBroadcast = false;
+        ((Fight) context).handleGameOver("Game finished");
 	}
 
 	/**
 	 * stops the entire client
 	 */
     public void closeGame() {
-        listeningToBroadcast = false;
+
     }
 	
     /**

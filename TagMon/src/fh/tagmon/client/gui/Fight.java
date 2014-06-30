@@ -615,8 +615,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 btn.setEnabled(true);
             }});
     }
-    @Override
-    public void handleGameOver(final String gameOverMessage, final ISetAbility gce) {
+    public void handleGameOver(final String gameOverMessage) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -625,8 +624,6 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                       
-                        gce.closeGame();
                         finishActivity();
                     }
 
