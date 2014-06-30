@@ -51,6 +51,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
     private void gameOver(){
     	for(Entry<Integer, IHostPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
     		entry.getValue().gameOver();
+
     	}
     	myLogger("GAME_OVER");
     	this.runGame = false;
@@ -143,17 +144,27 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         }
         
         SummaryObject summary = sendComponentListsToPlayersAndReceiveTheirAnswers(idToAbilityCompListMap);
-        broadcastSummary(summary);
+        if(summary != null)
+        	broadcastSummary(summary);
         
       
     }
 
     private SummaryObject sendComponentListsToPlayersAndReceiveTheirAnswers(HashMap<Integer,AbilityComponentList> affectedPlayers){
     	SummaryObject summary = SummaryObject.getInstance();
-        for(Integer targetId : affectedPlayers.keySet()){
+        boolean monsterIsDead = false;
+    	for(Integer targetId : affectedPlayers.keySet()){
     		AnswerObject answer = sendComponentListToPlayer(affectedPlayers.get(targetId));
+    		if (answer.isMonsterDead()) {
+    			this.gameOver();
+    			monsterIsDead = true;
+    		}
+    			
     		summary.add(answer);
         }
+    	if(monsterIsDead){
+    		return null;
+    	}
         return summary;
     }
     
@@ -164,8 +175,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         myLogger(answer.getMsg());
         
 		/////////////////////////////////////////// TESTHALBER
-		if (answer.isMonsterDead()) 
-			this.gameOver();
+		
 		//////////////////////////////
         return answer;
     }

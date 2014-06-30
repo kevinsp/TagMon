@@ -77,5 +77,11 @@ public class FakeSocket implements IClientConnection, IHostConnection{
 
 	@Override
 	public void closeConnection() {}
+
+	@Override
+	public void closeCon() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

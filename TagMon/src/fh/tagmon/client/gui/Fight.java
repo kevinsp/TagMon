@@ -40,6 +40,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     private ISetAbility iSetAbility;
     private List<Ability> abilities;
     private DialogBuilder summaryDialog;
+    private String playername = "";
 
 
 
@@ -133,6 +134,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 String playerName = player.NAME;
 
                 if (player.ID == this.userId) {
+                    playername = playerName;
                     initUserGui(playerName);
                 } else {
                     this.enemyName = playerName;
@@ -486,7 +488,12 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                     final List<String> targetNames = new ArrayList<String>();
                     for (Integer target : targetList) {
                         //targetNames.add(target.toString());
-                        targetNames.add(enemyName);
+                        if (target == userId) {
+                            targetNames.add(playername);
+                        } else {
+                            targetNames.add(enemyName);
+                        }
+
                     }
 
                     //final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
@@ -618,9 +625,9 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        finishActivity();
+                       
                         gce.closeGame();
-
+                        finishActivity();
                     }
 
                 }));
