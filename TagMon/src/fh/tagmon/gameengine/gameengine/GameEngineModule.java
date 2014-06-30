@@ -37,7 +37,11 @@ public class GameEngineModule {
  
     public void startGamePlayerVSTag(String tagSerNr) {
 
+<<<<<<< HEAD
+    	
+=======
 
+>>>>>>> branch 'master' of https://github.com/kevinsp/TagMon.git
     	//Starte den Host
     	int gamePlayerSize = 2; // Player vs Tag
     	startHostAsynkTask(gamePlayerSize);
@@ -55,6 +59,10 @@ public class GameEngineModule {
     	
     	//Die Ki bekommt ihr Monster und verbindet sich mit dem Server
     	startKiAsynkTask("RED", kiMonster);
+<<<<<<< HEAD
+		
+=======
+>>>>>>> branch 'master' of https://github.com/kevinsp/TagMon.git
 
 
     	//this.testAbsorber();
