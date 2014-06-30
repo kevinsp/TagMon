@@ -48,11 +48,12 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         broadcastSummary(summary);
     }
     
-    private void gameOver(){
+    private void gameOver(int targetId){
+    	String playerWhoLost = this.playerList.getPlayerInfo(this.playerList.getCurrentPlayerTargetId()).NAME;
     	for(Entry<Integer, IHostPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
-    		entry.getValue().gameOver();
-
+    		entry.getValue().gameOver(playerWhoLost);
     	}
+    	
     	myLogger("GAME_OVER");
     	this.runGame = false;
     }
@@ -156,7 +157,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
     	for(Integer targetId : affectedPlayers.keySet()){
     		AnswerObject answer = sendComponentListToPlayer(affectedPlayers.get(targetId));
     		if (answer.isMonsterDead()) {
-    			this.gameOver();
+    			this.gameOver(int targetId);
     			monsterIsDead = true;
     		}
     			

@@ -14,6 +14,6 @@ public interface IHostPlayer {
 	public AnswerObject dealWithAbilityComponent(IAbilityComponent iac);
 	public void	printSummary(SummaryObject msg);
     public PlayerInfo gameStarts(int playersId);
-    public void gameOver();
+    public void gameOver(String playerNameWhoLost);
 }
 
