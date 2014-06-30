@@ -202,10 +202,13 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements Ob
 	}
 	
 	private void stop(){
-		connection.deleteObservers();
-		connection.closeConnection();
-        ((Fight) context).handleGameOver("Game finished");
+        ((Fight) context).handleGameOver("Game finished", this);
 	}
+
+    public void closeGame() {
+        connection.deleteObservers();
+        connection.closeConnection();
+    }
 	
 
 
