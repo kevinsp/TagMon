@@ -65,7 +65,7 @@ public class AbilityComponentDirector implements IListener{
 		case SCHADENSABSORBATION:
 			Schadensabsorbation schadenAbs = (Schadensabsorbation) abilityComponent;
 			
-			testiVonRolle(schadenAbs);
+			//testiVonRolle(schadenAbs);
 			
 			this.dmgAbsHandler.handleDamageAbsorbation(schadenAbs);
 			event += "sicht mit einem natrlichen Schild gewappnet!";

@@ -51,6 +51,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
     private void gameOver(){
     	for(Entry<Integer, IHostPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
     		entry.getValue().gameOver();
+
     	}
     	myLogger("GAME_OVER");
     	this.runGame = false;

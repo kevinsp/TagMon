@@ -56,7 +56,14 @@ public class NetworkServerTCPConnection implements IHostConnection{
 			if(connection != null)
 				connection.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
+			//e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void closeCon() {
+		this.closeConnection();
+		
 	}
 }

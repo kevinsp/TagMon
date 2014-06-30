@@ -130,9 +130,12 @@ public class RollesTestKi {
 		AbilityComponentList abilityComponents = (AbilityComponentList) dealWithMsg.getContent();
 		PlayerInfo info = new PlayerInfo(kiName, id);
 		AnswerObject answerObject = director.handleAbilityComponents(abilityComponents, info);
+		
+		
 		if(this.playModule.getMonster().getCurrentLifePoints() <= 0){
 			answerObject.setMonsterIsDead(true);
 		}
+		
 		connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, id));
     }
     
