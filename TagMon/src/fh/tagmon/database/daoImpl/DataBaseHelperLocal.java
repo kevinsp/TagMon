@@ -746,12 +746,13 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 
 	private void updateStats(Monster monster) {
 		Stats stats = monster.getStats();
-		String sqlQuery = "UPDATE tagdb_stats" + "SET maxHP="
+		String sqlQuery = "UPDATE tagdb_stats " + "SET maxHP="
 				+ stats.getMaxHP() + ", curHP=" + stats.getCurHP() + ", maxEP="
 				+ stats.getMaxEP() + ", curEP=" + stats.getCurEP() + ", regEP="
 				+ stats.getRegEP() + ", lvl=" + stats.getLvl() + ", curEXP="
 				+ stats.getCurEXP() + ", defense=" + stats.getDefensye()
 				+ " WHERE monster_id = " + monster.id;
+		Log.d("tagmonDB", sqlQuery);
 		myDataBase.execSQL(sqlQuery);
 	}
 
