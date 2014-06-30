@@ -313,11 +313,13 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                     //dpToLeft = 71-dpToLeft+28;
                     dpToLeft = (int)((71-dpToLeft)*density + 28*density);
                 }
-                ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(healthBar.getLayoutParams());
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)healthBar.getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+                params.setMargins(0, (int) (15*density), (int)(dpToLeft), 0);
+                healthBar.setLayoutParams(params);
 
-                marginParams.setMargins((int)(dpToLeft), (int) (55*density), 0, 0);
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(marginParams);
-                healthBar.setLayoutParams(layoutParams);
+
+
             }});
     }
 
@@ -376,11 +378,13 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                     //dpToLeft = 71-dpToLeft+28;
                     dpToLeft = (int)((71-dpToLeft)*density + 28*density);
                 }
+
                 ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(healthBar.getLayoutParams());
 
-                marginParams.setMargins((int)(dpToLeft), (int) (55*density), 0, 0);
+                marginParams.setMargins((int)(dpToLeft), (int) (55*density),0 , 0);
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(marginParams);
                 healthBar.setLayoutParams(layoutParams);
+
             }});
     }
 
@@ -619,7 +623,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                summaryDialog = new DialogBuilder(context, "Zusammenfassung", gameOverMessage, -1);
+                summaryDialog = new DialogBuilder(context, "Game Over", gameOverMessage, -1);
                 summaryDialog.setOnDismissListener((new DialogInterface.OnDismissListener() {
 
                     @Override
