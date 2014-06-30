@@ -485,7 +485,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 			updateKoerperteil(koerperteil);
 			updateFaehigkeit(koerperteil);
 		}
-
+		updateStats(monster);
 	}
 
 	public void createPlayer(String name) {
