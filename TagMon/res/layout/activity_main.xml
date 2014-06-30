@@ -62,8 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:background="#22ffffff"
-            android:onClick="onBtnClicked"
-            android:text="@string/status" />
+            android:onClick="onBtnClicked"/>
 
         <Button
             android:id="@+id/switch_to_train_activity"
@@ -72,8 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:background="#22ffffff"
-            android:onClick="onBtnClicked"
-            android:text="@string/training" />
+            android:onClick="onBtnClicked"/>
 
         <Button
             android:id="@+id/switch_to_gen_lab_activity"
@@ -82,8 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.2"
             android:background="#22ffffff"
-            android:onClick="onBtnClicked"
-            android:text="@string/genlab" />
+            android:onClick="onBtnClicked"/>
 
         <Button
             android:id="@+id/switch_to_battle_activity"

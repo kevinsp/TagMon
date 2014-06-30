@@ -86,6 +86,9 @@ public class DialogBuilder extends Dialog {
             closeAfterTime();
         }
         showDialog();
+        if (text.equals("")) {
+            this.dismiss();
+        }
 
     }
 
