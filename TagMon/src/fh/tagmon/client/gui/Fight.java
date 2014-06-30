@@ -618,9 +618,9 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        finishActivity();
+                       
                         gce.closeGame();
-
+                        finishActivity();
                     }
 
                 }));
