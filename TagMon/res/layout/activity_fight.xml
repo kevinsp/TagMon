@@ -81,13 +81,15 @@
                 android:layout_width="23dp"
                 android:layout_height="28dp"
                 android:layout_marginLeft="13dp"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+               />
             <ImageView
                 android:id="@+id/enemyLvL01"
                 android:layout_width="23dp"
                 android:layout_height="28dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+                android:src="@drawable/lvl1"/>
             <TextView
                 android:id="@+id/enemyName"
                 android:layout_width="140dp"
@@ -288,7 +290,8 @@
                 android:layout_width="23dp"
                 android:layout_height="28dp"
                 android:layout_marginLeft="40dp"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="8dp"
+                android:src="@drawable/lvl1"/>
             <TextView
                 android:id="@+id/ownName"
                 android:layout_width="140dp"

@@ -9,4 +9,5 @@ public interface ISetAbility {
     public void setAbility(ActionObject actionObject);
 
     void onResumeDialog();
+    void closeGame();
 }
