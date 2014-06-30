@@ -157,7 +157,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
     	for(Integer targetId : affectedPlayers.keySet()){
     		AnswerObject answer = sendComponentListToPlayer(affectedPlayers.get(targetId));
     		if (answer.isMonsterDead()) {
-    			this.gameOver(int targetId);
+    			this.gameOver(targetId);
     			monsterIsDead = true;
     		}
     			
