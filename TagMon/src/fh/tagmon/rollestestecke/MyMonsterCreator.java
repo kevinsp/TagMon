@@ -104,14 +104,14 @@ public class MyMonsterCreator {
 	
 	private Ability getBeiAttacke(){
 		Ability ability = new Ability(1, "Beiattacke", 20,0, AbilityTargetRestriction.ENEMY);
-		IAbilityComponent component = new Damage(32, AbilityTargetRestriction.ENEMY);
+		IAbilityComponent component = new Damage(40, AbilityTargetRestriction.ENEMY);
 		ability.addAbilityComponent(component);
 		return ability;
 	}
 	
 	private Ability getBlockAbility(){
 		Ability blockAbility = new Ability(2, "BLOCKABILITY", 11,0, AbilityTargetRestriction.SELF);
-		IAbilityComponent buff = new Buff(1,2,null,3,2,3);
+		IAbilityComponent buff = new Buff(1,2,null,1,2,2);
 		blockAbility.addAbilityComponent(buff);
 		return blockAbility;
 	}

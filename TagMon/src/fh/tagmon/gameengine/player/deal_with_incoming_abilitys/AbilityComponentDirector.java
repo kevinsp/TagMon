@@ -37,7 +37,7 @@ public class AbilityComponentDirector implements IListener{
 		boolean first = true;
 		AnswerObject answer = new AnswerObject();
 		for(IAbilityComponent ac : abilityComponents.getAbilityList()){
-			answer.appendMsg(handleAbilityComponent(ac, first));
+			answer.appendMsg(handleAbilityComponent(ac, first, info.NAME));
 			first = false;
 		}
 		answer.setMonsterIsDead(Helper_PlayerSettings.monsterIsDead);
@@ -47,8 +47,8 @@ public class AbilityComponentDirector implements IListener{
 		return answer;
 	}
 	
-	private String handleAbilityComponent(IAbilityComponent abilityComponent, boolean first){
-		String event = first ? "Das Monster von " + Helper_PlayerSettings.playerName + " hat " : "Auerdem hat es ";
+	private String handleAbilityComponent(IAbilityComponent abilityComponent, boolean first, String name){
+		String event = first ? "Das Monster von " + name + " hat " : "Auerdem hat es ";
 		switch(abilityComponent.getComponentType()){
 		case BUFF:
 			Buff buff_debuff = (Buff) abilityComponent;
@@ -69,6 +69,7 @@ public class AbilityComponentDirector implements IListener{
 			
 			this.dmgAbsHandler.handleDamageAbsorbation(schadenAbs);
 			event += "sicht mit einem natrlichen Schild gewappnet!";
+			break;
 		case STUN:
 			event += "die Kontrolle ber seinen Krper verloren!";
 			break;
@@ -76,6 +77,7 @@ public class AbilityComponentDirector implements IListener{
 			break;
 		
 		}
+		Log.i("AbilityComponentDirector", "[AbilityComponentDirector] logged :: " + getLatestLog());
 		return event;
 	}
 	

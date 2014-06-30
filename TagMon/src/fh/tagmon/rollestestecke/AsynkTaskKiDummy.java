@@ -22,7 +22,7 @@ public class AsynkTaskKiDummy extends AsyncTask<Void, Void, Void>{
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}		
 		RollesTestKi ki = new RollesTestKi(kiName, kiMonster);
 		ki.playTheGame();
 		

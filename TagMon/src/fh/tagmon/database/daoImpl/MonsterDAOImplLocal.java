@@ -39,26 +39,37 @@ public class MonsterDAOImplLocal implements MonsterDAOLocal{
 	
 	@Override
 	public Monster getDummyMonster() throws MonsterDAOException {
-		Attribut attribut = new Attribut(0, 10, 11, 12);
-		Ability ability = new Ability(1, "Beiattacke", 20,2, AbilityTargetRestriction.ENEMY);
+		
+		Attribut attribut = new Attribut(1, 2, 3, 4);
+		
+		
+		Ability ability = new Ability(1, "Faustschlag", 20, 2, AbilityTargetRestriction.ENEMY);
 		
 		IAbilityComponent component = new Damage(7, AbilityTargetRestriction.ENEMY);
 		ability.addAbilityComponent(component);
 		
-		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
+		IAbilityComponent buffComponent = new Buff(1, 2, AbilityTargetRestriction.SELF, 4, 3, 2);
+		ability.addAbilityComponent(buffComponent);
 		
+
 		Ability blockAbility = new Ability(2, "BLOCKABILITY", 11,2, AbilityTargetRestriction.SELF);
-		blockAbility.addAbilityComponent(new Buff(2,2,null,3,5,3));
+		blockAbility.addAbilityComponent(new Buff(2,2,AbilityTargetRestriction.SELF,3,5,3));
+		
+		
+		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
+		abilityList.add(ability);
 		abilityList.add(blockAbility);
 		
 		
-		abilityList.add(ability);
 		
-		Koerperteil koerperteil = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
+		
+		Koerperteil koerperteil = new Koerperteil(1, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
 		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
 		koerperteilList.add(koerperteil);
-		Stats stats = new Stats(0,100,100,30,111,100,10,123,13);
-		Monster dummyMonster = new Monster(0, "MonsterName", "Beschr",attribut, koerperteilList, stats);
+		
+		Stats stats = new Stats(1,100,100,30,111,100,10,123,13);
+		
+		Monster dummyMonster = new Monster(1, "MonsterName", "Beschr",attribut, koerperteilList, stats);
 		
 		return dummyMonster;
 	}
@@ -70,6 +81,10 @@ public class MonsterDAOImplLocal implements MonsterDAOLocal{
 
 	public void updateMonster(Monster monster) throws MonsterDAOException {
 		dbHelper.updateMonster(monster);
+	}
+	
+	public void createPlayer(String name){
+		dbHelper.createPlayer(name);
 	}
 	
 	

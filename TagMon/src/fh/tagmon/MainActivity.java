@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.SQLException;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareUltralight;
@@ -15,6 +16,10 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import fh.tagmon.client.gui.Fight;
+import fh.tagmon.database.daoImpl.MonsterDAOImpl;
+import fh.tagmon.database.daoImpl.MonsterDAOImplLocal;
+import fh.tagmon.exception.MonsterDAOException;
+import fh.tagmon.model.Monster;
 
 /*GameEngineModule gEM = new GameEngineModule();
 
@@ -42,18 +47,28 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Start of MonsterDAO test
+//         Start of MonsterDAO test
         
-//        Monster monster = null;
-//        MonsterDAO monsterDAO = null;
-//        
-//		try {
-//			monsterDAO = new MonsterDAOImpl(this);
-//		} catch (SQLException e1) {
-//			Log.d("tagmonDB", "SQLEX");
-//		} catch (IOException e1) {
-//			Log.d("tagmonDB", "IOEX");
-//		}
+        Monster monster = null;
+        MonsterDAOImplLocal monsterDAO = null;
+        
+		try {
+			monsterDAO = new MonsterDAOImplLocal(this);
+			
+		} catch (SQLException e1) {
+			Log.d("tagmonDB", "SQLEX");
+		} catch (IOException e1) {
+			Log.d("tagmonDB", "IOEX");
+		}
+		
+		monsterDAO.createPlayer("TestPlayer");
+		try {
+			monster = monsterDAO.getDummyMonster();
+			monsterDAO.updateMonster(monster);
+		} catch (MonsterDAOException e1) {
+		}
+		
+		
 //		
 //        try {
 //			monster = monsterDAO.getMonster("tag1");
@@ -143,7 +158,7 @@ public class MainActivity extends Activity {
     public void onNewIntent(Intent intent) {
         Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         Log.i("Foreground dispatch", "Discovered tag with intent: " + intent);
-        mText.setText("Discovered tag " + ++mCount + " with intent: " + intent);
+        
 
         MifareUltralight leTag = MifareUltralight.get(tagFromIntent);
 

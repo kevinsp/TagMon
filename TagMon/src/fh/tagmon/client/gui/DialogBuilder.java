@@ -81,11 +81,15 @@ public class DialogBuilder extends Dialog {
             setTitle(title);
         } else if(timeTilClose != 0 && !text.equals("")) {
             setContentView(R.layout.custom_dialog_summary);
+
             setTitle(title);
             setText();
             closeAfterTime();
         }
         showDialog();
+        /*if (text != null && text.equals("")) {
+            dismiss();
+        }*/
 
     }
 

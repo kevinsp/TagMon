@@ -41,9 +41,9 @@ public class AnswerObject implements Serializable{
 	public String getMsg(){
 		return this.msg.toString();
 	}
-	public void setPlayerInfo(PlayerInfo pi){
-		playerInfo = pi;
-	}
+    public void setPlayerInfo(PlayerInfo pi){
+        playerInfo = pi;
+    }
 	public PlayerInfo getPlayerInfo(){
 		return playerInfo;
 	}
