@@ -57,7 +57,7 @@ public class NetworkPlayer implements IHostPlayer{
 	@Override
 	public void gameOver() {
 		this.connector.sendMsgToClient(MessageFactory.createHostMessage_GameOver(""));
-		this.closeCon();
+		//this.closeCon();
 	}
 
 	

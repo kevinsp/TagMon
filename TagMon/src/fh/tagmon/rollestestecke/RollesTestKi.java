@@ -37,6 +37,7 @@ public class RollesTestKi {
 			this.connection = new NetworkSocketConnection("localhost");
 		} catch (IOException e) {
 			Log.e(TAG, "Unable to Connect to localhost!");
+			Log.e(TAG, e.getMessage());
 		}
         this.playModule = new MonsterPlayModule(myMonster);
     }   
@@ -79,6 +80,7 @@ public class RollesTestKi {
 				break;
 			case GAME_OVER:
 				gameIsNotOver = false;
+				this.connection.closeConnection();
 				break;
 			case GAME_START:
 				this.id = (Integer)msgFromHost.getContent();
