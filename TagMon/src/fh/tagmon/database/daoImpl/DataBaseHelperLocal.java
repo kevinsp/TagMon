@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.gameengine.abilitys.*;
@@ -19,6 +20,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 public class DataBaseHelperLocal extends SQLiteOpenHelper {
@@ -27,8 +29,10 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	private static String DB_PATH = "/data/data/fh.tagmon/databases/";
 
 	private static String DB_NAME = "localDB.sqlite3";
-	
+
 	private static String BUILD_SCRIPT = "dbLocalEmptyBuildScript.sql";
+
+	private static String DUMMYMONSTER_SCRIPT = "dummyMonsterScript.sql";
 
 	private SQLiteDatabase myDataBase;
 
@@ -53,7 +57,7 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	public void createDataBase() throws IOException {
 
 		boolean dbExist = checkDataBase();
-//		boolean dbExist = false;
+		// boolean dbExist = false;
 
 		if (dbExist) {
 			// do nothing - database already exist
@@ -66,7 +70,9 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 			this.getWritableDatabase();
 
 			try {
-				copyDataBase();
+				// copyDataBase();
+				Log.d("tagmonDB", "db structure create");
+				createInitialLokaleDatabase();
 			} catch (IOException e) {
 				throw new Error("Error copying database");
 			}
@@ -132,7 +138,8 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		// Open the database
 		String myPath = DB_PATH + DB_NAME;
 		myDataBase = SQLiteDatabase.openDatabase(myPath, null,
-				SQLiteDatabase.NO_LOCALIZED_COLLATORS | SQLiteDatabase.OPEN_READWRITE );
+				SQLiteDatabase.NO_LOCALIZED_COLLATORS
+						| SQLiteDatabase.OPEN_READWRITE);
 	}
 
 	@Override
@@ -154,124 +161,158 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
 	}
-	
-	
-	
-	public Attribut getAttribute(int monsterID) throws MonsterDAOException{
-		
-		String sqlQuery = 	   "SELECT tAttr.id, tAttr.staerke, tAttr.intelligenz, tAttr.konstitution " +
-					 		   "FROM tagdb_monster tMonster INNER JOIN tagdb_attribute tAttr " +
-					 		   "	ON tMonster.id = tAttr.monster_id " + 
-				 			   "WHERE tMonster.id = " + monsterID;
-		 
-		 Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		 
-		 ArrayList<Integer> attribList = new ArrayList<Integer>();
-		 
-		 if(cursor.moveToFirst()){
-			 for (int i=0; i<cursor.getColumnCount(); i++) {
-				 attribList.add(cursor.getInt(i));
-			}
-		 }
-		 else
-			 throw new MonsterDAOException("Monster could not be created cause no attributes were found");
-		 
-		 return new Attribut(attribList.get(0), attribList.get(1), attribList.get(2), attribList.get(3));
-	}
-	
-	
-	public ArrayList<Koerperteil> getKoerperteile(int monsterID) throws MonsterDAOException{
-	 		
-		 String sqlQuery = 	"SELECT tKM.koerperteile_id, tK.name, tK.art " +
-				 			"FROM tagdb_monster tMonster " + 
-				 			"INNER JOIN tagdb_koerperteile_monster tKM " +
-				 				"ON tMonster.id = tKM.monster_id " +
-				 			"INNER JOIN tagdb_koerperteile tK " +
-				 				"ON tKM.koerperteile_id = tK.id " +
-				 			"WHERE tMonster.id = " + monsterID;
-		 
-		 Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		 
-		 
-		 int kId = 0;
-		 String name = "";
-		 int art = 0;
-		 
-		 ArrayList<Koerperteil> koerperteilList = new ArrayList<Koerperteil>();
-		 
-		 while(cursor.moveToNext()){
-			 kId = cursor.getInt(0);
-			 name = cursor.getString(1);
-			 art = cursor.getInt(2);
-			 			 
-			 AttributModifikator attrMod = getAttributModifikator(kId);	 
-			 ArrayList<Ability> abilityList = getAbilities(kId);
-			 			 
-			 KoerperteilArt koerperteileArt;
-			 
-			 // 1=Kopf, 2=Torso, 3=Arm, 4=Bein
-			 switch (art) {
-			case 1: koerperteileArt = KoerperteilArt.KOPF;
-				break;
-			case 2: koerperteileArt = KoerperteilArt.TORSO;
-				break;
-			case 3: koerperteileArt = KoerperteilArt.ARM;
-				break;
-			case 4: koerperteileArt = KoerperteilArt.BEIN;
-				break;
-			default: throw new MonsterDAOException("The Monster's 'koerperteil' has no correct 'koerperteileArt'");
-			}
-			 koerperteilList.add(new Koerperteil(kId, name, abilityList, koerperteileArt, attrMod));
-		 }
-		 
-		 if(koerperteilList.isEmpty())
-			 throw new MonsterDAOException("Monster has not a single 'koerperteil'");
-		 
-		 return koerperteilList;
-	}
-	
-	
-	public AttributModifikator getAttributModifikator(int koerperteileID) throws MonsterDAOException{
-		
-		 String sqlQuery = 	"SELECT tAttrM.staerke, tAttrM.intelligenz, tAttrM.konstitution " +
-							"FROM tagdb_attributmodifikator tAttrM " +
-							"WHERE tAttrM.koerperteile_id = " + koerperteileID;
+
+	/**
+	 * Holt die Attribute nach einer bestimmten MonsterID aus der Datenbank
+	 * 
+	 * @param monsterID Die ID des Monsters
+	 * @return	Das {@Attribut} Objekt
+	 * @throws MonsterDAOException
+	 */
+	public Attribut getAttribute(int monsterID) throws MonsterDAOException {
+
+		String sqlQuery = "SELECT tAttr.id, tAttr.staerke, tAttr.intelligenz, tAttr.konstitution "
+				+ "FROM tagdb_monster tMonster INNER JOIN tagdb_attribute tAttr "
+				+ "	ON tMonster.id = tAttr.monster_id "
+				+ "WHERE tMonster.id = " + monsterID;
 
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
+
 		ArrayList<Integer> attribList = new ArrayList<Integer>();
-		 
-		 while(cursor.moveToNext()){
-			 for (int i=0; i<cursor.getColumnCount(); i++) {
-				 attribList.add(cursor.getInt(i));
+
+		if (cursor.moveToFirst()) {
+			for (int i = 0; i < cursor.getColumnCount(); i++) {
+				attribList.add(cursor.getInt(i));
 			}
-		 }
-		 
-		 if(attribList.isEmpty())
-			 throw new MonsterDAOException("Koerperteil has no 'attributModifikator'");
-		 		 
-		 return new AttributModifikator(attribList.get(0), attribList.get(1), attribList.get(2));	
+		} else
+			throw new MonsterDAOException(
+					"Monster could not be created cause no attributes were found");
+
+		return new Attribut(attribList.get(0), attribList.get(1),
+				attribList.get(2), attribList.get(3));
 	}
-	
-	
-	public ArrayList<Ability> getAbilities(int koerperteileID) throws MonsterDAOException {
-		
-		 String sqlQuery = 	"SELECT tFaehigkeit.id, tFaehigkeit.name, tFaehigkeit.ziel, tFaehigkeit.energiekosten, tFaehigkeit.angriffsziel, tFaehigkeit.angriffswert, " +
-				 					"tFaehigkeit.heilungsziel, tFaehigkeit.heilungswert, tFaehigkeit.stunziel, tFaehigkeit.stundauer, " +
-				 					"tFaehigkeit.absorbationsziel, tFaehigkeit.absorbationsdauer, tFaehigkeit.schadensabsorbation, tFaehigkeit.cooldown " +
-				 			"FROM tagdb_faehigkeit tFaehigkeit " + 
-				 			"INNER JOIN tagdb_faehigkeit_koerperteile tFK " +
-				 				"ON tFaehigkeit.id = tFK.faehigkeit_id " +
-				 			"INNER JOIN tagdb_faehigkeit tF " +
-				 				"ON tFK.koerperteile_id = tF.id " +
-				 			"WHERE tFK.koerperteile_id = " + koerperteileID;
-		 
-		
-		
+
+	/**
+	 *	Holt alle Körperteile eines Monster aus der Datenbank 
+	 * 
+	 * @param monsterID Die ID des Monsters
+	 * @return Eine Liste mit den Koerperteil Objekten
+	 * @throws MonsterDAOException
+	 */
+	public ArrayList<Koerperteil> getKoerperteile(int monsterID)
+			throws MonsterDAOException {
+
+		String sqlQuery = "SELECT tKM.koerperteile_id, tK.name, tK.art "
+				+ "FROM tagdb_monster tMonster "
+				+ "INNER JOIN tagdb_koerperteile_monster tKM "
+				+ "ON tMonster.id = tKM.monster_id "
+				+ "INNER JOIN tagdb_koerperteile tK "
+				+ "ON tKM.koerperteile_id = tK.id " + "WHERE tMonster.id = "
+				+ monsterID;
+
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
+
+		int kId = 0;
+		String name = "";
+		int art = 0;
+
+		ArrayList<Koerperteil> koerperteilList = new ArrayList<Koerperteil>();
+
+		while (cursor.moveToNext()) {
+			kId = cursor.getInt(0);
+			name = cursor.getString(1);
+			art = cursor.getInt(2);
+
+			AttributModifikator attrMod = getAttributModifikator(kId);
+			ArrayList<Ability> abilityList = getAbilities(kId);
+
+			KoerperteilArt koerperteileArt;
+
+			// 1=Kopf, 2=Torso, 3=Arm, 4=Bein
+			switch (art) {
+			case 1:
+				koerperteileArt = KoerperteilArt.KOPF;
+				break;
+			case 2:
+				koerperteileArt = KoerperteilArt.TORSO;
+				break;
+			case 3:
+				koerperteileArt = KoerperteilArt.ARM;
+				break;
+			case 4:
+				koerperteileArt = KoerperteilArt.BEIN;
+				break;
+			default:
+				throw new MonsterDAOException(
+						"The Monster's 'koerperteil' has no correct 'koerperteileArt'");
+			}
+			koerperteilList.add(new Koerperteil(kId, name, abilityList,
+					koerperteileArt, attrMod));
+		}
+
+		if (koerperteilList.isEmpty())
+			throw new MonsterDAOException(
+					"Monster has not a single 'koerperteil'");
+
+		return koerperteilList;
+	}
+
+	/**
+	 * Holt die {@link AttributModifikator}en eine Koerperteils aus der Datenbank
+	 * 
+	 * @param koerperteileID Die ID des Koerperteils
+	 * @return {@link AttributModifikator}
+	 * @throws MonsterDAOException
+	 */
+	public AttributModifikator getAttributModifikator(int koerperteileID)
+			throws MonsterDAOException {
+
+		String sqlQuery = "SELECT tAttrM.staerke, tAttrM.intelligenz, tAttrM.konstitution "
+				+ "FROM tagdb_attributmodifikator tAttrM "
+				+ "WHERE tAttrM.koerperteile_id = " + koerperteileID;
+
+		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
+
+		ArrayList<Integer> attribList = new ArrayList<Integer>();
+
+		while (cursor.moveToNext()) {
+			for (int i = 0; i < cursor.getColumnCount(); i++) {
+				attribList.add(cursor.getInt(i));
+			}
+		}
+
+		if (attribList.isEmpty())
+			throw new MonsterDAOException(
+					"Koerperteil has no 'attributModifikator'");
+
+		return new AttributModifikator(attribList.get(0), attribList.get(1),
+				attribList.get(2));
+	}
+
+	/**
+	 * Holt eine Liste an Abilitys von einem Koerperteil aus der Datenbank
+	 * 
+	 * @param koerperteileID
+	 * @return {@link Ability}List
+	 * @throws MonsterDAOException
+	 */
+	public ArrayList<Ability> getAbilities(int koerperteileID)
+			throws MonsterDAOException {
+
+		String sqlQuery = "SELECT tFaehigkeit.id, tFaehigkeit.name, tFaehigkeit.ziel, tFaehigkeit.energiekosten, tFaehigkeit.angriffsziel, tFaehigkeit.angriffswert, "
+				+ "tFaehigkeit.heilungsziel, tFaehigkeit.heilungswert, tFaehigkeit.stunziel, tFaehigkeit.stundauer, "
+				+ "tFaehigkeit.absorbationsziel, tFaehigkeit.absorbationsdauer, tFaehigkeit.schadensabsorbation, tFaehigkeit.cooldown "
+				+ "FROM tagdb_faehigkeit tFaehigkeit "
+				+ "INNER JOIN tagdb_faehigkeit_koerperteile tFK "
+				+ "ON tFaehigkeit.id = tFK.faehigkeit_id "
+				+ "INNER JOIN tagdb_faehigkeit tF "
+				+ "ON tFK.koerperteile_id = tF.id "
+				+ "WHERE tFK.koerperteile_id = " + koerperteileID;
+
+		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
+
 		ArrayList<Ability> abilityList = new ArrayList<Ability>();
-		
+
 		int id;
 		String name;
 		int ziel;
@@ -286,11 +327,11 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		int absorbationsdauer;
 		int schadensabsorbation;
 		int cooldown;
-		
-		while(cursor.moveToNext()){
-			
+
+		while (cursor.moveToNext()) {
+
 			LinkedList<IAbilityComponent> abilityComponents = new LinkedList<IAbilityComponent>();
-			
+
 			id = cursor.getInt(0);
 			name = cursor.getString(1);
 			ziel = cursor.getInt(2);
@@ -305,205 +346,308 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 			absorbationsdauer = cursor.getInt(11);
 			schadensabsorbation = cursor.getInt(12);
 			cooldown = cursor.getInt(13);
-						
-			
-			if(angriffswert!=0){
-				abilityComponents.add(new Damage(angriffswert, getAbilityTargetRestriction(angriffsziel)));
+
+			if (angriffswert != 0) {
+				abilityComponents.add(new Damage(angriffswert,
+						getAbilityTargetRestriction(angriffsziel)));
 			}
-			
-			if(heilungswert!=0){
-				abilityComponents.add(new Heal(heilungswert, getAbilityTargetRestriction(heilungsziel)));
+
+			if (heilungswert != 0) {
+				abilityComponents.add(new Heal(heilungswert,
+						getAbilityTargetRestriction(heilungsziel)));
 			}
-			
-			if(stundauer!=0){
-				abilityComponents.add(new Stun(stundauer, getAbilityTargetRestriction(stunziel)));
+
+			if (stundauer != 0) {
+				abilityComponents.add(new Stun(stundauer,
+						getAbilityTargetRestriction(stunziel)));
 			}
-			
-			if(schadensabsorbation!=0){
-				abilityComponents.add(new Schadensabsorbation(absorbationsdauer, schadensabsorbation, getAbilityTargetRestriction(absorbationziel)));
+
+			if (schadensabsorbation != 0) {
+				abilityComponents.add(new Schadensabsorbation(
+						absorbationsdauer, schadensabsorbation,
+						getAbilityTargetRestriction(absorbationziel)));
 			}
-			
-			
+
 			// get Buffs for the ability
 			ArrayList<fh.tagmon.gameengine.abilitys.Buff> buffList = getBuff(id);
-			
+
 			for (fh.tagmon.gameengine.abilitys.Buff buff : buffList) {
 				abilityComponents.add(buff);
 			}
-			
-			abilityList.add(new Ability(id, name, energiekosten, cooldown, getAbilityTargetRestriction(ziel), abilityComponents));
-			
-			if(abilityList.isEmpty())
+
+			abilityList.add(new Ability(id, name, energiekosten, cooldown,
+					getAbilityTargetRestriction(ziel), abilityComponents));
+
+			if (abilityList.isEmpty())
 				throw new MonsterDAOException("Empty ability list");
-			
+
 		}
 		return abilityList;
 	}
-	
-	private AbilityTargetRestriction getAbilityTargetRestriction(int ziel){
-		AbilityTargetRestriction abilityTargetRest;
-		// targetRestriction 1=self, 2=enemy, 3=selfANDenemy, 4=enemygroup, 5=owngroup, 6=selfANDenemygroup, 7=owngroupANDenemy
-		switch (ziel) {
-		case 1: abilityTargetRest = AbilityTargetRestriction.SELF;
-			break;
-		case 2: abilityTargetRest = AbilityTargetRestriction.ENEMY;
-				break;
-		case 3: abilityTargetRest = AbilityTargetRestriction.SELFANDENEMY;
-				break;
-		case 4: abilityTargetRest = AbilityTargetRestriction.ENEMYGROUP;
-				break;
-		case 5: abilityTargetRest = AbilityTargetRestriction.OWNGROUP;
-				break;
-		case 6: abilityTargetRest = AbilityTargetRestriction.SELFANDENEMYGROUP;
-				break;
-		case 7: abilityTargetRest = AbilityTargetRestriction.OWNGROUPANDENEMY;
-				break;
-		default: abilityTargetRest = AbilityTargetRestriction.DEFAULT;
-			break;
-		}
-		return abilityTargetRest;
-	}
-	
-	
-	public ArrayList<fh.tagmon.gameengine.abilitys.Buff> getBuff(int faehigkeitID){
-		
-		 String sqlQuery = 	"SELECT tBuff.id, tBuff.dauer, tBuff.ziel, tBuff.bStaerke, " +
-							"		tBuff.bIntelligenz, tBuff.bKonstitution " +
-							"FROM tagdb_buff tBuff " +
-							"WHERE tBuff.faehigkeit_id = " + faehigkeitID;
+
+	/**
+	 * 
+	 * @param faehigkeitID
+	 * @return
+	 */
+	public ArrayList<fh.tagmon.gameengine.abilitys.Buff> getBuff(
+			int faehigkeitID) {
+
+		String sqlQuery = "SELECT tBuff.id, tBuff.dauer, tBuff.ziel, tBuff.bStaerke, "
+				+ "		tBuff.bIntelligenz, tBuff.bKonstitution "
+				+ "FROM tagdb_buff tBuff "
+				+ "WHERE tBuff.faehigkeit_id = "
+				+ faehigkeitID;
 
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
+
 		ArrayList<fh.tagmon.gameengine.abilitys.Buff> buffList = new ArrayList<fh.tagmon.gameengine.abilitys.Buff>();
-		
-		while(cursor.moveToNext()){ //int id, int duration, AbilityTargetRestriction abilityTargetRestriction, int strengthBuff, int intelligenceBuff, int constitutionBuff
-			buffList.add(new fh.tagmon.gameengine.abilitys.Buff(cursor.getInt(0), cursor.getInt(1), getAbilityTargetRestriction(cursor.getInt(2)), 
-					cursor.getInt(3), cursor.getInt(4), cursor.getInt(5)));
+
+		while (cursor.moveToNext()) { // int id, int duration,
+										// AbilityTargetRestriction
+										// abilityTargetRestriction, int
+										// strengthBuff, int intelligenceBuff,
+										// int constitutionBuff
+			buffList.add(new fh.tagmon.gameengine.abilitys.Buff(cursor
+					.getInt(0), cursor.getInt(1),
+					getAbilityTargetRestriction(cursor.getInt(2)), cursor
+							.getInt(3), cursor.getInt(4), cursor.getInt(5)));
 		}
 		return buffList;
-		
+
 	}
-	
-	
-	public Stats getStats(int monsterID) throws MonsterDAOException{
-		
-		 String sqlQuery = 	"SELECT tagdb_stats.maxHP,tagdb_stats.curHP,tagdb_stats.curHP,tagdb_stats.maxEP, " +
-				 			"		tagdb_stats.curEP,tagdb_stats.regEP, tagdb_stats.lvl, tagdb_stats.curEXP, tagdb_stats.defense " +
-				 			"FROM tagdb_stats " +
-				 			"WHERE tagdb_stats.monster_id = " + monsterID;
+	/**
+	 * Holt die Stats von einem Monster aus der Datenbank
+	 * 
+	 * @param monsterID Die ID des Monsters
+	 * @return Das Stats Objekt
+	 * @throws MonsterDAOException
+	 */
+	public Stats getStats(int monsterID) throws MonsterDAOException {
+
+		String sqlQuery = "SELECT tagdb_stats.maxHP,tagdb_stats.curHP,tagdb_stats.curHP,tagdb_stats.maxEP, "
+				+ "		tagdb_stats.curEP,tagdb_stats.regEP, tagdb_stats.lvl, tagdb_stats.curEXP, tagdb_stats.defense "
+				+ "FROM tagdb_stats "
+				+ "WHERE tagdb_stats.monster_id = "
+				+ monsterID;
 
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
-		if(!cursor.moveToFirst())
+
+		if (!cursor.moveToFirst())
 			throw new MonsterDAOException("Monster has no stats");
-			
-		
-		return new Stats(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6), cursor.getInt(7), cursor.getInt(8));			
+
+		return new Stats(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2),
+				cursor.getInt(3), cursor.getInt(4), cursor.getInt(5),
+				cursor.getInt(6), cursor.getInt(7), cursor.getInt(8));
 
 	}
-	
-	
-	public Monster getMonsterByID(int monsterID) throws MonsterDAOException{
-		
+
+	/**
+	 * Holt ein Monster nach einer bestimmten ID aus der Datenbank
+	 * 
+	 * @param monsterID Die ID des Monsters
+	 * @return Das Monster Objekt
+	 * @throws MonsterDAOException
+	 */
+	public Monster getMonsterByID(int monsterID) throws MonsterDAOException {
+
 		Attribut attribut = getAttribute(monsterID);
-		
+
 		ArrayList<Koerperteil> koerperteile = null;
 		try {
 			koerperteile = getKoerperteile(monsterID);
 		} catch (MonsterDAOException e) {
 			Log.d("tagmonDB", "Koerperteil could not be created");
 		}
-				
+
 		Stats stats = getStats(monsterID);
-		
-		String sqlQuery = 	"SELECT name, beschreibung " +
-							"FROM tagdb_monster " + 
-							"WHERE id = " + monsterID;
+
+		String sqlQuery = "SELECT name, beschreibung " + "FROM tagdb_monster "
+				+ "WHERE id = " + monsterID;
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
-		if(!cursor.moveToFirst())
+
+		if (!cursor.moveToFirst())
 			throw new MonsterDAOException("Monster has no name");
 
 		String monsterName = cursor.getString(0);
 		String monsterBeschreibung = cursor.getString(1);
-		
-		Monster monster = new Monster(monsterID, monsterName, monsterBeschreibung, attribut, koerperteile, stats);
+
+		Monster monster = new Monster(monsterID, monsterName,
+				monsterBeschreibung, attribut, koerperteile, stats);
 		return monster;
 	}
-	
-	
+
 	// UPDATE METHODS
-	public void updateMonster(Monster monster) throws MonsterDAOException{
+	public void updateMonster(Monster monster) throws MonsterDAOException {
 		updateAttribute(monster);
-		
+
 		for (Koerperteil koerperteil : monster.getKoerperteileList()) {
 			updateKoerperteil(koerperteil);
 			updateFaehigkeit(koerperteil);
 		}
-		
-	}
-	private void updateAttribute(Monster monster) throws MonsterDAOException{
-		Attribut attr = monster.getAttributes();
-		
-		String sqlQuery = 	   " UPDATE tagdb_attribute " +
-					 		   " SET staerke = "+ attr.getStaerke() +", intelligenz= "+ attr.getIntelligenz() +", konstitution= " + attr.getKonstitution() +
-				 			   " WHERE tagdb_attribute.monster_id = " + monster.id;
 
-		 myDataBase.execSQL(sqlQuery);
 	}
-	public void createDbStructureFromFile() throws IOException {
-	    
-		
-	    // Open the resource
-	    InputStream insertsStream = myContext.getAssets().open(BUILD_SCRIPT);
-	    BufferedReader insertReader = new BufferedReader(new InputStreamReader(insertsStream));
 
-	    // Iterate through lines (assuming each insert has its own line and theres no other stuff)
-	    String statement = "";
-	    while (insertReader.ready()) {
-	        statement = insertReader.readLine();
-	    }
-	    insertReader.close();
-	    
-	    myDataBase.execSQL(statement);
+	public void createPlayer(String name) {
+		String SQLStatement = "INSERT INTO tagdb_player (name) VALUES(\""
+				+ name + "\")";
+		myDataBase.execSQL(SQLStatement);
 	}
-	
-	
-	private void updateKoerperteil(Koerperteil koerperteil){
-		
-		 int kArt = 0;
-		 // 1=Kopf, 2=Torso, 3=Arm, 4=Bein
-		 switch (koerperteil.koerperteilArt){
-		case KOPF: kArt = 1;
+
+	private AbilityTargetRestriction getAbilityTargetRestriction(int ziel) {
+		AbilityTargetRestriction abilityTargetRest;
+		// targetRestriction 1=self, 2=enemy, 3=selfANDenemy, 4=enemygroup,
+		// 5=owngroup, 6=selfANDenemygroup, 7=owngroupANDenemy
+		switch (ziel) {
+		case 1:
+			abilityTargetRest = AbilityTargetRestriction.SELF;
 			break;
-		case TORSO: kArt =  2;
+		case 2:
+			abilityTargetRest = AbilityTargetRestriction.ENEMY;
 			break;
-		case ARM: kArt =  3;
+		case 3:
+			abilityTargetRest = AbilityTargetRestriction.SELFANDENEMY;
 			break;
-		case BEIN: kArt =  4;
+		case 4:
+			abilityTargetRest = AbilityTargetRestriction.ENEMYGROUP;
+			break;
+		case 5:
+			abilityTargetRest = AbilityTargetRestriction.OWNGROUP;
+			break;
+		case 6:
+			abilityTargetRest = AbilityTargetRestriction.SELFANDENEMYGROUP;
+			break;
+		case 7:
+			abilityTargetRest = AbilityTargetRestriction.OWNGROUPANDENEMY;
+			break;
+		default:
+			abilityTargetRest = AbilityTargetRestriction.DEFAULT;
+			break;
 		}
-		
-		// Update Koerperteil
-		String sqlQuery = 	   " UPDATE tagdb_koerperteile " +
-		 		   			   " SET name = '"+ koerperteil.name +"', art= " + kArt +
-	 		   				   " WHERE id = " + koerperteil.id;
-		myDataBase.execSQL(sqlQuery);
-		
-		// Update AttributModifikator from Koerperteil
-		sqlQuery = 	   	" UPDATE tagdb_attributmodifikator " +
-	   			   		" SET staerke = "+ koerperteil.getAttributModifikator().getStaerke() +
-		   					", intelligenz= "+ koerperteil.getAttributModifikator().getIntelligenz() +", konstitution= " + koerperteil.getAttributModifikator().getKonstitution() +
-   			   			" WHERE koerperteile_id = " + koerperteil.id;
-		myDataBase.execSQL(sqlQuery);
-		
-		
-		
+		return abilityTargetRest;
 	}
-	
-	private void updateFaehigkeit(Koerperteil koerperteil){
-		
+
+	/**
+	 * Erstellt die Struktur der lokalen Datenbank und erstellt ein Dummy Monster
+	 * @throws IOException
+	 */
+	private void createInitialLokaleDatabase() throws IOException{
+		createDbStructureFromFile();
+		insertDummyMonster();
+	}
+
+	private void updateAttribute(Monster monster) throws MonsterDAOException {
+		Attribut attr = monster.getAttributes();
+
+		String sqlQuery = " UPDATE tagdb_attribute " + " SET staerke = "
+				+ attr.getStaerke() + ", intelligenz= " + attr.getIntelligenz()
+				+ ", konstitution= " + attr.getKonstitution()
+				+ " WHERE tagdb_attribute.monster_id = " + monster.id;
+
+		myDataBase.execSQL(sqlQuery);
+	}
+
+	/**
+	 * Erstellt die Struktur für die lokale Datenbank aus dem
+	 * dbLocalEmptyBuildScript Der Pfad steht in BUILD_SCRIPT
+	 * 
+	 * @throws IOException
+	 */
+	private void createDbStructureFromFile() throws IOException {
+
+		openDataBase();
+		List<String> stmtList = getStatementList(BUILD_SCRIPT);
+		for (String stmt : stmtList) {
+			myDataBase.execSQL(stmt);
+		}
+	}
+
+	/**
+	 * Fügt ein Dummy Monster aus einem SQL Script (DUMMYMONSTER_SCRIPT) in die
+	 * Datenbank ein
+	 * 
+	 * @throws IOException
+	 */
+	private void insertDummyMonster() throws IOException {
+		openDataBase();
+
+		List<String> stmtList = getStatementList(DUMMYMONSTER_SCRIPT);
+		Log.d("tagmonDB", DUMMYMONSTER_SCRIPT);
+		for (String stmt : stmtList) {
+			Log.d("tagmonDB", stmt);
+			myDataBase.execSQL(stmt);
+		}
+	}
+
+	/**
+	 * Erstellt aus einem SQL Script mit mehreren Statements eine Liste mit
+	 * einzelnen Statements
+	 * 
+	 * @param sqlFilePath
+	 *            Der Pfad zu dem SQL Script
+	 * @return Die Liste mit den einzelnen SQL Scripts
+	 * @throws IOException
+	 */
+	private List<String> getStatementList(String sqlFilePath) throws IOException {
+		InputStream insertsStream = myContext.getAssets().open(sqlFilePath);
+		BufferedReader insertReader = new BufferedReader(new InputStreamReader(
+				insertsStream));
+
+		LinkedList<String> stmtList = new LinkedList<String>();
+		String statement = "";
+
+		while (insertReader.ready()) {
+			statement += insertReader.readLine();
+			if (statement.contains(";")) {
+				stmtList.add(statement);
+				statement = "";
+			}
+		}
+		insertReader.close();
+
+		return stmtList;
+	}
+
+	private void updateKoerperteil(Koerperteil koerperteil) {
+
+		int kArt = 0;
+		// 1=Kopf, 2=Torso, 3=Arm, 4=Bein
+		switch (koerperteil.koerperteilArt) {
+		case KOPF:
+			kArt = 1;
+			break;
+		case TORSO:
+			kArt = 2;
+			break;
+		case ARM:
+			kArt = 3;
+			break;
+		case BEIN:
+			kArt = 4;
+		}
+
+		// Update Koerperteil
+		String sqlQuery = " UPDATE tagdb_koerperteile " + " SET name = '"
+				+ koerperteil.name + "', art= " + kArt + " WHERE id = "
+				+ koerperteil.id;
+		myDataBase.execSQL(sqlQuery);
+
+		// Update AttributModifikator from Koerperteil
+		sqlQuery = " UPDATE tagdb_attributmodifikator " + " SET staerke = "
+				+ koerperteil.getAttributModifikator().getStaerke()
+				+ ", intelligenz= "
+				+ koerperteil.getAttributModifikator().getIntelligenz()
+				+ ", konstitution= "
+				+ koerperteil.getAttributModifikator().getKonstitution()
+				+ " WHERE koerperteile_id = " + koerperteil.id;
+		myDataBase.execSQL(sqlQuery);
+
+	}
+
+	private void updateFaehigkeit(Koerperteil koerperteil) {
+
 		String sqlQuery = "";
-		
+
 		// Faehigkeit attribute
 		int abilityID = 0;
 		String name = "";
@@ -518,103 +662,126 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		int absorbationziel = 0;
 		int absorbationsdauer = 0;
 		int schadensabsorbation = 0;
-		
+
 		// buff attribute
 		int bDauer = 0;
 		int bZiel = 0;
 		int bStaerke = 0;
 		int bIntelligenz = 0;
 		int bKonstitution = 0;
-		
+
 		// iterate through all abilities of a 'koerperteil'..
 		for (Ability ability : koerperteil.getAbilityList()) {
 			abilityID = ability.getID();
 			name = ability.getAbilityName();
 			ziel = getZielFromTargetRestriction(ability.getTargetRestriction());
 			energiekosten = ability.getEnergyCosts();
-			
-			// get different components for example 'faustschlag' has a dmg component and stun component -> get the 2 components
-			// and change the angriffswert/angriffsziel and stun attributes, the ability has e.g. no heal component -> heilungswert = 0 and so on
-			for (IAbilityComponent abilityComponent : ability.getAbilityComponents()) {
-				switch(abilityComponent.getComponentType()){
+
+			// get different components for example 'faustschlag' has a dmg
+			// component and stun component -> get the 2 components
+			// and change the angriffswert/angriffsziel and stun attributes, the
+			// ability has e.g. no heal component -> heilungswert = 0 and so on
+			for (IAbilityComponent abilityComponent : ability
+					.getAbilityComponents()) {
+				switch (abilityComponent.getComponentType()) {
 				case BUFF:
 					Buff buffObj = (Buff) abilityComponent;
 					bDauer = buffObj.getDuration();
-					bZiel = getZielFromTargetRestriction(buffObj.getComponentTargetRestriction());
+					bZiel = getZielFromTargetRestriction(buffObj
+							.getComponentTargetRestriction());
 					bStaerke = buffObj.getStrengthBuff();
 					bIntelligenz = buffObj.getIntelligenceBuff();
 					bKonstitution = buffObj.getConstitutionBuff();
 					break;
 				case DAMAGE:
 					Damage dmgObj = (Damage) abilityComponent;
-					angriffsziel = getZielFromTargetRestriction(dmgObj.getComponentTargetRestriction());
+					angriffsziel = getZielFromTargetRestriction(dmgObj
+							.getComponentTargetRestriction());
 					angriffswert = dmgObj.getDamage();
 					break;
 				case HEAL:
-					Heal healObj = (Heal)abilityComponent;
-					heilungsziel = getZielFromTargetRestriction(healObj.getComponentTargetRestriction());
+					Heal healObj = (Heal) abilityComponent;
+					heilungsziel = getZielFromTargetRestriction(healObj
+							.getComponentTargetRestriction());
 					heilungswert = healObj.getHealAmount();
 					break;
 				case SCHADENSABSORBATION:
 					Schadensabsorbation absObj = (Schadensabsorbation) abilityComponent;
-					absorbationziel = getZielFromTargetRestriction(absObj.getComponentTargetRestriction());
+					absorbationziel = getZielFromTargetRestriction(absObj
+							.getComponentTargetRestriction());
 					absorbationsdauer = absObj.getDuration();
 					schadensabsorbation = absObj.getAbsorbationAmount();
 					break;
 				case STUN:
 					Stun stunObj = (Stun) abilityComponent;
-					stunziel = getZielFromTargetRestriction(stunObj.getComponentTargetRestriction());
+					stunziel = getZielFromTargetRestriction(stunObj
+							.getComponentTargetRestriction());
 					stundauer = stunObj.getStunDuration();
 					break;
 				}
 			}
-			// After finishing iterate through all abilitycomponents of one ability it updates the ability and the ability buff
+			// After finishing iterate through all abilitycomponents of one
+			// ability it updates the ability and the ability buff
 			// UPDATE Ability
-			sqlQuery = 	  	" UPDATE tagdb_faehigkeit " +
-							" SET name = '"+name+"', ziel="+ziel+", energiekosten="+energiekosten+", angriffsziel="+angriffsziel+", angriffswert="+angriffswert+", "+
-							" heilungsziel="+heilungsziel+", heilungswert="+heilungswert+", stunziel="+stunziel+",stundauer="+stundauer+", absorbationsziel="+absorbationziel+", "+
-							" absorbationsdauer="+absorbationsdauer+", schadensabsorbation="+schadensabsorbation+
-							" WHERE id = "+ abilityID;
+			sqlQuery = " UPDATE tagdb_faehigkeit " + " SET name = '" + name
+					+ "', ziel=" + ziel + ", energiekosten=" + energiekosten
+					+ ", angriffsziel=" + angriffsziel + ", angriffswert="
+					+ angriffswert + ", " + " heilungsziel=" + heilungsziel
+					+ ", heilungswert=" + heilungswert + ", stunziel="
+					+ stunziel + ",stundauer=" + stundauer
+					+ ", absorbationsziel=" + absorbationziel + ", "
+					+ " absorbationsdauer=" + absorbationsdauer
+					+ ", schadensabsorbation=" + schadensabsorbation
+					+ " WHERE id = " + abilityID;
 			myDataBase.execSQL(sqlQuery);
-			
+
 			// Update AbilityBUFF
-			sqlQuery = 	  	" UPDATE tagdb_buff "+
-							" SET dauer="+bDauer+", ziel="+bZiel+", bStaerke="+bStaerke+", bIntelligenz="+bIntelligenz+", bKonstitution="+bKonstitution+
-							" WHERE faehigkeit_id = "+abilityID;
+			sqlQuery = " UPDATE tagdb_buff " + " SET dauer=" + bDauer
+					+ ", ziel=" + bZiel + ", bStaerke=" + bStaerke
+					+ ", bIntelligenz=" + bIntelligenz + ", bKonstitution="
+					+ bKonstitution + " WHERE faehigkeit_id = " + abilityID;
 			myDataBase.execSQL(sqlQuery);
 		}
 	}
-	
-	private void updateStats(Monster monster){
+
+	private void updateStats(Monster monster) {
 		Stats stats = monster.getStats();
-		String sqlQuery = 	"UPDATE tagdb_stats"+
-							"SET maxHP="+stats.getMaxHP()+", curHP="+stats.getCurHP()+", maxEP="+stats.getMaxEP()+
-							", curEP="+stats.getCurEP()+", regEP="+stats.getRegEP()+", lvl="+stats.getLvl()+", curEXP="+stats.getCurEXP()+", defense="+stats.getDefensye()+
-							" WHERE monster_id = "+ monster.id;
+		String sqlQuery = "UPDATE tagdb_stats" + "SET maxHP="
+				+ stats.getMaxHP() + ", curHP=" + stats.getCurHP() + ", maxEP="
+				+ stats.getMaxEP() + ", curEP=" + stats.getCurEP() + ", regEP="
+				+ stats.getRegEP() + ", lvl=" + stats.getLvl() + ", curEXP="
+				+ stats.getCurEXP() + ", defense=" + stats.getDefensye()
+				+ " WHERE monster_id = " + monster.id;
 		myDataBase.execSQL(sqlQuery);
 	}
-	
-	private int getZielFromTargetRestriction(AbilityTargetRestriction abilityTargetRestriction){
+
+	private int getZielFromTargetRestriction(
+			AbilityTargetRestriction abilityTargetRestriction) {
 		int ziel = 0;
 		switch (abilityTargetRestriction) {
-		case SELF: ziel = 1;
+		case SELF:
+			ziel = 1;
 			break;
-		case ENEMY: ziel = 2;
-				break;
-		case SELFANDENEMY: ziel = 3;
-				break;
-		case ENEMYGROUP: ziel = 4;
-				break;
-		case OWNGROUP: ziel = 5;
-				break;
-		case SELFANDENEMYGROUP: ziel = 6;
-				break;
-		case OWNGROUPANDENEMY: ziel = 7;
-				break;
+		case ENEMY:
+			ziel = 2;
+			break;
+		case SELFANDENEMY:
+			ziel = 3;
+			break;
+		case ENEMYGROUP:
+			ziel = 4;
+			break;
+		case OWNGROUP:
+			ziel = 5;
+			break;
+		case SELFANDENEMYGROUP:
+			ziel = 6;
+			break;
+		case OWNGROUPANDENEMY:
+			ziel = 7;
+			break;
 		}
 		return ziel;
 	}
-	
-	
-	
+
 }

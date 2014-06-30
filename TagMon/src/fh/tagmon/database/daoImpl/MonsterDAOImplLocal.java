@@ -71,6 +71,9 @@ public class MonsterDAOImplLocal implements MonsterDAOLocal{
 	public void updateMonster(Monster monster) throws MonsterDAOException {
 		dbHelper.updateMonster(monster);
 	}
+	public void createPlayer(String name){
+		dbHelper.createPlayer(name);
+	}
 	
 	
 }

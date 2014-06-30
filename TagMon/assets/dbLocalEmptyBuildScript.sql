@@ -82,9 +82,4 @@ CREATE INDEX "tagdb_faehigkeit_koerperteile_883604fe" ON "tagdb_faehigkeit_koerp
 CREATE INDEX "tagdb_faehigkeit_koerperteile_f3d68923" ON "tagdb_faehigkeit_koerperteile" ("faehigkeit_id");
 CREATE INDEX "tagdb_koerperteile_monster_686ce9b2" ON "tagdb_koerperteile_monster" ("monster_id");
 CREATE INDEX "tagdb_koerperteile_monster_883604fe" ON "tagdb_koerperteile_monster" ("koerperteile_id");
-;
-;
-;
-;
-;
-COMMIT;
+
