@@ -55,10 +55,10 @@ public class NetworkPlayer implements IHostPlayer{
 
 	
 	@Override
-	public void gameOver() {
-		this.connector.sendMsgToClient(MessageFactory.createHostMessage_GameOver(""));
-	}
+	public void gameOver(String playerNameWhoLost) {
+		this.connector.sendMsgToClient(MessageFactory.createHostMessage_GameOver(playerNameWhoLost));
 
+	}
 	
 	private MessageObject<?> sendMsgAndReceiveAnswer(MessageObject<?> msg){
 		this.connector.sendMsgToClient(msg);
@@ -70,6 +70,7 @@ public class NetworkPlayer implements IHostPlayer{
 	public void printSummary(SummaryObject msg) {
 		this.connector.sendMsgToClient(MessageFactory.createHostMessage_Summary(msg));
 	}
+
 
 
 }

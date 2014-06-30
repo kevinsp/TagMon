@@ -148,7 +148,7 @@ public class MainActivity extends Activity {
     public void onNewIntent(Intent intent) {
         Tag tagFromIntent = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         Log.i("Foreground dispatch", "Discovered tag with intent: " + intent);
-        mText.setText("Discovered tag " + ++mCount + " with intent: " + intent);
+        
 
         MifareUltralight leTag = MifareUltralight.get(tagFromIntent);
 

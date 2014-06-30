@@ -36,15 +36,21 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     private Context context = this;
     private DialogBuilder chooseDialog;
     private GameEngineModule engineModule;
-
+    private String enemyName = "";
     private ISetAbility iSetAbility;
     private List<Ability> abilities;
     private DialogBuilder summaryDialog;
+    private String playername = "";
 
 
 
 
     private Ability lastChoosenAbility = null;
+
+    @Override
+    public void onBackPressed() {
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,7 +91,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         Monster blueM = mCreator.getMonsterDummy();
 
         engineModule = new GameEngineModule(this, blueM);
-        engineModule.startGamePlayerVSTag("408bcf6gff"); // die eig SerienNr vom gescanten Tag übergeben
+        engineModule.startGamePlayerVSTag(monsterId); // die eig SerienNr vom gescanten Tag übergeben
 
         //mock-up
         /*
@@ -123,12 +129,15 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             battleGuiInit = true;
             this.userId = userId;
             this.abilities = abilities;
+
             for (PlayerInfo player : players) {
                 String playerName = player.NAME;
 
                 if (player.ID == this.userId) {
+                    playername = playerName;
                     initUserGui(playerName);
                 } else {
+                    this.enemyName = playerName;
                     initEnemyGui(playerName);
                 }
             }
@@ -298,17 +307,19 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 ImageView healthBar = (ImageView) findViewById(R.id.ownHealthBar);
                 if (dpToLeft < 71-28) {
                     //dpToLeft = -(71-28-dpToLeft);
-                    dpToLeft = (int)-((71*density - 28 - dpToLeft*density));
+                    dpToLeft = (int)-((71*density - 28*density - dpToLeft*density));
 
                 } else {
                     //dpToLeft = 71-dpToLeft+28;
-                    dpToLeft = (int)((71-dpToLeft)*density + 28);
+                    dpToLeft = (int)((71-dpToLeft)*density + 28*density);
                 }
-                ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(healthBar.getLayoutParams());
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)healthBar.getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+                params.setMargins(0, (int) (15*density), (int)(dpToLeft), 0);
+                healthBar.setLayoutParams(params);
 
-                marginParams.setMargins((int)(dpToLeft), (int) (55*density), 0, 0);
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(marginParams);
-                healthBar.setLayoutParams(layoutParams);
+
+
             }});
     }
 
@@ -361,17 +372,19 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 ImageView healthBar = (ImageView) findViewById(R.id.enemyHealthBar);
                 if (dpToLeft < 71-28) {
                     //dpToLeft = -(71-28-dpToLeft);
-                    dpToLeft = (int)-((71*density - 28 - dpToLeft*density));
+                    dpToLeft = (int)-((71*density - 28*density - dpToLeft*density));
 
                 } else {
                     //dpToLeft = 71-dpToLeft+28;
-                    dpToLeft = (int)((71-dpToLeft)*density + 28);
+                    dpToLeft = (int)((71-dpToLeft)*density + 28*density);
                 }
+
                 ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(healthBar.getLayoutParams());
 
-                marginParams.setMargins((int)(dpToLeft), (int) (55*density), 0, 0);
+                marginParams.setMargins((int)(dpToLeft), (int) (55*density),0 , 0);
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(marginParams);
                 healthBar.setLayoutParams(layoutParams);
+
             }});
     }
 
@@ -459,7 +472,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 //int item = Integer.parseInt(v.getTag().toString());
                 TableRow tableRow = (TableRow) v;
                 if (tableRow != null) {
-                   // int targetRestrictionChoosen = (Integer) tableRow.getTag();
+                    // int targetRestrictionChoosen = (Integer) tableRow.getTag();
 
                     //final Ability choosenAbility = (Ability) abilities.get(targetRestrictionChoosen);
                     //ist keine liste mehr
@@ -478,7 +491,13 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
                     final List<String> targetNames = new ArrayList<String>();
                     for (Integer target : targetList) {
-                        targetNames.add(target.toString());
+                        //targetNames.add(target.toString());
+                        if (target == userId) {
+                            targetNames.add(playername);
+                        } else {
+                            targetNames.add(enemyName);
+                        }
+
                     }
 
                     //final CharSequence[] targetItems = targetNames.toArray(new CharSequence[targetNames.size()]);
@@ -510,8 +529,9 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 if (tableRow != null) {
                     chooseDialog.dismiss();
                     disableButtons();
-                    int choosenEnemyId = (Integer) tableRow.getTag();
+                    int choosenEnemyIdInList = (Integer) tableRow.getTag();
                     AbilityTargetRestriction atr = lastChoosenAbility.getTargetRestriction();
+                    int choosenEnemyId = atr.getTargetList().get(choosenEnemyIdInList);
                     atr.cleanTargetList();
                     atr.addTarget(choosenEnemyId);
                     iSetAbility.setAbility(new ActionObject(lastChoosenAbility, atr));
@@ -532,7 +552,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                        onresumeDialog.onResumeDialog();
+                     //   onresumeDialog.onResumeDialog();
                     }
 
                 }));
@@ -587,24 +607,23 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-        Button btn = (Button) findViewById(R.id.chooseAttack);
-        btn.setEnabled(false);
+                Button btn = (Button) findViewById(R.id.chooseAttack);
+                btn.setEnabled(false);
             }});
     }
     public void enableButtons(){
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-        Button btn = (Button) findViewById(R.id.chooseAttack);
-        btn.setEnabled(true);
+                Button btn = (Button) findViewById(R.id.chooseAttack);
+                btn.setEnabled(true);
             }});
     }
-    @Override
     public void handleGameOver(final String gameOverMessage) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                summaryDialog = new DialogBuilder(context, "Zusammenfassung", gameOverMessage, -1);
+                summaryDialog = new DialogBuilder(context, "Game Over", gameOverMessage, -1);
                 summaryDialog.setOnDismissListener((new DialogInterface.OnDismissListener() {
 
                     @Override

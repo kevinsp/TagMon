@@ -11,5 +11,5 @@ public interface IBattleGUI {
     public boolean initBattleGUI(List<PlayerInfo> players, int userId, List<Ability> abilities);
     void refreshGUI(List<PlayerInfo> players, Enum<GuiPartsToUpdate> partToUpdate);
     void chooseAbility(ISetAbility setAbility);
-    void handleGameOver(String gameOverMessage);
+
 }

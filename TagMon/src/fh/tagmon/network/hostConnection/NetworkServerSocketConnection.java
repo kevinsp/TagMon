@@ -47,6 +47,15 @@ public class NetworkServerSocketConnection {
 	public int getPort(){
 		return port;
 	}
+	
+	public void closeServerSocket(){
+		try {
+			this.serverSocket.close();
+		} catch (IOException e) {
+			
+			Log.e(TAG, e.getMessage());
+		}
+	}
 }
 
 
