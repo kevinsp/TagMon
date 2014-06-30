@@ -151,18 +151,12 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements IS
         ((Fight)context).refreshGUI(summary.getPlayerInfos(), GuiPartsToUpdate.HEALTH);
 
         Log.d("summary", "got summary");
-        synchronized (waitForOtherDialog) {
-            while (waitForDialog) {
-                try {
-                    waitForOtherDialog.wait();
-                } catch (InterruptedException e) { }
-            }
-        }
+
         String summaryMsg = summary.getSummary();
         if(!summaryMsg.isEmpty())
         	((Fight)context).showTemporaryDialog(summary.getSummary(), this);
 
-        onPauseDialog();
+        //onPauseDialog();
 	}
 	
 	/**
@@ -208,13 +202,7 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements IS
      * @return actionObject
      */
 	private ActionObject waitForAction() {
-        synchronized (waitForOtherDialog) {
-            while (waitForDialog) {
-                try {
-                    waitForOtherDialog.wait();
-                } catch (InterruptedException e) { }
-            }
-        }
+
         ActionObject action = null;
         ((Fight) context).chooseAbility(this);
         synchronized (waitForPlayer) {
