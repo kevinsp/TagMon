@@ -82,7 +82,7 @@
                 android:layout_height="28dp"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="8dp"
-               />
+                />
             <ImageView
                 android:id="@+id/enemyLvL01"
                 android:layout_width="23dp"
@@ -214,41 +214,34 @@
         android:id="@+id/ownGridlayout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:columnCount="2"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentLeft="true"
+        android:columnCount="2"
+        android:rowCount="1">
 
         <RelativeLayout
             android:layout_width="501dp"
             android:layout_height="270dp"
             android:layout_column="0"
-            android:layout_row="0"
-            android:layout_marginBottom="-200dp"
-            android:layout_marginLeft="-200dp">
+            android:layout_marginLeft="-220dp"
+            android:layout_marginBottom="-100dp">
 
-            <ImageView
-                android:id="@+id/ownBody"
-                android:layout_width="501dp"
-                android:layout_height="270dp"
-                android:src="@drawable/body_dino_own"
-                />
 
-            <ImageView
-                android:id="@+id/ownHead"
-                android:layout_width="156dp"
-                android:layout_height="210dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/head_dino_own"
-                android:layout_alignParentRight="true"
-                />
-            <ImageView
-                android:id="@+id/ownLeftRightFront"
-                android:layout_width="156dp"
-                android:layout_height="210dp"
-                android:layout_marginTop="8dp"
-                android:src="@drawable/head_dino_own"
-                android:layout_alignParentRight="true"
-                />
+                <ImageView
+                    android:id="@+id/ownBody"
+                    android:layout_width="501dp"
+                    android:layout_height="270dp"
+                    android:src="@drawable/body_dino_own"
+                    />
+
+                <ImageView
+                    android:id="@+id/ownHead"
+                    android:layout_width="156dp"
+                    android:layout_height="210dp"
+                    android:layout_marginTop="8dp"
+                    android:src="@drawable/head_dino_own"
+                    android:layout_alignParentRight="true"
+                    />
 
 
 
@@ -257,25 +250,26 @@
 
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="280dp"
             android:layout_height="100dp"
             android:layout_column="1"
-            android:layout_row="1"
-            android:layout_marginLeft="20dp">
+            android:layout_gravity="bottom|right">
 
             <ImageView
                 android:id="@+id/ownHealthBar"
-                android:src="@drawable/healtbar_scaled_down4"
+                android:src="@drawable/healtbar_scaled_down4own"
                 android:layout_width="152dp"
                 android:layout_height="30dp"
-                android:layout_marginLeft="28dp"
-                android:layout_marginTop="55dp"/>
+                android:layout_marginRight="28dp"
+                android:layout_marginTop="15dp"
+                android:layout_alignParentRight="true"/>
 
             <ImageView
                 android:id="@+id/ownHealthBarBackground"
-                android:src="@drawable/healthbar_frame_scaled_down4"
+                android:src="@drawable/testbar_unten_scaled_down4"
                 android:layout_width="280dp"
                 android:layout_height="100dp"
+                android:layout_alignParentRight="true"
                 />
 
 
@@ -283,60 +277,66 @@
                 android:id="@+id/ownLvL10"
                 android:layout_width="23dp"
                 android:layout_height="28dp"
-                android:layout_marginLeft="13dp"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginRight="36dp"
+                android:layout_marginBottom="6dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"/>
+
             <ImageView
                 android:id="@+id/ownLvL01"
                 android:layout_width="23dp"
                 android:layout_height="28dp"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="6dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
                 android:src="@drawable/lvl1"/>
             <TextView
                 android:id="@+id/ownName"
                 android:layout_width="140dp"
                 android:layout_height="28dp"
-                android:layout_marginLeft="118dp"
-                android:layout_marginTop="9dp"
+                android:layout_marginLeft="36dp"
+                android:layout_marginBottom="2dp"
+                android:layout_alignParentBottom="true"
                 android:textColor="#000"/>
 
             <ImageView
                 android:id="@+id/curHp100"
                 android:layout_width="8dp"
                 android:layout_height="10dp"
-                android:layout_marginLeft="130dp"
-                android:layout_marginTop="55dp"/>
+                android:layout_marginLeft="125dp"
+                android:layout_marginTop="17dp"/>
             <ImageView
-            android:id="@+id/curHp010"
+                android:id="@+id/curHp010"
                 android:layout_width="8dp"
                 android:layout_height="10dp"
-                android:layout_marginLeft="140dp"
-                android:layout_marginTop="55dp"/>
+                android:layout_marginLeft="135dp"
+                android:layout_marginTop="17dp"/>
             <ImageView
-            android:id="@+id/curHp001"
+                android:id="@+id/curHp001"
                 android:layout_width="8dp"
                 android:layout_height="10dp"
-                android:layout_marginLeft="150dp"
-                android:layout_marginTop="55dp"/>
+                android:layout_marginLeft="145dp"
+                android:layout_marginTop="17dp"/>
 
             <ImageView
                 android:id="@+id/maxHp100"
                 android:layout_width="8dp"
                 android:layout_height="10dp"
-                android:layout_marginLeft="130dp"
-                android:layout_marginTop="75dp"/>
+                android:layout_marginLeft="125dp"
+                android:layout_marginTop="37dp"/>
             <ImageView
                 android:id="@+id/maxHp010"
                 android:layout_width="8dp"
                 android:layout_height="10dp"
-                android:layout_marginLeft="140dp"
-                android:layout_marginTop="75dp"/>
+                android:layout_marginLeft="135dp"
+                android:layout_marginTop="37dp"/>
             <ImageView
                 android:id="@+id/maxHp001"
                 android:layout_width="8dp"
                 android:layout_height="10dp"
-                android:layout_marginLeft="150dp"
-                android:layout_marginTop="75dp"/>
+                android:layout_marginLeft="145dp"
+                android:layout_marginTop="37dp"/>
 
         </RelativeLayout>
 
@@ -348,11 +348,11 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp">
-    <Button
-        android:id="@+id/chooseAttack"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:onClick="onBtnClicked"
-        android:background="@drawable/attack" />
+        <Button
+            android:id="@+id/chooseAttack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:onClick="onBtnClicked"
+            android:background="@drawable/attack" />
     </RelativeLayout>
 </RelativeLayout>

@@ -55,7 +55,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fight);
-        disableButtons();
+        //disableButtons();
         Intent intent = getIntent();
         String monsterId = intent.getStringExtra("monsterId");
 
