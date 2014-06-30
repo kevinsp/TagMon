@@ -110,12 +110,12 @@ public class RollesTestKi {
     	
     	ActionObject myAction = new ActionObject(chosenAbility,targetRes);
     	
-    	////TEST
-    	IAbilityComponent comp = chosenAbility.getAbilityComponents().getFirst();
-    	if(comp.getComponentType() == AbilityComponentTypes.SCHADENSABSORBATION){
-    		Schadensabsorbation sch = (Schadensabsorbation) comp;
-    		Log.i("GameEngine", "KI sending ... abs:" + String.valueOf(sch.getAbsorbationAmount()));
-    	}
+//    	////TEST
+//    	IAbilityComponent comp = chosenAbility.getAbilityComponents().getFirst();
+//    	if(comp.getComponentType() == AbilityComponentTypes.SCHADENSABSORBATION){
+//    		Schadensabsorbation sch = (Schadensabsorbation) comp;
+//    		Log.i("GameEngine", "KI sending ... abs:" + String.valueOf(sch.getAbsorbationAmount()));
+//    	}
     	
     	
     	
@@ -130,6 +130,9 @@ public class RollesTestKi {
 		AbilityComponentList abilityComponents = (AbilityComponentList) dealWithMsg.getContent();
 		PlayerInfo info = new PlayerInfo(kiName, id);
 		AnswerObject answerObject = director.handleAbilityComponents(abilityComponents, info);
+		if(this.playModule.getMonster().getCurrentLifePoints() <= 0){
+			answerObject.setMonsterIsDead(true);
+		}
 		connection.sendToHost(MessageFactory.createClientMessage_Answer(answerObject, id));
     }
     

@@ -108,7 +108,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         for(IAbilityComponent component : action.getAbility().getAbilityComponents()){
         	//Get the targetIDs of the specific component
         	///TEST
-        		testFunc(component);
+        		//testFunc(component);
         	/////
         	LinkedList<Integer> targetList = null;
         	switch (component.getComponentTargetRestriction()) {
@@ -162,7 +162,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
     	AnswerObject answer  = player.dealWithAbilityComponents(al);
     	myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(al.target).NAME + " ====");
         myLogger(answer.getMsg());
-        myLogger("====");
+        
 		/////////////////////////////////////////// TESTHALBER
 		if (answer.isMonsterDead()) 
 			this.gameOver();

@@ -17,6 +17,13 @@ public class AsynkTaskKiDummy extends AsyncTask<Void, Void, Void>{
 	
 	@Override
 	protected Void doInBackground(Void... params) {
+		try {
+			Thread.sleep(500); // manchmal wollte sich ki verbinden obwohl kein server gelaufen ist. Grund Ki zu schnell gestartet
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		RollesTestKi ki = new RollesTestKi(kiName, kiMonster);
 		ki.playTheGame();
 		

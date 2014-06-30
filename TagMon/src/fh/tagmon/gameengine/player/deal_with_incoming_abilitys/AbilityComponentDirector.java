@@ -69,6 +69,7 @@ public class AbilityComponentDirector implements IListener{
 			
 			this.dmgAbsHandler.handleDamageAbsorbation(schadenAbs);
 			event += "sicht mit einem natrlichen Schild gewappnet!";
+			break;
 		case STUN:
 			event += "die Kontrolle ber seinen Krper verloren!";
 			break;
@@ -76,6 +77,7 @@ public class AbilityComponentDirector implements IListener{
 			break;
 		
 		}
+		Log.i("AbilityComponentDirector", "[AbilityComponentDirector] logged :: " + getLatestLog());
 		return event;
 	}
 	
