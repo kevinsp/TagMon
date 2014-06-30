@@ -49,7 +49,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fight);
-
+        disableButtons();
         Intent intent = getIntent();
         String monsterId = intent.getStringExtra("monsterId");
 
@@ -291,18 +291,22 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                     counter++;
                 }
                 //71    28
+                float density = context.getResources().getDisplayMetrics().density;
+
                 float life = (float)currentLife / (float) maxLife;
                 float dpToLeft = life * 71;
                 ImageView healthBar = (ImageView) findViewById(R.id.ownHealthBar);
                 if (dpToLeft < 71-28) {
-                    dpToLeft = -(71-28-dpToLeft);
+                    //dpToLeft = -(71-28-dpToLeft);
+                    dpToLeft = (int)-((71*density - 28 - dpToLeft*density));
+
                 } else {
-                    dpToLeft = 71-dpToLeft+28;
+                    //dpToLeft = 71-dpToLeft+28;
+                    dpToLeft = (int)((71-dpToLeft)*density + 28);
                 }
                 ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(healthBar.getLayoutParams());
-                float density = context.getResources().getDisplayMetrics().density;
 
-                marginParams.setMargins((int)(dpToLeft*density), (int) (55*density), 0, 0);
+                marginParams.setMargins((int)(dpToLeft), (int) (55*density), 0, 0);
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(marginParams);
                 healthBar.setLayoutParams(layoutParams);
             }});
@@ -350,17 +354,22 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                     counter++;
                 }
                 //71    28
-                float life = (float) currentLife / (float) maxLife;
+                float density = context.getResources().getDisplayMetrics().density;
+
+                float life = (float)currentLife / (float) maxLife;
                 float dpToLeft = life * 71;
                 ImageView healthBar = (ImageView) findViewById(R.id.enemyHealthBar);
                 if (dpToLeft < 71-28) {
-                    dpToLeft = -(71-28-dpToLeft);
+                    //dpToLeft = -(71-28-dpToLeft);
+                    dpToLeft = (int)-((71*density - 28 - dpToLeft*density));
+
                 } else {
-                    dpToLeft = 71-dpToLeft+28;
+                    //dpToLeft = 71-dpToLeft+28;
+                    dpToLeft = (int)((71-dpToLeft)*density + 28);
                 }
                 ViewGroup.MarginLayoutParams marginParams = new ViewGroup.MarginLayoutParams(healthBar.getLayoutParams());
-                float density = context.getResources().getDisplayMetrics().density;
-                marginParams.setMargins((int)(dpToLeft*density), (int) (55*density), 0, 0);
+
+                marginParams.setMargins((int)(dpToLeft), (int) (55*density), 0, 0);
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(marginParams);
                 healthBar.setLayoutParams(layoutParams);
             }});
@@ -575,12 +584,20 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     }
 
     public void disableButtons(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
         Button btn = (Button) findViewById(R.id.chooseAttack);
         btn.setEnabled(false);
+            }});
     }
     public void enableButtons(){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
         Button btn = (Button) findViewById(R.id.chooseAttack);
         btn.setEnabled(true);
+            }});
     }
     @Override
     public void handleGameOver(final String gameOverMessage) {
