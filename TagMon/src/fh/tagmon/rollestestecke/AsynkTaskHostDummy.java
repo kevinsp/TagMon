@@ -24,6 +24,7 @@ public class AsynkTaskHostDummy extends AsyncTask<Void, Void, Void>{
 			PlayerList playerList = server.getPlayers();
 			hostEngine = new GameHostEngine(playerList);
 			this.hostEngine.go();
+			server.closeServerSocket();
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
