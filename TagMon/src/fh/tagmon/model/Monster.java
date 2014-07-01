@@ -112,9 +112,15 @@ public class Monster {
 	}
 	
 	public int increaseLifePoints(int increaseValue){
-		stats.setCurHP(stats.getCurHP() + increaseValue);
-		return stats.getCurHP();
+		int lifeAfterHeal = stats.getCurHP() + increaseValue;
+		if(getMaxLifePoints() <= lifeAfterHeal){
+			stats.setCurHP(getMaxLifePoints());
+		}
+		else{
+			stats.setCurHP(lifeAfterHeal);
+		}
 		
+		return stats.getCurHP();
 	}
 	
 	public void setAdditionalStrength(int additionalStrength) {

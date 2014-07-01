@@ -170,9 +170,10 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
     }
     
     private AnswerObject sendComponentListToPlayer(AbilityComponentList al){
+    	myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(al.target).NAME + " ====");
     	final IHostPlayer player = this.playerList.getPlayerByTargetId(al.target);
     	AnswerObject answer  = player.dealWithAbilityComponents(al);
-    	myLogger("==== Answer from Player: " + this.playerList.getPlayerInfo(al.target).NAME + " ====");
+    	
         myLogger(answer.getMsg());
         
 		/////////////////////////////////////////// TESTHALBER

@@ -15,15 +15,17 @@ public class HealHandler {
 	}
 	
 	
-	public void handleHeal(Heal heal){
+	public int handleHeal(Heal heal){
 		
 		int healAmount = heal.getHealAmount();
 		
 		myMonster.increaseLifePoints(healAmount);
 		
 		String logString = "[HealHandler] monster was healed : |" + String.valueOf(healAmount) + "| .";
-		
+		logString += "Monster currentLife: " + this.myMonster.getCurrentLifePoints()+ ".";
 		compLogger.addLogMsg(logString);
+		
+		return healAmount;
 	}
 	
 	

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
+import fh.tagmon.gameengine.abilitys.Heal;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
@@ -99,8 +100,37 @@ public class MyMonsterCreator {
 		return dummyMonster;
 	}
 	
+	public Monster getHealMonster(){
+		//stats
+				Stats stats = new Stats(0,30,30,30,111,100,10,123,11);
+				
+				//Attribute
+				Attribut attribut = new Attribut(0, 10, 11, 12);
+				
+				//Abilitys		
+				Ability heal =  getHeal();
+				
+				ArrayList<Ability>	abilityList = new ArrayList<Ability>();
+				abilityList.add(heal);
+				
+				//Krperteile
+				Koerperteil arm = new Koerperteil(0, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
+				
+				ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
+				koerperteilList.add(arm);
+				
+				//setze Monster zusammen
+				Monster dummyMonster = new Monster(0, "MonsterName","test", attribut, koerperteilList, stats);
+				
+				return dummyMonster;
+	}
 	
-	
+	private Ability getHeal(){
+		Ability ability = new Ability(1, "Healoraisor", 20,0, AbilityTargetRestriction.SELF);
+		IAbilityComponent component = new Heal(10, AbilityTargetRestriction.SELF);
+		ability.addAbilityComponent(component);
+		return ability;
+	}
 	
 	private Ability getBeiAttacke(){
 		Ability ability = new Ability(1, "Beissattacke", 20,0, AbilityTargetRestriction.ENEMY);

@@ -7,6 +7,7 @@ import java.util.List;
 import fh.tagmon.client.Helper_PlayerSettings;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
+import fh.tagmon.gameengine.abilitys.Heal;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.gameengine.AbilityComponentList;
@@ -22,6 +23,7 @@ public class AbilityComponentDirector implements IListener{
 	private BuffHandler BuffHandler;
 	private DamageHandler dmgHandler;
 	private DamageAbsorbationHandler dmgAbsHandler;
+	private HealHandler healHandler;
 	private AbilityComponentLogger compLogger = new AbilityComponentLogger();
 	
 	
@@ -30,6 +32,7 @@ public class AbilityComponentDirector implements IListener{
 		this.BuffHandler = new BuffHandler(monster,compLogger);
 		this.dmgHandler = new DamageHandler(monster,compLogger);
 		this.dmgAbsHandler = new DamageAbsorbationHandler(monster, compLogger);
+		this.healHandler = new HealHandler(monster, compLogger);
 	}
 	
 	
@@ -61,6 +64,9 @@ public class AbilityComponentDirector implements IListener{
 			event += "durch einen Angriff " + dmg + " schaden erlitten!";
 			break;
 		case HEAL:
+			Heal healObj = (Heal) abilityComponent;
+			int heal = this.healHandler.handleHeal(healObj);
+			event += "durch einen Heal " + heal + " Lebenspunkte erhalten!";
 			break;
 		case SCHADENSABSORBATION:
 			Schadensabsorbation schadenAbs = (Schadensabsorbation) abilityComponent;
