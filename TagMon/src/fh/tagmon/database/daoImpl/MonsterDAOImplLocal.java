@@ -11,7 +11,9 @@ import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.gameengine.abilitys.Ability;
 import fh.tagmon.gameengine.abilitys.Buff;
 import fh.tagmon.gameengine.abilitys.Damage;
+import fh.tagmon.gameengine.abilitys.Heal;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
+import fh.tagmon.gameengine.abilitys.Schadensabsorbation;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 import fh.tagmon.model.Attribut;
 import fh.tagmon.model.AttributModifikator;
@@ -40,36 +42,44 @@ public class MonsterDAOImplLocal implements MonsterDAOLocal{
 	@Override
 	public Monster getDummyMonster() throws MonsterDAOException {
 		
-		Attribut attribut = new Attribut(1, 2, 3, 4);
-		
-		
-		Ability ability = new Ability(1, "Faustschlag", 20, 2, AbilityTargetRestriction.ENEMY);
-		
-		IAbilityComponent component = new Damage(7, AbilityTargetRestriction.ENEMY);
-		ability.addAbilityComponent(component);
-		
-		IAbilityComponent buffComponent = new Buff(1, 2, AbilityTargetRestriction.SELF, 4, 3, 2);
-		ability.addAbilityComponent(buffComponent);
-		
-
-		Ability blockAbility = new Ability(2, "BLOCKABILITY", 11,2, AbilityTargetRestriction.SELF);
-		blockAbility.addAbilityComponent(new Buff(2,2,AbilityTargetRestriction.SELF,3,5,3));
-		
+		Attribut attribut = new Attribut(1, 4, 3, 4);
 		
 		ArrayList<Ability>	abilityList = new ArrayList<Ability>();
-		abilityList.add(ability);
-		abilityList.add(blockAbility);
-		
-		
-		
-		
-		Koerperteil koerperteil = new Koerperteil(1, "Koerpterteili", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
 		ArrayList<Koerperteil>koerperteilList = new ArrayList<Koerperteil>();
+		
+		
+		Ability ability = new Ability(1, "Heilung", 30, 2, AbilityTargetRestriction.SELF);	
+		IAbilityComponent component = new Heal(25, AbilityTargetRestriction.SELF);
+		ability.addAbilityComponent(component);
+		abilityList.add(ability);
+		Koerperteil koerperteil = new Koerperteil(1, "Kopf", abilityList, KoerperteilArt.KOPF, new AttributModifikator(0, 0, 0));
 		koerperteilList.add(koerperteil);
 		
-		Stats stats = new Stats(1,100,100,30,111,100,10,123,13);
 		
-		Monster dummyMonster = new Monster(1, "MonsterName", "Beschr",attribut, koerperteilList, stats);
+		ability = new Ability(2, "Schadensabsorbation", 20, 3, AbilityTargetRestriction.SELF);	
+		component = new Schadensabsorbation(2, 20, AbilityTargetRestriction.SELF);
+		koerperteil = new Koerperteil(2, "Torso", abilityList, KoerperteilArt.TORSO, new AttributModifikator(0, 0, 0));
+		ability.addAbilityComponent(component);
+		koerperteilList.add(koerperteil);
+		
+		
+		ability = new Ability(3, "Faustschlag", 25, 1, AbilityTargetRestriction.ENEMY);	
+		component = new Damage(25, AbilityTargetRestriction.ENEMY);
+		koerperteil = new Koerperteil(2, "Arm", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
+		ability.addAbilityComponent(component);
+		koerperteilList.add(koerperteil);
+
+		
+		ability = new Ability(4, "Roundhousekick", 40, 2, AbilityTargetRestriction.ENEMY);	
+		component = new Damage(40, AbilityTargetRestriction.ENEMY);
+		koerperteil = new Koerperteil(4, "Bein", abilityList, KoerperteilArt.BEIN, new AttributModifikator(0, 0, 0));
+		ability.addAbilityComponent(component);
+		koerperteilList.add(koerperteil);
+		
+
+		Stats stats = new Stats(1, 60, 60, 80, 80, 15, 1, 0, 3);
+		
+		Monster dummyMonster = new Monster(1, "Tagzilla", "Beschreibung", attribut, koerperteilList, stats);
 		
 		return dummyMonster;
 	}
