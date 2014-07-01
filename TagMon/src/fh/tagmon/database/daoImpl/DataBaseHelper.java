@@ -49,7 +49,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	public void createDataBase() throws IOException {
 
 		boolean dbExist = checkDataBase();
-//		boolean dbExist = false;
+		// boolean dbExist = false;
 
 		if (dbExist) {
 			// do nothing - database already exist
@@ -82,7 +82,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		try {
 			String myPath = DB_PATH + DB_NAME;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
-					SQLiteDatabase.OPEN_READONLY);
+					SQLiteDatabase.NO_LOCALIZED_COLLATORS
+							| SQLiteDatabase.OPEN_READONLY);
 		} catch (SQLiteException e) {
 			// database does't exist yet.
 		}
@@ -150,124 +151,130 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
 	}
-	
-	
-	
-	public Attribut getAttribute(int monsterID) throws MonsterDAOException{
-		
-		String sqlQuery = 	   "SELECT tAttr.id, tAttr.staerke, tAttr.intelligenz, tAttr.konstitution " +
-					 		   "FROM tagdb_monster tMonster INNER JOIN tagdb_attribute tAttr " +
-					 		   "	ON tMonster.id = tAttr.monster_id " + 
-				 			   "WHERE tMonster.id = " + monsterID;
-		 
-		 Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		 
-		 ArrayList<Integer> attribList = new ArrayList<Integer>();
-		 
-		 if(cursor.moveToFirst()){
-			 for (int i=0; i<cursor.getColumnCount(); i++) {
-				 attribList.add(cursor.getInt(i));
-			}
-		 }
-		 else
-			 throw new MonsterDAOException("Monster could not be created cause no attributes were found");
-		 
-		 return new Attribut(attribList.get(0), attribList.get(1), attribList.get(2), attribList.get(3));
-	}
-	
-	
-	public ArrayList<Koerperteil> getKoerperteile(int monsterID) throws MonsterDAOException{
- 		
-		 String sqlQuery = 	"SELECT tKM.koerperteile_id, tK.name, tK.art " +
-				 			"FROM tagdb_monster tMonster " + 
-				 			"INNER JOIN tagdb_koerperteile_monster tKM " +
-				 				"ON tMonster.id = tKM.monster_id " +
-				 			"INNER JOIN tagdb_koerperteile tK " +
-				 				"ON tKM.koerperteile_id = tK.id " +
-				 			"WHERE tMonster.id = " + monsterID;
-		 
-		 Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		 
-		 
-		 int kId = 0;
-		 String name = "";
-		 int art = 0;
-		 
-		 ArrayList<Koerperteil> koerperteilList = new ArrayList<Koerperteil>();
-		 
-		 while(cursor.moveToNext()){
-			 kId = cursor.getInt(0);
-			 name = cursor.getString(1);
-			 art = cursor.getInt(2);
-			 			 
-			 AttributModifikator attrMod = getAttributModifikator(kId);	 
-			 ArrayList<Ability> abilityList = getAbilities(kId);
-			 			 
-			 KoerperteilArt koerperteileArt;
-			 
-			 // 1=Kopf, 2=Torso, 3=Arm, 4=Bein
-			 switch (art) {
-			case 1: koerperteileArt = KoerperteilArt.KOPF;
-				break;
-			case 2: koerperteileArt = KoerperteilArt.TORSO;
-				break;
-			case 3: koerperteileArt = KoerperteilArt.ARM;
-				break;
-			case 4: koerperteileArt = KoerperteilArt.BEIN;
-				break;
-			default: throw new MonsterDAOException("The Monster's 'koerperteil' has no correct 'koerperteileArt'");
-			}
-			 koerperteilList.add(new Koerperteil(kId, name, abilityList, koerperteileArt, attrMod));
-		 }
-		 
-		 if(koerperteilList.isEmpty())
-			 throw new MonsterDAOException("Monster has not a single 'koerperteil'");
-		 
-		 return koerperteilList;
-	}
-	
-	
-	public AttributModifikator getAttributModifikator(int koerperteileID) throws MonsterDAOException{
-		
-		 String sqlQuery = 	"SELECT tAttrM.staerke, tAttrM.intelligenz, tAttrM.konstitution " +
-							"FROM tagdb_attributmodifikator tAttrM " +
-							"WHERE tAttrM.koerperteile_id = " + koerperteileID;
+
+	public Attribut getAttribute(int monsterID) throws MonsterDAOException {
+
+		String sqlQuery = "SELECT tAttr.id, tAttr.staerke, tAttr.intelligenz, tAttr.konstitution "
+				+ "FROM tagdb_monster tMonster INNER JOIN tagdb_attribute tAttr "
+				+ "	ON tMonster.id = tAttr.monster_id "
+				+ "WHERE tMonster.id = " + monsterID;
 
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
+
 		ArrayList<Integer> attribList = new ArrayList<Integer>();
-		 
-		 while(cursor.moveToNext()){
-			 for (int i=0; i<cursor.getColumnCount(); i++) {
-				 attribList.add(cursor.getInt(i));
+
+		if (cursor.moveToFirst()) {
+			for (int i = 0; i < cursor.getColumnCount(); i++) {
+				attribList.add(cursor.getInt(i));
 			}
-		 }
-		 
-		 if(attribList.isEmpty())
-			 throw new MonsterDAOException("Koerperteil has no 'attributModifikator'");
-		 		 
-		 return new AttributModifikator(attribList.get(0), attribList.get(1), attribList.get(2));	
+		} else
+			throw new MonsterDAOException(
+					"Monster could not be created cause no attributes were found");
+
+		return new Attribut(attribList.get(0), attribList.get(1),
+				attribList.get(2), attribList.get(3));
 	}
-	
-	
-	public ArrayList<Ability> getAbilities(int koerperteileID) throws MonsterDAOException {
-		
-		 String sqlQuery = 	"SELECT tFaehigkeit.id, tFaehigkeit.name, tFaehigkeit.ziel, tFaehigkeit.energiekosten, tFaehigkeit.angriffsziel, tFaehigkeit.angriffswert, " +
-				 					"tFaehigkeit.heilungsziel, tFaehigkeit.heilungswert, tFaehigkeit.stunziel, tFaehigkeit.stundauer, " +
-				 					"tFaehigkeit.absorbationsziel, tFaehigkeit.absorbationsdauer, tFaehigkeit.schadensabsorbation, tFaehigkeit.cooldown " +
-				 			"FROM tagdb_faehigkeit tFaehigkeit " + 
-				 			"INNER JOIN tagdb_faehigkeit_koerperteile tFK " +
-				 				"ON tFaehigkeit.id = tFK.faehigkeit_id " +
-				 			"INNER JOIN tagdb_faehigkeit tF " +
-				 				"ON tFK.koerperteile_id = tF.id " +
-				 			"WHERE tFK.koerperteile_id = " + koerperteileID;
-		 
-		
-		
+
+	public ArrayList<Koerperteil> getKoerperteile(int monsterID)
+			throws MonsterDAOException {
+
+		String sqlQuery = "SELECT tKM.koerperteile_id, tK.name, tK.art "
+				+ "FROM tagdb_monster tMonster "
+				+ "INNER JOIN tagdb_koerperteile_monster tKM "
+				+ "ON tMonster.id = tKM.monster_id "
+				+ "INNER JOIN tagdb_koerperteile tK "
+				+ "ON tKM.koerperteile_id = tK.id " + "WHERE tMonster.id = "
+				+ monsterID;
+
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
+
+		int kId = 0;
+		String name = "";
+		int art = 0;
+
+		ArrayList<Koerperteil> koerperteilList = new ArrayList<Koerperteil>();
+
+		while (cursor.moveToNext()) {
+			kId = cursor.getInt(0);
+			name = cursor.getString(1);
+			art = cursor.getInt(2);
+
+			AttributModifikator attrMod = getAttributModifikator(kId);
+			ArrayList<Ability> abilityList = getAbilities(kId);
+
+			KoerperteilArt koerperteileArt;
+
+			// 1=Kopf, 2=Torso, 3=Arm, 4=Bein
+			switch (art) {
+			case 1:
+				koerperteileArt = KoerperteilArt.KOPF;
+				break;
+			case 2:
+				koerperteileArt = KoerperteilArt.TORSO;
+				break;
+			case 3:
+				koerperteileArt = KoerperteilArt.ARM;
+				break;
+			case 4:
+				koerperteileArt = KoerperteilArt.BEIN;
+				break;
+			default:
+				throw new MonsterDAOException(
+						"The Monster's 'koerperteil' has no correct 'koerperteileArt'");
+			}
+			koerperteilList.add(new Koerperteil(kId, name, abilityList,
+					koerperteileArt, attrMod));
+		}
+
+		if (koerperteilList.isEmpty())
+			throw new MonsterDAOException(
+					"Monster has not a single 'koerperteil'");
+
+		return koerperteilList;
+	}
+
+	public AttributModifikator getAttributModifikator(int koerperteileID)
+			throws MonsterDAOException {
+
+		String sqlQuery = "SELECT tAttrM.staerke, tAttrM.intelligenz, tAttrM.konstitution "
+				+ "FROM tagdb_attributmodifikator tAttrM "
+				+ "WHERE tAttrM.koerperteile_id = " + koerperteileID;
+
+		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
+
+		ArrayList<Integer> attribList = new ArrayList<Integer>();
+
+		while (cursor.moveToNext()) {
+			for (int i = 0; i < cursor.getColumnCount(); i++) {
+				attribList.add(cursor.getInt(i));
+			}
+		}
+
+		if (attribList.isEmpty())
+			throw new MonsterDAOException(
+					"Koerperteil has no 'attributModifikator'");
+
+		return new AttributModifikator(attribList.get(0), attribList.get(1),
+				attribList.get(2));
+	}
+
+	public ArrayList<Ability> getAbilities(int koerperteileID)
+			throws MonsterDAOException {
+
+		String sqlQuery = "SELECT tFaehigkeit.id, tFaehigkeit.name, tFaehigkeit.ziel, tFaehigkeit.energiekosten, tFaehigkeit.angriffsziel, tFaehigkeit.angriffswert, "
+				+ "tFaehigkeit.heilungsziel, tFaehigkeit.heilungswert, tFaehigkeit.stunziel, tFaehigkeit.stundauer, "
+				+ "tFaehigkeit.absorbationsziel, tFaehigkeit.absorbationsdauer, tFaehigkeit.schadensabsorbation, tFaehigkeit.cooldown "
+				+ "FROM tagdb_faehigkeit tFaehigkeit "
+				+ "INNER JOIN tagdb_faehigkeit_koerperteile tFK "
+				+ "ON tFaehigkeit.id = tFK.faehigkeit_id "
+				+ "INNER JOIN tagdb_faehigkeit tF "
+				+ "ON tFK.koerperteile_id = tF.id "
+				+ "WHERE tFK.koerperteile_id = " + koerperteileID;
+
+		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
+
 		ArrayList<Ability> abilityList = new ArrayList<Ability>();
-		
+
 		int id;
 		String name;
 		int ziel;
@@ -282,11 +289,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		int absorbationsdauer;
 		int schadensabsorbation;
 		int cooldown;
-		
-		while(cursor.moveToNext()){
-			
+
+		while (cursor.moveToNext()) {
+
 			LinkedList<IAbilityComponent> abilityComponents = new LinkedList<IAbilityComponent>();
-			
+
 			id = cursor.getInt(0);
 			name = cursor.getString(1);
 			ziel = cursor.getInt(2);
@@ -301,173 +308,188 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 			absorbationsdauer = cursor.getInt(11);
 			schadensabsorbation = cursor.getInt(12);
 			cooldown = cursor.getInt(13);
-						
-			
-			if(angriffswert!=0){
-				abilityComponents.add(new Damage(angriffswert, getAbilityTargetRestriction(angriffsziel)));
+
+			if (angriffswert != 0) {
+				abilityComponents.add(new Damage(angriffswert,
+						getAbilityTargetRestriction(angriffsziel)));
 			}
-			
-			if(heilungswert!=0){
-				abilityComponents.add(new Heal(heilungswert, getAbilityTargetRestriction(heilungsziel)));
+
+			if (heilungswert != 0) {
+				abilityComponents.add(new Heal(heilungswert,
+						getAbilityTargetRestriction(heilungsziel)));
 			}
-			
-			if(stundauer!=0){
-				abilityComponents.add(new Stun(stundauer, getAbilityTargetRestriction(stunziel)));
+
+			if (stundauer != 0) {
+				abilityComponents.add(new Stun(stundauer,
+						getAbilityTargetRestriction(stunziel)));
 			}
-			
-			if(schadensabsorbation!=0){
-				abilityComponents.add(new Schadensabsorbation(absorbationsdauer, schadensabsorbation, getAbilityTargetRestriction(absorbationziel)));
+
+			if (schadensabsorbation != 0) {
+				abilityComponents.add(new Schadensabsorbation(
+						absorbationsdauer, schadensabsorbation,
+						getAbilityTargetRestriction(absorbationziel)));
 			}
-			
-			
+
 			// get Buffs for the ability
 			ArrayList<fh.tagmon.gameengine.abilitys.Buff> buffList = getBuff(id);
-			
+
 			for (fh.tagmon.gameengine.abilitys.Buff buff : buffList) {
 				abilityComponents.add(buff);
 			}
-			
-			abilityList.add(new Ability(id, name, energiekosten, cooldown, getAbilityTargetRestriction(ziel), abilityComponents));
-			
-			if(abilityList.isEmpty())
+
+			abilityList.add(new Ability(id, name, energiekosten, cooldown,
+					getAbilityTargetRestriction(ziel), abilityComponents));
+
+			if (abilityList.isEmpty())
 				throw new MonsterDAOException("Empty ability list");
-			
+
 		}
 		return abilityList;
 	}
-	
-	private AbilityTargetRestriction getAbilityTargetRestriction(int ziel){
+
+	private AbilityTargetRestriction getAbilityTargetRestriction(int ziel) {
 		AbilityTargetRestriction abilityTargetRest;
-		// targetRestriction 1=self, 2=enemy, 3=selfANDenemy, 4=enemygroup, 5=owngroup, 6=selfANDenemygroup, 7=owngroupANDenemy
+		// targetRestriction 1=self, 2=enemy, 3=selfANDenemy, 4=enemygroup,
+		// 5=owngroup, 6=selfANDenemygroup, 7=owngroupANDenemy
 		switch (ziel) {
-		case 1: abilityTargetRest = AbilityTargetRestriction.SELF;
+		case 1:
+			abilityTargetRest = AbilityTargetRestriction.SELF;
 			break;
-		case 2: abilityTargetRest = AbilityTargetRestriction.ENEMY;
-				break;
-		case 3: abilityTargetRest = AbilityTargetRestriction.SELFANDENEMY;
-				break;
-		case 4: abilityTargetRest = AbilityTargetRestriction.ENEMYGROUP;
-				break;
-		case 5: abilityTargetRest = AbilityTargetRestriction.OWNGROUP;
-				break;
-		case 6: abilityTargetRest = AbilityTargetRestriction.SELFANDENEMYGROUP;
-				break;
-		case 7: abilityTargetRest = AbilityTargetRestriction.OWNGROUPANDENEMY;
-				break;
-		default: abilityTargetRest = AbilityTargetRestriction.DEFAULT;
+		case 2:
+			abilityTargetRest = AbilityTargetRestriction.ENEMY;
+			break;
+		case 3:
+			abilityTargetRest = AbilityTargetRestriction.SELFANDENEMY;
+			break;
+		case 4:
+			abilityTargetRest = AbilityTargetRestriction.ENEMYGROUP;
+			break;
+		case 5:
+			abilityTargetRest = AbilityTargetRestriction.OWNGROUP;
+			break;
+		case 6:
+			abilityTargetRest = AbilityTargetRestriction.SELFANDENEMYGROUP;
+			break;
+		case 7:
+			abilityTargetRest = AbilityTargetRestriction.OWNGROUPANDENEMY;
+			break;
+		default:
+			abilityTargetRest = AbilityTargetRestriction.DEFAULT;
 			break;
 		}
 		return abilityTargetRest;
 	}
-	
-	
-	public ArrayList<fh.tagmon.gameengine.abilitys.Buff> getBuff(int faehigkeitID){
-		
-		 String sqlQuery = 	"SELECT tBuff.id, tBuff.dauer, tBuff.ziel, tBuff.bStaerke, " +
-							"		tBuff.bIntelligenz, tBuff.bKonstitution " +
-							"FROM tagdb_buff tBuff " +
-							"WHERE tBuff.faehigkeit_id = " + faehigkeitID;
+
+	public ArrayList<fh.tagmon.gameengine.abilitys.Buff> getBuff(
+			int faehigkeitID) {
+
+		String sqlQuery = "SELECT tBuff.id, tBuff.dauer, tBuff.ziel, tBuff.bStaerke, "
+				+ "		tBuff.bIntelligenz, tBuff.bKonstitution "
+				+ "FROM tagdb_buff tBuff "
+				+ "WHERE tBuff.faehigkeit_id = "
+				+ faehigkeitID;
 
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
+
 		ArrayList<fh.tagmon.gameengine.abilitys.Buff> buffList = new ArrayList<fh.tagmon.gameengine.abilitys.Buff>();
-		
-		while(cursor.moveToNext()){ //int id, int duration, AbilityTargetRestriction abilityTargetRestriction, int strengthBuff, int intelligenceBuff, int constitutionBuff
-			buffList.add(new fh.tagmon.gameengine.abilitys.Buff(cursor.getInt(0), cursor.getInt(1), getAbilityTargetRestriction(cursor.getInt(2)), 
-					cursor.getInt(3), cursor.getInt(4), cursor.getInt(5)));
+
+		while (cursor.moveToNext()) { // int id, int duration,
+										// AbilityTargetRestriction
+										// abilityTargetRestriction, int
+										// strengthBuff, int intelligenceBuff,
+										// int constitutionBuff
+			buffList.add(new fh.tagmon.gameengine.abilitys.Buff(cursor
+					.getInt(0), cursor.getInt(1),
+					getAbilityTargetRestriction(cursor.getInt(2)), cursor
+							.getInt(3), cursor.getInt(4), cursor.getInt(5)));
 		}
 		return buffList;
-		
+
 	}
-	
-	
-	public Stats getStats(int monsterID) throws MonsterDAOException{
-		
-		 String sqlQuery = 	"SELECT tagdb_stats.maxHP,tagdb_stats.curHP,tagdb_stats.curHP,tagdb_stats.maxEP, " +
-				 			"		tagdb_stats.curEP,tagdb_stats.regEP, tagdb_stats.lvl, tagdb_stats.curEXP, tagdb_stats.defense " +
-				 			"FROM tagdb_stats " +
-				 			"WHERE tagdb_stats.monster_id = " + monsterID;
+
+	public Stats getStats(int monsterID) throws MonsterDAOException {
+
+		String sqlQuery = "SELECT tagdb_stats.maxHP,tagdb_stats.curHP,tagdb_stats.curHP,tagdb_stats.maxEP, "
+				+ "		tagdb_stats.curEP,tagdb_stats.regEP, tagdb_stats.lvl, tagdb_stats.curEXP, tagdb_stats.defense "
+				+ "FROM tagdb_stats "
+				+ "WHERE tagdb_stats.monster_id = "
+				+ monsterID;
 
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
-		if(!cursor.moveToFirst())
+
+		if (!cursor.moveToFirst())
 			throw new MonsterDAOException("Monster has no stats");
-			
-		
-		return new Stats(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getInt(3), cursor.getInt(4), cursor.getInt(5), cursor.getInt(6), cursor.getInt(7), cursor.getInt(8));			
+
+		return new Stats(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2),
+				cursor.getInt(3), cursor.getInt(4), cursor.getInt(5),
+				cursor.getInt(6), cursor.getInt(7), cursor.getInt(8));
 
 	}
-	
-	
-	public Monster getMonsterByID(int monsterID) throws MonsterDAOException{
-				
+
+	public Monster getMonsterByID(int monsterID) throws MonsterDAOException {
+
 		Attribut attribut = getAttribute(monsterID);
-		
+
 		ArrayList<Koerperteil> koerperteile = null;
 		try {
 			koerperteile = getKoerperteile(monsterID);
 		} catch (MonsterDAOException e) {
 			Log.d("tagmonDB", "Koerperteil could not be created");
 		}
-				
+
 		Stats stats = getStats(monsterID);
-		
-		String sqlQuery = 	"SELECT name, beschreibung " +
-							"FROM tagdb_monster " + 
-							"WHERE id = " + monsterID;
+
+		String sqlQuery = "SELECT name, beschreibung " + "FROM tagdb_monster "
+				+ "WHERE id = " + monsterID;
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
-		if(!cursor.moveToFirst())
+
+		if (!cursor.moveToFirst())
 			throw new MonsterDAOException("Monster has no name");
 
 		String monsterName = cursor.getString(0);
 		String monsterBeschreibung = cursor.getString(1);
-		
-		Monster monster = new Monster(monsterID, monsterName, monsterBeschreibung, attribut, koerperteile, stats);
+
+		Monster monster = new Monster(monsterID, monsterName,
+				monsterBeschreibung, attribut, koerperteile, stats);
 		return monster;
 	}
-	
-	
+
 	// returns list of monstergroup id's
-	public ArrayList<Integer> getMonsterGroupsByTagID(String tagSerial){
-		
-		
-		// getting monstergroup id's for specific tagSerial (1 tag can have several groups)
-		String sqlQuery = 	"SELECT monstergruppe_id " +
-							"FROM tagdb_tag_monsterGruppe tmg " +
-							"INNER JOIN tagdb_tag ta " +
-							"	ON tmg.tag_id = ta.id " +
-							"WHERE ta.tagserial =  '" + tagSerial +"'";
+	public ArrayList<Integer> getMonsterGroupsByTagID(String tagSerial) {
+
+		// getting monstergroup id's for specific tagSerial (1 tag can have
+		// several groups)
+		String sqlQuery = "SELECT monstergruppe_id "
+				+ "FROM tagdb_tag_monsterGruppe tmg "
+				+ "INNER JOIN tagdb_tag ta " + "	ON tmg.tag_id = ta.id "
+				+ "WHERE ta.tagserial =  '" + tagSerial + "'";
 
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
+
 		ArrayList<Integer> groupIDList = new ArrayList<Integer>();
-		
-		while(cursor.moveToNext()){
+
+		while (cursor.moveToNext()) {
 			groupIDList.add(cursor.getInt(0));
 		}
 		return groupIDList;
 	}
-	
-	
+
 	// returns list of monster id's
-	public ArrayList<Integer> getMonsterByGroupID(int monsterGroupID){
-		String sqlQuery = 	"SELECT monster_id " +
-							"FROM tagdb_monstergruppe_monster " +
-							"WHERE monstergruppe_id =  " + monsterGroupID;
-		
+	public ArrayList<Integer> getMonsterByGroupID(int monsterGroupID) {
+		String sqlQuery = "SELECT monster_id "
+				+ "FROM tagdb_monstergruppe_monster "
+				+ "WHERE monstergruppe_id =  " + monsterGroupID;
+
 		Cursor cursor = myDataBase.rawQuery(sqlQuery, null);
-		
+
 		ArrayList<Integer> monsterIDList = new ArrayList<Integer>();
-		
-		while(cursor.moveToNext()){
+
+		while (cursor.moveToNext()) {
 			monsterIDList.add(cursor.getInt(0));
 		}
 		return monsterIDList;
 	}
-	
 
-	
 	// Add your public helper methods to access and get content from the
 	// database.
 	// You could return cursors by doing "return myDataBase.query(....)" so it'd

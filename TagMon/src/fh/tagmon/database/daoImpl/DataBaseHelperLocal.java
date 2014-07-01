@@ -92,7 +92,8 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		try {
 			String myPath = DB_PATH + DB_NAME;
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
-					SQLiteDatabase.OPEN_READWRITE);
+					SQLiteDatabase.NO_LOCALIZED_COLLATORS
+							| SQLiteDatabase.OPEN_READWRITE);
 		} catch (SQLiteException e) {
 			// database does't exist yet.
 		}
@@ -165,8 +166,9 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	/**
 	 * Holt die Attribute nach einer bestimmten MonsterID aus der Datenbank
 	 * 
-	 * @param monsterID Die ID des Monsters
-	 * @return	Das {@Attribut} Objekt
+	 * @param monsterID
+	 *            Die ID des Monsters
+	 * @return Das {@Attribut} Objekt
 	 * @throws MonsterDAOException
 	 */
 	public Attribut getAttribute(int monsterID) throws MonsterDAOException {
@@ -193,9 +195,10 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	}
 
 	/**
-	 *	Holt alle Körperteile eines Monster aus der Datenbank 
+	 * Holt alle Körperteile eines Monster aus der Datenbank
 	 * 
-	 * @param monsterID Die ID des Monsters
+	 * @param monsterID
+	 *            Die ID des Monsters
 	 * @return Eine Liste mit den Koerperteil Objekten
 	 * @throws MonsterDAOException
 	 */
@@ -258,9 +261,11 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Holt die {@link AttributModifikator}en eine Koerperteils aus der Datenbank
+	 * Holt die {@link AttributModifikator}en eine Koerperteils aus der
+	 * Datenbank
 	 * 
-	 * @param koerperteileID Die ID des Koerperteils
+	 * @param koerperteileID
+	 *            Die ID des Koerperteils
 	 * @return {@link AttributModifikator}
 	 * @throws MonsterDAOException
 	 */
@@ -416,10 +421,12 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		return buffList;
 
 	}
+
 	/**
 	 * Holt die Stats von einem Monster aus der Datenbank
 	 * 
-	 * @param monsterID Die ID des Monsters
+	 * @param monsterID
+	 *            Die ID des Monsters
 	 * @return Das Stats Objekt
 	 * @throws MonsterDAOException
 	 */
@@ -445,7 +452,8 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	/**
 	 * Holt ein Monster nach einer bestimmten ID aus der Datenbank
 	 * 
-	 * @param monsterID Die ID des Monsters
+	 * @param monsterID
+	 *            Die ID des Monsters
 	 * @return Das Monster Objekt
 	 * @throws MonsterDAOException
 	 */
@@ -528,10 +536,12 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Erstellt die Struktur der lokalen Datenbank und erstellt ein Dummy Monster
+	 * Erstellt die Struktur der lokalen Datenbank und erstellt ein Dummy
+	 * Monster
+	 * 
 	 * @throws IOException
 	 */
-	private void createInitialLokaleDatabase() throws IOException{
+	private void createInitialLokaleDatabase() throws IOException {
 		createDbStructureFromFile();
 		insertDummyMonster();
 	}
@@ -588,7 +598,8 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	 * @return Die Liste mit den einzelnen SQL Scripts
 	 * @throws IOException
 	 */
-	private List<String> getStatementList(String sqlFilePath) throws IOException {
+	private List<String> getStatementList(String sqlFilePath)
+			throws IOException {
 		InputStream insertsStream = myContext.getAssets().open(sqlFilePath);
 		BufferedReader insertReader = new BufferedReader(new InputStreamReader(
 				insertsStream));

@@ -58,22 +58,28 @@ public class MonsterDAOImplLocal implements MonsterDAOLocal{
 		
 		ability = new Ability(2, "Schadensabsorbation", 20, 3, AbilityTargetRestriction.SELF);	
 		component = new Schadensabsorbation(2, 20, AbilityTargetRestriction.SELF);
+		abilityList = new ArrayList<Ability>();
 		koerperteil = new Koerperteil(2, "Torso", abilityList, KoerperteilArt.TORSO, new AttributModifikator(0, 0, 0));
 		ability.addAbilityComponent(component);
+		abilityList.add(ability);
 		koerperteilList.add(koerperteil);
 		
 		
 		ability = new Ability(3, "Faustschlag", 25, 1, AbilityTargetRestriction.ENEMY);	
 		component = new Damage(25, AbilityTargetRestriction.ENEMY);
+		abilityList = new ArrayList<Ability>();
 		koerperteil = new Koerperteil(2, "Arm", abilityList, KoerperteilArt.ARM, new AttributModifikator(0, 0, 0));
 		ability.addAbilityComponent(component);
+		abilityList.add(ability);
 		koerperteilList.add(koerperteil);
 
 		
 		ability = new Ability(4, "Roundhousekick", 40, 2, AbilityTargetRestriction.ENEMY);	
 		component = new Damage(40, AbilityTargetRestriction.ENEMY);
+		abilityList = new ArrayList<Ability>();
 		koerperteil = new Koerperteil(4, "Bein", abilityList, KoerperteilArt.BEIN, new AttributModifikator(0, 0, 0));
 		ability.addAbilityComponent(component);
+		abilityList.add(ability);
 		koerperteilList.add(koerperteil);
 		
 
