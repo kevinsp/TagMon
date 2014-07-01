@@ -110,7 +110,7 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
         for(IAbilityComponent component : action.getAbility().getAbilityComponents()){
         	//Get the targetIDs of the specific component
         	///TEST
-        		//testFunc(component);
+        		//testFunc(component); // ob CloneMe weggelassen werden kann (Rolle)
         	/////
         	LinkedList<Integer> targetList = null;
         	switch (component.getComponentTargetRestriction()) {

@@ -12,6 +12,7 @@ public class AsynkTaskHostDummy extends AsyncTask<Void, Void, Void>{
 
 	private GameHostEngine hostEngine = null;
 	private int gamePlayerSize = 0;
+	private String TAG = "AsynkTaskHostDummy";
 	
 	public AsynkTaskHostDummy(int gamePlayerSize){
 		this.gamePlayerSize = gamePlayerSize;
@@ -27,7 +28,7 @@ public class AsynkTaskHostDummy extends AsyncTask<Void, Void, Void>{
 			server.closeServerSocket();
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Log.e(TAG, e.getMessage());
 			e.printStackTrace();
 		}
 		

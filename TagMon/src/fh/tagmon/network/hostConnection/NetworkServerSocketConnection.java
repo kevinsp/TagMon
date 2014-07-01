@@ -26,14 +26,16 @@ public class NetworkServerSocketConnection {
 		PlayerList playerList = new PlayerList();
 		for(int i = 0; i < maxPlayerSize; i++){
 			try {
+				Log.i(TAG, "Waiting for Client ....");
 				Socket newClient = this.serverSocket.accept();
 				
 				Log.i(TAG, "Client accepted");
-				
 				NetworkServerTCPConnection tcpClientCon = new NetworkServerTCPConnection(newClient);
 				
+				Log.i(TAG, "building NetworkPlayer");
 				NetworkPlayer newNetPlayer = new NetworkPlayer(tcpClientCon);
 				
+				Log.i(TAG, "Adding NetworkPlayer to the Playlist");
 				playerList.addPlayer(newNetPlayer);
 				
 			} catch (IOException e) {
@@ -41,6 +43,7 @@ public class NetworkServerSocketConnection {
 				e.printStackTrace();
 			}
 		}
+		Log.i(TAG, "All Players have connected and are now in the PlayerList");
 		return playerList;
 	}
 	
