@@ -38,40 +38,40 @@ public class GameEngineModule {
  
     public void startGamePlayerVSTag(String tagSerNr) {
 
-    	try{
-    	//Starte den Host
-    	int gamePlayerSize = 2; // Player vs Tag
-    	startHostAsynkTask(gamePlayerSize);
-    	
-    	//dem Spieler sein Monster Holen
-//    	MyMonsterCreator mCreator = new MyMonsterCreator(); // eig aus der Db holen
-//    	Monster monsterFromPlayer = mCreator.getMonsterDummy();
-    	MonsterDAOImplLocal playerMonsterDb = new MonsterDAOImplLocal(this.context);
-    	Monster monsterFromPlayer = playerMonsterDb.getDummyMonster();
-    	
-    	
-    	//Spieler bekommt sein Monster und verbindet sich mit dem Server
-    	initializeClient(this.context, monsterFromPlayer);
-    	this.clientEngine.execute();
-    	
-    	//der Ki ihr Monster holen
-//    	Monster kiMonster = mCreator.getMonsterDummy(); // eig aus der Db holen mit tagSerNr
-    	MonsterDAOImpl enmyMonsterDb = new MonsterDAOImpl(this.context);
-    	
-    	Monster enemyMonster = enmyMonsterDb.getMonster("tagserial1DinoRat");
-    	
-    	//Die Ki bekommt ihr Monster und verbindet sich mit dem Server
-    	startKiAsynkTask(enemyMonster.name, enemyMonster);
-    	}catch(IOException e){
-    		Log.e("GameEngineModule" , e.getMessage());
-    	}catch(MonsterDAOException mde){
-    		Log.e("GameEngineModule" , mde.getMessage());
-    	}
-		
+//    	try{
+//    	//Starte den Host
+//    	int gamePlayerSize = 2; // Player vs Tag
+//    	startHostAsynkTask(gamePlayerSize);
+//    	
+//    	//dem Spieler sein Monster Holen
+////    	MyMonsterCreator mCreator = new MyMonsterCreator(); // eig aus der Db holen
+////    	Monster monsterFromPlayer = mCreator.getMonsterDummy();
+//    	MonsterDAOImplLocal playerMonsterDb = new MonsterDAOImplLocal(this.context);
+//    	Monster monsterFromPlayer = playerMonsterDb.getDummyMonster();
+//    	
+//    	
+//    	//Spieler bekommt sein Monster und verbindet sich mit dem Server
+//    	initializeClient(this.context, monsterFromPlayer);
+//    	this.clientEngine.execute();
+//    	
+//    	//der Ki ihr Monster holen
+////    	Monster kiMonster = mCreator.getMonsterDummy(); // eig aus der Db holen mit tagSerNr
+//    	MonsterDAOImpl enmyMonsterDb = new MonsterDAOImpl(this.context);
+//    	
+//    	Monster enemyMonster = enmyMonsterDb.getMonster("tagserial1DinoRat");
+//    	
+//    	//Die Ki bekommt ihr Monster und verbindet sich mit dem Server
+//    	startKiAsynkTask(enemyMonster.name, enemyMonster);
+//    	}catch(IOException e){
+//    		Log.e("GameEngineModule" , e.getMessage());
+//    	}catch(MonsterDAOException mde){
+//    		Log.e("GameEngineModule" , mde.getMessage());
+//    	}
+//		
 
 
     	//this.testAbsorber();
-    	//testKiVSKi();
+    	testKiVSKi();
     	//testHeal();
     }
 
@@ -138,8 +138,9 @@ public class GameEngineModule {
 		Monster redM = mCreator.getMonsterDummy();
 		Monster blueM = mCreator.getMonsterDummy();
 		
+		startKiAsynkTask("BLUE", blueM);
 		startKiAsynkTask("RED", redM);
-		startKiAsynkTask("BLUE", blueM);	
+		
 	}
 	
 	private void testAbsorber(){

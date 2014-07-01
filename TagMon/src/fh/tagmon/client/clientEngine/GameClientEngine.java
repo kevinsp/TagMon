@@ -118,7 +118,7 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements IS
 			proceedIncomingAbilityComponent(msg);
 			break;
 		case GAME_OVER:
-			stop(); 
+			stop(msg); 
 			break;
 		default:
 			((Fight)context).showTemporaryDialog("Ungltige Host-Message", this);
@@ -233,9 +233,10 @@ public class GameClientEngine extends AsyncTask <Void, Void, Void> implements IS
 	/**
 	 * Displays the "Game finished"-Screen
 	 */
-	private void stop(){
-        listeningToBroadcast = false;
-        ((Fight) context).handleGameOver("Game finished");
+	private void stop(MessageObject<?> msg){
+        String defeatedPlayer = (String) msg.getContent();
+		listeningToBroadcast = false;
+        ((Fight) context).handleGameOver(defeatedPlayer + " wurde besiegt!");
 	}
 
 	/**

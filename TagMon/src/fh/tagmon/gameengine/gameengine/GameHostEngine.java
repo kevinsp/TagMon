@@ -49,7 +49,8 @@ public class GameHostEngine extends AsyncTask<Void, Void, Void>{
     }
     
     private void gameOver(int targetId){
-    	String playerWhoLost = this.playerList.getPlayerInfo(this.playerList.getCurrentPlayerTargetId()).NAME;
+    	String playerWhoLost = this.playerList.getPlayerInfo(targetId).NAME;
+    	myLogger("Player is dead " + playerWhoLost);
     	for(Entry<Integer, IHostPlayer> entry : this.playerList.getPlayerTargetList().entrySet()) {
     		entry.getValue().gameOver(playerWhoLost);
     	}

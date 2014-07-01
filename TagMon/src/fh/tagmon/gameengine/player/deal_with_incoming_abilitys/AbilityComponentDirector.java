@@ -74,10 +74,10 @@ public class AbilityComponentDirector implements IListener{
 			//testiVonRolle(schadenAbs); // ob CloneMe weggelassen werden kann (Rolle)
 			
 			this.dmgAbsHandler.handleDamageAbsorbation(schadenAbs);
-			event += "sicht mit einem natrlichen Schild gewappnet!";
+			event += "sicht mit einem natuerlichen Schild gewappnet!";
 			break;
 		case STUN:
-			event += "die Kontrolle ber seinen Krper verloren!";
+			event += "die Kontrolle ber seinen Koerper verloren!";
 			break;
 		default:
 			break;
