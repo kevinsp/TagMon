@@ -63,6 +63,39 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         //Todo : Kondition einbauen fuer nicht-host-spieler
 
 
+        /*little hardcoded hack to switch the appearance of the enemy*/
+
+/*mockup*/
+        /*
+        monsterId = "123";
+        if (monsterId.equals("123")) {
+            setEnemyBody("body_wolfrat");
+            setEnemyHead("head_dino");
+            setEnemyLeftLeg("leg_l_dino");
+            setEnemyRightLeg("leg_r_wolfrat");
+        } else if (monsterId.equals("123")) {
+            setEnemyBody("body_wolfrat");
+            setEnemyHead("head_dino");
+            setEnemyLeftLeg("leg_l_dino");
+            setEnemyRightLeg("leg_r_wolfrat");
+        } else if (monsterId.equals("123")) {
+            setEnemyBody("body_wolfrat");
+            setEnemyHead("head_dino");
+            setEnemyLeftLeg("leg_l_dino");
+            setEnemyRightLeg("leg_r_wolfrat");
+        } else if (monsterId.equals("123")) {
+            setEnemyBody("body_wolfrat");
+            setEnemyHead("head_dino");
+            setEnemyLeftLeg("leg_l_dino");
+            setEnemyRightLeg("leg_r_wolfrat");
+        }*/
+
+
+
+
+
+
+
 /*
         Monster monster = null;
         MonsterDAOLocal monsterDAO = null;
@@ -552,7 +585,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
                     @Override
                     public void onDismiss(DialogInterface dialog) {
-                     //   onresumeDialog.onResumeDialog();
+                        //   onresumeDialog.onResumeDialog();
                     }
 
                 }));
