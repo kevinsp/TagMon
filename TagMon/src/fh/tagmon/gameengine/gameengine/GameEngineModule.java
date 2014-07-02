@@ -58,7 +58,7 @@ public class GameEngineModule {
 	//    	Monster kiMonster = mCreator.getMonsterDummy(); // eig aus der Db holen mit tagSerNr
 	    	MonsterDAOImpl enmyMonsterDb = new MonsterDAOImpl(this.context);
 	    	
-	    	Monster enemyMonster = enmyMonsterDb.getMonster("tagserial1DinoRat");
+	    	Monster enemyMonster = enmyMonsterDb.getMonster(tagSerNr);
 	    	
 	    	//Die Ki bekommt ihr Monster und verbindet sich mit dem Server
 	    	startKiAsynkTask(enemyMonster.name, enemyMonster);

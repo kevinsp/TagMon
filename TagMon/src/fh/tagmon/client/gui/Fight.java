@@ -79,12 +79,12 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 setEnemyHead("head_octo");
                 setEnemyLeftLeg("leg_l_dino");
                 setEnemyRightLeg("leg_r_dino");
-            } else if (monsterId.equals("123")) { //Grindfolds schlund
+            } else if (monsterId.equals("04aeebc932233580")) { //Grindfolds schlund
                 setEnemyBody("body_spider");
                 setEnemyHead("head_spider");
                 setEnemyLeftLeg("leg_l_dino");
                 setEnemyRightLeg("leg_r_spider");
-            } else if (monsterId.equals("123")) { ///Grüne Gestade
+            } else if (monsterId.equals("04807c7022473480")) { ///Grüne Gestade
                 setEnemyBody("body_wolfrat");
                 setEnemyHead("head_spider");
                 setEnemyLeftLeg("leg_l_spider");
