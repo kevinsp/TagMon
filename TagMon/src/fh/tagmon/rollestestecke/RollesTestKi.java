@@ -122,6 +122,12 @@ public class RollesTestKi {
     	
     	
     	//// End
+    	try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			Log.e(TAG, e.getMessage());
+		}
     	this.connection.sendToHost(MessageFactory.createClientMessage_Action(myAction, id));
     	
     }
