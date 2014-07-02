@@ -16,7 +16,6 @@ import android.widget.TextView;
 import java.io.IOException;
 
 import fh.tagmon.client.gui.Fight;
-import fh.tagmon.database.daoImpl.MonsterDAOImpl;
 import fh.tagmon.database.daoImpl.MonsterDAOImplLocal;
 import fh.tagmon.exception.MonsterDAOException;
 import fh.tagmon.model.Monster;
@@ -125,10 +124,10 @@ public class MainActivity extends Activity {
     }
 
     public void switchToBattleActivity(View view) {
-        Intent myIntent = new Intent(this, Fight.class);
+        /*Intent myIntent = new Intent(this, Fight.class);
         String battleMode = "normalPvE";
         myIntent.putExtra("battleMode", battleMode);
-        startActivity(myIntent);
+        startActivity(myIntent);*/
     }
 /*
     public void switchToGenLabActivity(View view) {

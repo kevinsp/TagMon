@@ -227,19 +227,19 @@
             android:layout_marginBottom="-100dp">
 
 
-                <ImageView
+                <!--ImageView
                     android:id="@+id/ownBody"
                     android:layout_width="501dp"
                     android:layout_height="270dp"
                     android:src="@drawable/body_dino_own"
-                    />
+                    /-->
 
                 <ImageView
                     android:id="@+id/ownHead"
-                    android:layout_width="156dp"
-                    android:layout_height="210dp"
-                    android:layout_marginTop="8dp"
-                    android:src="@drawable/head_dino_own"
+                    android:layout_width="265dp"
+                    android:layout_height="203dp"
+
+                    android:src="@drawable/head_dino_hinten"
                     android:layout_alignParentRight="true"
                     />
 

@@ -66,31 +66,31 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         /*little hardcoded hack to switch the appearance of the enemy*/
 
 /*mockup*/
-        /*
-        monsterId = "123";
-        if (monsterId.equals("123")) {
-            setEnemyBody("body_wolfrat");
-            setEnemyHead("head_dino");
-            setEnemyLeftLeg("leg_l_dino");
-            setEnemyRightLeg("leg_r_wolfrat");
-        } else if (monsterId.equals("123")) {
-            setEnemyBody("body_wolfrat");
-            setEnemyHead("head_dino");
-            setEnemyLeftLeg("leg_l_dino");
-            setEnemyRightLeg("leg_r_wolfrat");
-        } else if (monsterId.equals("123")) {
-            setEnemyBody("body_wolfrat");
-            setEnemyHead("head_dino");
-            setEnemyLeftLeg("leg_l_dino");
-            setEnemyRightLeg("leg_r_wolfrat");
-        } else if (monsterId.equals("123")) {
-            setEnemyBody("body_wolfrat");
-            setEnemyHead("head_dino");
-            setEnemyLeftLeg("leg_l_dino");
-            setEnemyRightLeg("leg_r_wolfrat");
-        }*/
 
-
+        if (monsterId != null) {
+            //monsterId = "123";
+            if (monsterId.equals("04decc9e2a853280")) { //dinorat
+                setEnemyBody("body_wolfrat");
+                setEnemyHead("head_dino");
+                setEnemyLeftLeg("leg_l_dino");
+                setEnemyRightLeg("leg_r_wolfrat");
+            } else if (monsterId.equals("04fb4b3ce2853280")) { //blutbäche
+                setEnemyBody("body_octo");
+                setEnemyHead("head_octo");
+                setEnemyLeftLeg("leg_l_dino");
+                setEnemyRightLeg("leg_r_dino");
+            } else if (monsterId.equals("123")) { //Grindfolds schlund
+                setEnemyBody("body_spider");
+                setEnemyHead("head_spider");
+                setEnemyLeftLeg("leg_l_dino");
+                setEnemyRightLeg("leg_r_spider");
+            } else if (monsterId.equals("123")) { ///Grüne Gestade
+                setEnemyBody("body_wolfrat");
+                setEnemyHead("head_spider");
+                setEnemyLeftLeg("leg_l_spider");
+                setEnemyRightLeg("leg_r_wolfrat");
+            }
+        }
 
 
 
@@ -642,6 +642,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             public void run() {
                 Button btn = (Button) findViewById(R.id.chooseAttack);
                 btn.setEnabled(false);
+
             }});
     }
     public void enableButtons(){
@@ -650,6 +651,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             public void run() {
                 Button btn = (Button) findViewById(R.id.chooseAttack);
                 btn.setEnabled(true);
+
             }});
     }
     public void handleGameOver(final String gameOverMessage) {
