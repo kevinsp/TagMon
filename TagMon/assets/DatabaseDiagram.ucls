@@ -21,7 +21,7 @@
   </interface>  
   <class id="3" language="java" name="fh.tagmon.database.daoImpl.DataBaseHelper" project="TagMon" 
     file="/TagMon/src/fh/tagmon/database/daoImpl/DataBaseHelper.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="168" y="579"/>    
+    <position height="-1" width="-1" x="174" y="491"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
       visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -163,116 +163,160 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="19">    
+  <class id="19" language="java" name="fh.tagmon.gameengine.abilitys.Buff" project="TagMon" 
+    file="/TagMon/src/fh/tagmon/gameengine/abilitys/Buff.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="257" y="994"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="20" language="java" name="fh.tagmon.gameengine.abilitys.Ability" project="TagMon" 
+    file="/TagMon/src/fh/tagmon/gameengine/abilitys/Ability.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="-1" width="-1" x="1940" y="1519"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" accessors="true" 
+      visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <association id="21">    
     <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="20" name="attributModifikator"/>      
-      <multiplicity id="21" minimum="0" maximum="1"/>    
+      <attribute id="22" name="attributModifikator"/>      
+      <multiplicity id="23" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="10" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="22">    
+  <association id="24">    
     <end type="SOURCE" refId="15" navigable="false">      
-      <attribute id="23" name="koerperteilArt"/>      
-      <multiplicity id="24" minimum="0" maximum="1"/>    
+      <attribute id="25" name="abilityList"/>      
+      <multiplicity id="26" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="27">    
+    <end type="SOURCE" refId="15" navigable="false">      
+      <attribute id="28" name="koerperteilArt"/>      
+      <multiplicity id="29" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="16" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="25">    
+  <association id="30">    
     <end type="SOURCE" refId="18" navigable="false">      
-      <attribute id="26" name="engineModule"/>      
-      <multiplicity id="27" minimum="0" maximum="1"/>    
+      <attribute id="31" name="engineModule"/>      
+      <multiplicity id="32" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="17" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="28">    
+  <association id="33">    
     <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="29" name="dbHelper"/>      
-      <multiplicity id="30" minimum="0" maximum="1"/>    
+      <attribute id="34" name="dbHelper"/>      
+      <multiplicity id="35" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="3" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="31">    
+  <realization id="36">    
     <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="2"/>  
   </realization>  
-  <association id="32">    
+  <association id="37">    
     <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="33" name="stats"/>      
-      <multiplicity id="34" minimum="0" maximum="1"/>    
+      <attribute id="38" name="stats"/>      
+      <multiplicity id="39" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="9" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="35">    
+  <association id="40">    
     <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="36" name="attribut"/>      
-      <multiplicity id="37" minimum="0" maximum="1"/>    
+      <attribute id="41" name="attribut"/>      
+      <multiplicity id="42" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="8" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="38">    
+  <association id="43">    
     <end type="SOURCE" refId="14" navigable="false">      
-      <attribute id="39" name="durationAbilityList"/>      
-      <multiplicity id="40" minimum="0" maximum="2147483647"/>    
+      <attribute id="44" name="durationAbilityList"/>      
+      <multiplicity id="45" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="11" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="41">    
+  <association id="46">    
     <bendpoint x="961" y="1034"/>    
     <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="42" name="durationAbilityListHandler"/>      
-      <multiplicity id="43" minimum="0" maximum="1"/>    
+      <attribute id="47" name="durationAbilityListHandler"/>      
+      <multiplicity id="48" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="14" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="44">    
+  <association id="49">    
     <bendpoint x="848" y="1514"/>    
     <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="45" name="koerperteile"/>      
-      <multiplicity id="46" minimum="0" maximum="2147483647"/>    
+      <attribute id="50" name="koerperteile"/>      
+      <multiplicity id="51" minimum="0" maximum="2147483647"/>    
     </end>    
     <end type="TARGET" refId="15" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="47">    
+  <association id="52">    
     <end type="SOURCE" refId="17" navigable="false">      
-      <attribute id="48" name="ownMonster"/>      
-      <multiplicity id="49" minimum="0" maximum="1"/>    
+      <attribute id="53" name="ownMonster"/>      
+      <multiplicity id="54" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="12" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="50">    
+  <association id="55">    
+    <bendpoint x="1972" y="918"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="56" name="abilities"/>      
+      <multiplicity id="57" minimum="0" maximum="2147483647"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <association id="58">    
     <end type="SOURCE" refId="13" navigable="false">      
-      <attribute id="51" name="durationAbilityListHandler"/>      
-      <multiplicity id="52" minimum="0" maximum="1"/>    
+      <attribute id="59" name="durationAbilityListHandler"/>      
+      <multiplicity id="60" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="14" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <association id="53">    
+  <association id="61">    
     <end type="SOURCE" refId="6" navigable="false">      
-      <attribute id="54" name="dbHelper"/>      
-      <multiplicity id="55" minimum="0" maximum="1"/>    
+      <attribute id="62" name="dbHelper"/>      
+      <multiplicity id="63" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <realization id="56">    
+  <association id="64">    
+    <bendpoint x="2217" y="1116"/>    
+    <end type="SOURCE" refId="18" navigable="false">      
+      <attribute id="65" name="lastChoosenAbility"/>      
+      <multiplicity id="66" minimum="0" maximum="1"/>    
+    </end>    
+    <end type="TARGET" refId="20" navigable="true"/>    
+    <display labels="true" multiplicity="true"/>  
+  </association>  
+  <realization id="67">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="1"/>  
   </realization>  
-  <association id="57">    
+  <association id="68">    
     <end type="SOURCE" refId="12" navigable="false">      
-      <attribute id="58" name="dmgAbsHandler"/>      
-      <multiplicity id="59" minimum="0" maximum="1"/>    
+      <attribute id="69" name="dmgAbsHandler"/>      
+      <multiplicity id="70" minimum="0" maximum="1"/>    
     </end>    
     <end type="TARGET" refId="13" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
