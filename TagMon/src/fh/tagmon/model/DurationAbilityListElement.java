@@ -1,3 +1,8 @@
+/**
+ * Author: Christian Roletscheck
+ */
+
+
 package fh.tagmon.model;
 
 import fh.tagmon.gameengine.abilitys.IDurationAbilityComponent;

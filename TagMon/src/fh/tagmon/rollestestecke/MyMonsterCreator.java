@@ -1,3 +1,8 @@
+/**
+ * Author: Christian Roletscheck
+ */
+
+
 package fh.tagmon.rollestestecke;
 
 import java.util.ArrayList;

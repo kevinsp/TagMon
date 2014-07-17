@@ -1,3 +1,8 @@
+/**
+ * Author: Christian Roletscheck & Christian Schmid
+ */
+
+
 package fh.tagmon.network.hostConnection;
 
 

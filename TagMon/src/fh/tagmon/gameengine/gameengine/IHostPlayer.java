@@ -1,3 +1,8 @@
+/**
+ * Author: Christian Roletscheck
+ */
+
+
 package fh.tagmon.gameengine.gameengine;
 
 import java.util.HashMap;

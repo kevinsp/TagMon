@@ -1,3 +1,8 @@
+/**
+ * Author: Christian Roletscheck
+ */
+
+
 package fh.tagmon.network.localConnection;
 
 import fh.tagmon.network.clientConnections.IClientConnection;

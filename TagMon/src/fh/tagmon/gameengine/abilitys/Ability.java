@@ -1,3 +1,7 @@
+/**
+ * Author: Christian Roletscheck
+ */
+
 package fh.tagmon.gameengine.abilitys;
 
 import java.io.Serializable;

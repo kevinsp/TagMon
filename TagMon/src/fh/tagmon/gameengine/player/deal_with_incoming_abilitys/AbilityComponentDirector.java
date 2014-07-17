@@ -1,3 +1,8 @@
+/**
+ * Author: Christian Roletscheck & Christian Schmid
+ */
+
+
 package fh.tagmon.gameengine.player.deal_with_incoming_abilitys;
 
 import android.util.Log;

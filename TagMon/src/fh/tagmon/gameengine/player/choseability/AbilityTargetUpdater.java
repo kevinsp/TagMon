@@ -1,3 +1,8 @@
+/**
+ * Author: Christian Roletscheck
+ */
+
+
 package fh.tagmon.gameengine.player.choseability;
 
 import java.util.EnumSet;

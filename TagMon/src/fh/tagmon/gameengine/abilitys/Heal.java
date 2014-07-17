@@ -1,3 +1,8 @@
+/**
+ * Author: Christian Roletscheck
+ */
+
+
 package fh.tagmon.gameengine.abilitys;
 
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
