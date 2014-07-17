@@ -19,15 +19,24 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * Die {@link DataBaseHelperLocal} wird für die Datenbank verwendet, in der sich alle gegnerischen Monster befinden.
+ * Diese Datenbank wird über die Tagmon.de Admin Page erstellt und dann in die App synchronisiert.
+ * 
+ *
+ */
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-	// The Android's default system path of your application database.
+	/** Der Standard Pfad zur Anwendunsgdatenbank */
 	private static String DB_PATH = "/data/data/fh.tagmon/databases/";
 
+	/** Der Name der Datenbank */
 	private static String DB_NAME = "db.sqlite3";
 
+	/** Die {@link SQLiteDatabase} */
 	private SQLiteDatabase myDataBase;
 
+	/** Der App {@link Context} */
 	private final Context myContext;
 
 	/**
@@ -152,6 +161,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 	}
 
+	/**
+	 * Holt das {@link Attribut} des {@link Monster}s aus der Datenbank
+	 * @param monsterID Die ID des Monsters
+	 * @return Das {@link Attribut} Objekt des {@link Monster}s
+	 * @throws MonsterDAOException
+	 */
 	public Attribut getAttribute(int monsterID) throws MonsterDAOException {
 
 		String sqlQuery = "SELECT tAttr.id, tAttr.staerke, tAttr.intelligenz, tAttr.konstitution "
@@ -175,6 +190,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 				attribList.get(2), attribList.get(3));
 	}
 
+	/**
+	 * Holt die {@link ArrayList} an {@link Koerperteil}en von einem {@link Monster} anhand dessen ID
+	 * 
+	 * @param monsterID Die {@link Integer} des {@link Monster}s
+	 * @return {@link ArrayList} aus {@link Koerperteil}en
+	 * @throws MonsterDAOException
+	 */
 	public ArrayList<Koerperteil> getKoerperteile(int monsterID)
 			throws MonsterDAOException {
 
@@ -233,6 +255,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		return koerperteilList;
 	}
 
+	/**
+	 * Holt den {@link AttributModifikator} für ein {@link Koerperteil} aus der Datenbank
+	 * @param koerperteileID Die {@link Integer} ID des {@link Koerperteil}s für das der {@link AttributModifikator} geholt werden soll
+	 * @return Der {@link AttributModifikator}
+	 * @throws MonsterDAOException
+	 */
 	public AttributModifikator getAttributModifikator(int koerperteileID)
 			throws MonsterDAOException {
 
@@ -258,6 +286,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 				attribList.get(2));
 	}
 
+	/**
+	 * Holt eine {@link ArrayList} an {@link Ability}s für ein bestimmtes {@link Koerperteil} aus der DB
+	 * @param koerperteileID Die {@link Integer} ID des {@link Koerperteil}s
+	 * @return {@link ArrayList} aus {@link Ability}s
+	 * @throws MonsterDAOException
+	 */
 	public ArrayList<Ability> getAbilities(int koerperteileID)
 			throws MonsterDAOException {
 
@@ -347,6 +381,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		return abilityList;
 	}
 
+	/**
+	 * Holt die {@link AbilityTargetRestriction} anhand eines Ziel {@link Integer}
+	 * @param ziel Der {@link Integer} Wert des Ziels
+	 * @return Die {@link AbilityTargetRestriction}, welche aus dem Ziel {@link Integer} umgewandelt wird
+	 */
 	private AbilityTargetRestriction getAbilityTargetRestriction(int ziel) {
 		AbilityTargetRestriction abilityTargetRest;
 		// targetRestriction 1=self, 2=enemy, 3=selfANDenemy, 4=enemygroup,
@@ -380,6 +419,11 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		return abilityTargetRest;
 	}
 
+	/**
+	 * Holt eine {@link ArrayList} aus {@link Buff}s von einer {@link Ability} anhand der faehigkeitID
+	 * @param faehigkeitID Die ID der {@link Ability}, für die die {@link ArrayList} der {@link Buff}s geholt wird
+	 * @return Eine {@link ArrayList} aus {@link Buff}s
+	 */
 	public ArrayList<fh.tagmon.gameengine.abilitys.Buff> getBuff(
 			int faehigkeitID) {
 
@@ -407,6 +451,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 	}
 
+	/**
+	 * Holt anhand der monsterID, die Stats des {@link Monster}s
+	 * @param monsterID Die {@link Integer}-ID der Monsters
+	 * @return Gibt das {@link Stats} Obejkt des {@link Monster}s zurück
+	 * @throws MonsterDAOException
+	 */
 	public Stats getStats(int monsterID) throws MonsterDAOException {
 
 		String sqlQuery = "SELECT tagdb_stats.maxHP,tagdb_stats.curHP,tagdb_stats.curHP,tagdb_stats.maxEP, "
@@ -426,6 +476,13 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 
 	}
 
+	/**
+	 * Holt anhand einer {@link Integer} MonsterID, das passende {@link Monster} aus der Datenbank
+	 * 
+	 * @param monsterID Die {@link Integer} ID des {@link Monster}
+	 * @return Das {@link Monster} Objekt, welches anhand der monsterID aus der DB geholt worden ist
+	 * @throws MonsterDAOException
+	 */
 	public Monster getMonsterByID(int monsterID) throws MonsterDAOException {
 
 		Attribut attribut = getAttribute(monsterID);
@@ -454,7 +511,14 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		return monster;
 	}
 
-	// returns list of monstergroup id's
+	/**
+	 * Holt anhand der {@link String} tagSerial, die zugehörige Monstergruppen
+	 * ID
+	 * 
+	 * @param tagSerial
+	 *            Der {@link String} der tagSerial
+	 * @return
+	 */
 	public ArrayList<Integer> getMonsterGroupsByTagID(String tagSerial) {
 
 		// getting monstergroup id's for specific tagSerial (1 tag can have
@@ -474,7 +538,15 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		return groupIDList;
 	}
 
-	// returns list of monster id's
+	/**
+	 * Holt eine {@link ArrayList} aus {@link Monster} von einer Monster Gruppe,
+	 * aus der Datenbank
+	 * 
+	 * @param monsterGroupID
+	 *            Die ID der Monstergruppe, aus der die {@link ArrayList} aus
+	 *            {@link Monster}m geholt werden soll
+	 * @return
+	 */
 	public ArrayList<Integer> getMonsterByGroupID(int monsterGroupID) {
 		String sqlQuery = "SELECT monster_id "
 				+ "FROM tagdb_monstergruppe_monster "
@@ -489,11 +561,5 @@ public class DataBaseHelper extends SQLiteOpenHelper {
 		}
 		return monsterIDList;
 	}
-
-	// Add your public helper methods to access and get content from the
-	// database.
-	// You could return cursors by doing "return myDataBase.query(....)" so it'd
-	// be easy
-	// to you to create adapters for your views.
 
 }
