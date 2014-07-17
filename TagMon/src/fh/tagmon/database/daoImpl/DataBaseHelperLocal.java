@@ -20,22 +20,36 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
+/**
+ * Diese {@link DataBaseHelperLocal} Klasse wird dafür verwendet, um das Monster des Spielers in der lokalen Datenbank 
+ * abzuspeichern.
+ * Da sich dieses Monster im laufe des Spiels veränder kann, werden update Methoden gebraucht um diese Änderungen auch
+ * in der Datenbank abspeichern zu können.
+ * In dieser Datenbank wird auch der Player abgespeichert.
+ * Beim erstmaligen starten der App, wird eine leere lokale Datenbankstruktur anhand einens Skripts erstellt
+ * und anschließend mit einem Dummy Monster, ebenfalls anhand eines Skripts, befüllt.
+ *
+ */
 public class DataBaseHelperLocal extends SQLiteOpenHelper {
 
-	// The Android's default system path of your application database.
+	/** Der Standard Pfad zur Anwendunsgdatenbank */
 	private static String DB_PATH = "/data/data/fh.tagmon/databases/";
 
+	/** Der Name der lokalen Datenbank */
 	private static String DB_NAME = "localDB.sqlite3";
 
+	/** Der Name des SQL Build Scripts um die locale Datenbank aufzubauen */
 	private static String BUILD_SCRIPT = "dbLocalEmptyBuildScript.sql";
 
+	/** Der Name des SQL Build Scripts um das Anfangs Monster zu generieren*/
 	private static String DUMMYMONSTER_SCRIPT = "dummyMonsterScript.sql";
 
+	/** Die {@link SQLiteDatabase} */
 	private SQLiteDatabase myDataBase;
 
+	/** Der App {@link Context}*/
 	private final Context myContext;
 
 	/**
@@ -164,7 +178,8 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Holt die Attribute nach einer bestimmten MonsterID aus der Datenbank
+	 * Holt die {@link Attribut} nach einer bestimmten MonsterID aus der
+	 * Datenbank
 	 * 
 	 * @param monsterID
 	 *            Die ID des Monsters
@@ -195,11 +210,11 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Holt alle Körperteile eines Monster aus der Datenbank
+	 * Holt alle {@link Koerperteil} eines {@link Monster}s aus der Datenbank
 	 * 
 	 * @param monsterID
-	 *            Die ID des Monsters
-	 * @return Eine Liste mit den Koerperteil Objekten
+	 *            Die ID des {@link Monster}
+	 * @return Eine {@link ArrayList} mit den {@link Koerperteil} Objekten
 	 * @throws MonsterDAOException
 	 */
 	public ArrayList<Koerperteil> getKoerperteile(int monsterID)
@@ -261,11 +276,11 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Holt die {@link AttributModifikator}en eine Koerperteils aus der
+	 * Holt die {@link AttributModifikator}en eine {@link Koerperteil}s aus der
 	 * Datenbank
 	 * 
 	 * @param koerperteileID
-	 *            Die ID des Koerperteils
+	 *            Die ID des {@link Koerperteil}
 	 * @return {@link AttributModifikator}
 	 * @throws MonsterDAOException
 	 */
@@ -295,10 +310,13 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Holt eine Liste an Abilitys von einem Koerperteil aus der Datenbank
+	 * Holt eine Liste an {@link Ability}s von einem {@link Koerperteil} aus der
+	 * Datenbank
 	 * 
 	 * @param koerperteileID
-	 * @return {@link Ability}List
+	 *            Der {@link Integer} Wert des {@link Koerperteil}, für das die
+	 *            {@link Ability}List geholt werden soll
+	 * @return {@link ArrayList} aus {@link Ability}s
 	 * @throws MonsterDAOException
 	 */
 	public ArrayList<Ability> getAbilities(int koerperteileID)
@@ -391,9 +409,13 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	}
 
 	/**
+	 * Holt eine {@link ArrayList} aus {@link Buff}s von anhand einer
+	 * {@link Integer} faeigkeitID aus der Datenbank
 	 * 
 	 * @param faehigkeitID
-	 * @return
+	 *            Der {@link Integer} Wert der Faehigkeit, für die die
+	 *            {@link Buff} Liste geholt wird
+	 * @return {@link ArrayList} aus {@link Buff}s
 	 */
 	public ArrayList<fh.tagmon.gameengine.abilitys.Buff> getBuff(
 			int faehigkeitID) {
@@ -423,11 +445,11 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Holt die Stats von einem Monster aus der Datenbank
+	 * Holt die {@link Stats} von einem {@link Monster} aus der Datenbank
 	 * 
 	 * @param monsterID
-	 *            Die ID des Monsters
-	 * @return Das Stats Objekt
+	 *            Die ID des {@link Monster}
+	 * @return Das {@link Stats} Objekt
 	 * @throws MonsterDAOException
 	 */
 	public Stats getStats(int monsterID) throws MonsterDAOException {
@@ -450,11 +472,12 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Holt ein Monster nach einer bestimmten ID aus der Datenbank
+	 * Holt ein {@link Monster} nach einer bestimmten {@link Integer} Wert ID
+	 * aus der Datenbank
 	 * 
 	 * @param monsterID
 	 *            Die ID des Monsters
-	 * @return Das Monster Objekt
+	 * @return Das {@link Monster} Objekt
 	 * @throws MonsterDAOException
 	 */
 	public Monster getMonsterByID(int monsterID) throws MonsterDAOException {
@@ -485,7 +508,14 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		return monster;
 	}
 
-	// UPDATE METHODS
+	/**
+	 * Aktualisiert das {@link Monster} in der Datenbank
+	 * 
+	 * @param monster
+	 *            Das {@link Monster}, welches in der DB aktualisiert werden
+	 *            soll
+	 * @throws MonsterDAOException
+	 */
 	public void updateMonster(Monster monster) throws MonsterDAOException {
 		updateAttribute(monster);
 
@@ -496,12 +526,26 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		updateStats(monster);
 	}
 
+	/**
+	 * Erstellt einen Spieler in der Datenbank mit einem Name {@link String}
+	 * 
+	 * @param name
+	 *            Der {@link String} Wert für den Namen
+	 */
 	public void createPlayer(String name) {
 		String SQLStatement = "INSERT INTO tagdb_player (name) VALUES(\""
 				+ name + "\")";
 		myDataBase.execSQL(SQLStatement);
 	}
 
+	/**
+	 * Erstellt aus einem {@link Int} Wert die {@link AbilityTargetRestriction}
+	 * 
+	 * @param ziel
+	 *            Der {@link Integer} Wert aus dem die
+	 *            {@link AbilityTargetRestriction} erstellt werden soll
+	 * @return
+	 */
 	private AbilityTargetRestriction getAbilityTargetRestriction(int ziel) {
 		AbilityTargetRestriction abilityTargetRest;
 		// targetRestriction 1=self, 2=enemy, 3=selfANDenemy, 4=enemygroup,
@@ -546,6 +590,14 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		insertDummyMonster();
 	}
 
+	/**
+	 * Aktualisiert das {@link Attribut} Objekt des {@link Monster}s
+	 * 
+	 * @param monster
+	 *            Das {@link Monster}, für das die {@link Attribut}e in der DB
+	 *            aktualisiert werden sollen
+	 * @throws MonsterDAOException
+	 */
 	private void updateAttribute(Monster monster) throws MonsterDAOException {
 		Attribut attr = monster.getAttributes();
 
@@ -619,6 +671,13 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		return stmtList;
 	}
 
+	/**
+	 * Aktualisiert {@link Koerperteil}
+	 * 
+	 * @param Das
+	 *            {@link Koerperteil} das in der Datenbank aktualisiert werden
+	 *            soll
+	 */
 	private void updateKoerperteil(Koerperteil koerperteil) {
 
 		int kArt = 0;
@@ -655,6 +714,13 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 
 	}
 
+	/**
+	 * Aktualisiert die Abilitys für das übergebene {@link Koerperteil}
+	 * 
+	 * @param koerperteil
+	 *            Das {@link Koerperteil} welches in der DB aktualisiert werden
+	 *            soll
+	 */
 	private void updateFaehigkeit(Koerperteil koerperteil) {
 
 		String sqlQuery = "";
@@ -755,6 +821,13 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		}
 	}
 
+	/**
+	 * Aktualisiert das {@link Stats} Objekt für das übergebene {@link Monster}
+	 * 
+	 * @param monster
+	 *            Das {@link Monster} Obejkt, wo die {@link Stats} aktualisiert
+	 *            in der DB werden soll
+	 */
 	private void updateStats(Monster monster) {
 		Stats stats = monster.getStats();
 		String sqlQuery = "UPDATE tagdb_stats " + "SET maxHP="
@@ -767,6 +840,13 @@ public class DataBaseHelperLocal extends SQLiteOpenHelper {
 		myDataBase.execSQL(sqlQuery);
 	}
 
+	/**
+	 * Holt aus {@link abilityTargetRestriction} den {@link int} Wert für das
+	 * Angriffsziel
+	 * 
+	 * @param abilityTargetRestriction
+	 * @return Der {@link int} Wert für das Ziel
+	 */
 	private int getZielFromTargetRestriction(
 			AbilityTargetRestriction abilityTargetRestriction) {
 		int ziel = 0;
