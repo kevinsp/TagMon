@@ -34,6 +34,7 @@ public class MonsterDAOImplLocal implements MonsterDAOLocal{
 		
 	}
 	
+	
 	@Override
 	public Monster getMonster(int monsterID) throws MonsterDAOException {
 		return dbHelper.getMonsterByID(monsterID);
