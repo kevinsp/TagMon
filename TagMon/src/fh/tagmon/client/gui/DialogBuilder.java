@@ -22,7 +22,9 @@ import fh.tagmon.gameengine.abilitys.AbilityComponentTypes;
 import fh.tagmon.gameengine.abilitys.IAbilityComponent;
 import fh.tagmon.gameengine.player.choseability.AbilityTargetRestriction;
 
-
+/*
+* Custom Dialog for messages interaction with the user
+* */
 public class DialogBuilder extends Dialog {
 
     private Context context;
@@ -51,7 +53,7 @@ public class DialogBuilder extends Dialog {
         initDialog();
 
     }
-
+    //default dialog
     public DialogBuilder(Context context) {
         super(context);
         initDialog();
@@ -68,17 +70,19 @@ public class DialogBuilder extends Dialog {
         initDialog();
     }
 
-
+    //show the dialog
     private void showDialog() {
         this.show();
     }
 
+    //initialize the dialog
     private void initDialog() {
-
+        // test for params which are needed in ability choose dialog
         if (items != null && onClickListener != null) {
             setContentView(R.layout.custom_dialog);
             setItemsInScrollList();
             setTitle(title);
+            //test for params which are needed in summary dialog
         } else if(timeTilClose != 0 && !text.equals("")) {
             setContentView(R.layout.custom_dialog_summary);
 
@@ -93,6 +97,7 @@ public class DialogBuilder extends Dialog {
 
     }
 
+    // set the text in the dialog
     private void setText() {
         TextView tv = (TextView) findViewById(R.id.summaryText);
         tv.setText(text);
@@ -108,6 +113,7 @@ public class DialogBuilder extends Dialog {
         table.addView(tr);*/
     }
 
+    // close the dialog after a given time
     private void closeAfterTime() {
         if (this.timeTilClose != -1) {
             final Dialog d = this;
@@ -120,12 +126,14 @@ public class DialogBuilder extends Dialog {
         }
     }
 
+    // set the items for the ability choose dialog into a scrollist
     private void setItemsInScrollList() {
         TableLayout table = (TableLayout) findViewById(R.id.custom_dialog_scroll_table);
         table.setTag(obj);
 
         int counter = 0;
         for (Object item : items) {
+            //set the layout params
             TableRow tr = new TableRow(context);
             LinearLayout ll = new LinearLayout(context);
             TableRow.LayoutParams tlp = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
@@ -134,9 +142,7 @@ public class DialogBuilder extends Dialog {
             ll.setGravity(Gravity.CENTER);
             ll.setLayoutParams(tlp);
 
-
-
-
+            // get the image for the abilities
             List <Drawable> drawables = getDrawableForItem(item);
             if (!drawables.isEmpty()) {
 
@@ -153,10 +159,12 @@ public class DialogBuilder extends Dialog {
             }
             tr.addView(ll);
 
+            //set the item name
             TextView tv = new TextView(context);
             String itemName = getTextForItem(item);
             tv.setText(itemName);
 
+            // set some layout params
             tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, context.getResources().getDimension(R.dimen.text_size));
             TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
            // lp.setMargins(10, 0, 0, 10);
@@ -165,6 +173,7 @@ public class DialogBuilder extends Dialog {
             tr.addView(tv);
             //ll.addView(tv);
 
+            // set listener a id/tag
             tr.setTag(counter);
             tr.setOnClickListener(onClickListener);
             //tr.addView(ll);
@@ -173,11 +182,14 @@ public class DialogBuilder extends Dialog {
         }
     }
 
+    // get the drawable for a object
     private List <Drawable> getDrawableForItem(Object obj) {
         List <Drawable> drawables = new LinkedList<Drawable>();
 
+        //test if object is ability, otherwise theres no drawable
         if (obj instanceof Ability && dialogAction == DialogAction.CHOOSE_ABILITY) {
             // targetRestriction 0=default, 1=self, 2=enemy, 3=selfANDenemy, 4=enemygroup, 5=owngroup, 6=selfANDenemygroup, 7=owngroupANDenemy
+            // get drawable for the target restriction
             AbilityTargetRestriction atr = ((Ability) obj).getTargetRestriction();
             atr.getTargetList();
             switch(atr) {
@@ -189,6 +201,7 @@ public class DialogBuilder extends Dialog {
                     break;
             }
 
+            //get drawable for ability type
             LinkedList<IAbilityComponent> acl = ((Ability) obj).getAbilityComponents();
             for (IAbilityComponent iac : acl) {
                 AbilityComponentTypes act = iac.getComponentType();
@@ -217,6 +230,7 @@ public class DialogBuilder extends Dialog {
         return drawables;
     }
 
+    // get the text/name for a given ability
     private String getTextForItem(Object obj) {
         String name = "";
 

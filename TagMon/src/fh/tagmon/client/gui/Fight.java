@@ -59,16 +59,8 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         Intent intent = getIntent();
         String monsterId = intent.getStringExtra("monsterId");
 
-        //init game engine
-        //Todo : Kondition einbauen fuer nicht-host-spieler
-
-
-        /*little hardcoded hack to switch the appearance of the enemy*/
-
-/*mockup*/
-
+        //set the drawable for the enemy depending on the passed tag id
         if (monsterId != null) {
-            //monsterId = "123";
             if (monsterId.equals("04decc9e2a853280")) { //dinorat
                 setEnemyBody("body_wolfrat");
                 setEnemyHead("head_dino");
@@ -92,33 +84,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             }
         }
 
-
-
-
-
-/*
-        Monster monster = null;
-        MonsterDAOLocal monsterDAO = null;
-
-        try {
-            monsterDAO = new MonsterDAOImplLocal(this);
-        } catch (SQLException e1) {
-            Log.d("tagmonDB", "SQLEX");
-        } catch (IOException e1) {
-            Log.d("tagmonDB", "IOEX");
-        }
-
-        try {
-            monster = monsterDAO.getMonster(Integer.parseInt(monsterId,10));
-
-        } catch (MonsterDAOException e){
-            Log.d("tagmonDB", "MonsterDAO");
-            e.printStackTrace();
-        } catch (Exception e) {
-            Log.d("tagmonDB", "FAIIIIIIIIIIIIIIL");
-            e.printStackTrace();
-        }*/
-
+        //create monster and initialize the engine
         MyMonsterCreator mCreator = new MyMonsterCreator();
 
         Monster blueM = mCreator.getMonsterDummy();
@@ -126,43 +92,23 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         engineModule = new GameEngineModule(this, blueM);
         engineModule.startGamePlayerVSTag(monsterId); // die eig SerienNr vom gescanten Tag übergeben
 
-        //mock-up
-        /*
-        MyMonsterCreator mCreator = new MyMonsterCreator();
-        Monster redM = mCreator.getMonsterDummy();
-        this.abilities = redM.getAbilitys();
-        runOnUiThread(new Runnable() {
-                          @Override
-                          public void run() {
-                              if (chooseDialog != null) {
-                                  chooseDialog.dismiss();
-                              }
-                              chooseDialog = new DialogBuilder(context, getString(R.string.chooseAbility), abilities, null, chooseAbilityListener, DialogAction.CHOOSE_ABILITY);
-                          }
-                      }
-        );*/
+
     }
 
 
     /**
      * ** functions ****
      */
-        /*
-        @desc:
-        init the gui when starting a battle
 
-        @params:
-
-
-        @return:
-        boolean: true if the GUI could initialize successful, otherwise false
-        */
+    //initialize the battle gui
     public boolean initBattleGUI(List<PlayerInfo> players, int userId, List<Ability> abilities) {
+        //set class variables if the battle gui wasn't initialized yet
         if (!battleGuiInit) {
             battleGuiInit = true;
             this.userId = userId;
             this.abilities = abilities;
 
+            // iterate the list of players and initialize them
             for (PlayerInfo player : players) {
                 String playerName = player.NAME;
 
@@ -180,6 +126,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         }
     }
 
+    // initialize the user gui
     public void initUserGui(final String name) {
         runOnUiThread(new Runnable() {
                           @Override
@@ -206,6 +153,8 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                       }
         );
     }
+
+    //initialize the enemy gui
     public void initEnemyGui(final String name) {
         runOnUiThread(new Runnable() {
                           @Override
@@ -230,6 +179,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         );
     }
 
+    // set the drawable for the enemys head
     public void setEnemyHead(final String imgName) {
         runOnUiThread(new Runnable() {
             @Override
@@ -245,6 +195,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             }});
     }
 
+    // set the drawable for the enemys body
     public void setEnemyBody(final String imgName) {
         runOnUiThread(new Runnable() {
             @Override
@@ -258,6 +209,8 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 }
             }});
     }
+
+    // set the drawable for the enemys left leg
     public void setEnemyLeftLeg(final String imgName) {
         runOnUiThread(new Runnable() {
             @Override
@@ -274,6 +227,8 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
             }});
     }
+
+    // set the drawable for the enemys right leg
     public void setEnemyRightLeg(final String imgName) {
         runOnUiThread(new Runnable() {
             @Override
@@ -291,11 +246,12 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     }
 
 
-
+    //refresh the life of the user
     public void refreshUserLife(final int maxLife, final int currentLife) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // get all the life views and refresh them
                 ArrayList<ImageView> al = new ArrayList<ImageView>();
                 ArrayList<Integer> lifes = new ArrayList<Integer>();
 
@@ -323,6 +279,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 al.add(ivMaxHp010);
                 al.add(ivMaxHp100);
 
+                //set the new life
                 int counter = 0;
                 for (ImageView iv : al) {
                     //String drawableName = context.getResources().getResourceName(iv.getId());
@@ -333,17 +290,16 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                     counter++;
                 }
                 //71    28
+                // set some layout params
                 float density = context.getResources().getDisplayMetrics().density;
 
                 float life = (float)currentLife / (float) maxLife;
                 float dpToLeft = life * 71;
                 ImageView healthBar = (ImageView) findViewById(R.id.ownHealthBar);
                 if (dpToLeft < 71-28) {
-                    //dpToLeft = -(71-28-dpToLeft);
                     dpToLeft = (int)-((71*density - 28*density - dpToLeft*density));
 
                 } else {
-                    //dpToLeft = 71-dpToLeft+28;
                     dpToLeft = (int)((71-dpToLeft)*density + 28*density);
                 }
                 RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)healthBar.getLayoutParams();
@@ -356,11 +312,13 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             }});
     }
 
-
+    //refresh the life of the enemy
     public void refreshEnemyLife(final int maxLife,final int currentLife) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // get all the life views and refresh them
+
                 ArrayList<ImageView> al = new ArrayList<ImageView>();
                 ArrayList<Integer> lifes = new ArrayList<Integer>();
 
@@ -388,6 +346,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 al.add(ivMaxHp010);
                 al.add(ivMaxHp100);
 
+                //set the new life
                 int counter = 0;
                 for (ImageView iv : al) {
                     //String drawableName = context.getResources().getResourceName(iv.getId());
@@ -398,6 +357,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                     counter++;
                 }
                 //71    28
+                // set some layout params
                 float density = context.getResources().getDisplayMetrics().density;
 
                 float life = (float)currentLife / (float) maxLife;
@@ -444,6 +404,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
     }
 
 
+    // stop the activity
     public void finishActivity() {
         battleGuiInit = false;
         finish();
@@ -576,6 +537,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         }
     };
 
+    //show the summary dialog
     public void showTemporaryDialog(final String content, final ISetAbility onresumeDialog) {
         runOnUiThread(new Runnable() {
             @Override
@@ -592,6 +554,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             }});
     }
 
+    //refresh the enemy and user gui
     @Override
     public void refreshGUI(final List<PlayerInfo> players, final Enum<GuiPartsToUpdate> partToUpdate) {
         if (battleGuiInit && !players.isEmpty()) {
@@ -599,11 +562,15 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
                 @Override
                 public void run() {
 
+                    // check if health should be updated
                     if (partToUpdate == GuiPartsToUpdate.HEALTH) {
+                        //iterate the player list
                         for (PlayerInfo playerInfo : players) {
                             if (playerInfo != null) {
+                                //the max and current life
                                 int maxLife = playerInfo.getMaxLife();
                                 int currentLife = playerInfo.getCurrentLife();
+                                //refresh the gui's
                                 if (playerInfo.ID == userId) {
                                     refreshUserLife(maxLife, currentLife);
                                 } else {
@@ -617,6 +584,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
             });
         }
     }
+
 
     @Override
     public void chooseAbility(ISetAbility setAbility) {
@@ -636,6 +604,7 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
         );*/
     }
 
+    //disable the buttons
     public void disableButtons(){
         runOnUiThread(new Runnable() {
             @Override
@@ -645,6 +614,8 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
             }});
     }
+
+    //enable the button
     public void enableButtons(){
         runOnUiThread(new Runnable() {
             @Override
@@ -654,11 +625,14 @@ public class Fight extends Activity implements fh.tagmon.client.gui.IBattleGUI {
 
             }});
     }
+
+    // handle the game over with showing a summary dialog
     public void handleGameOver(final String gameOverMessage) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 summaryDialog = new DialogBuilder(context, "Game Over", gameOverMessage, -1);
+                //stop activity after dialog vanish
                 summaryDialog.setOnDismissListener((new DialogInterface.OnDismissListener() {
 
                     @Override
